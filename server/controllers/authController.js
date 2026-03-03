@@ -2,6 +2,7 @@ const asyncHandler = require('express-async-handler');
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
+const System = require('../models/System');
 
 // Generate JWT
 const generateToken = (id) => {
@@ -14,7 +15,14 @@ const generateToken = (id) => {
 // @route   POST /api/auth/register
 // @access  Public
 const registerUser = asyncHandler(async (req, res) => {
-    const { name, email, password, role, schoolId, class: studentClass, rollNumber, batchYear } = req.body;
+    const { name, email, password, role, schoolId, class: studentClass, rollNumber, registerNumber, department, semester, batchYear } = req.body;
+
+    // Strict security: Only allow Admin registration via this endpoint
+    // Student registration must be handled by an Admin via the Student Management module
+    if (role !== 'Admin') {
+        res.status(403);
+        throw new Error('Only Administrator registration is allowed via this path.');
+    }
 
     if (!name || !email || !password) {
         res.status(400);
@@ -31,7 +39,14 @@ const registerUser = asyncHandler(async (req, res) => {
 
     // Handle role restrictions: Only Super Admin can create other admins ideally, 
     // but for initial setup we might allow it or use a seed script.
-    // For now, allow simplified registration.
+    // Enhanced security: Validate admin access code
+    if (role === 'Admin') {
+        const adminCode = req.body.schoolId?.trim();
+        if (adminCode !== process.env.ADMIN_ACCESS_CODE?.trim()) {
+            res.status(401);
+            throw new Error('Invalid Admin Access Code');
+        }
+    }
 
     const user = await User.create({
         name,
@@ -41,6 +56,9 @@ const registerUser = asyncHandler(async (req, res) => {
         schoolId,
         class: studentClass,
         rollNumber,
+        registerNumber,
+        department,
+        semester,
         batchYear
     });
 
@@ -50,6 +68,9 @@ const registerUser = asyncHandler(async (req, res) => {
             name: user.name,
             email: user.email,
             role: user.role,
+            registerNumber: user.registerNumber,
+            department: user.department,
+            semester: user.semester,
             token: generateToken(user._id),
         });
     } else {
@@ -62,28 +83,51 @@ const registerUser = asyncHandler(async (req, res) => {
 // @route   POST /api/auth/login
 // @access  Public
 const loginUser = asyncHandler(async (req, res) => {
-    console.log('Login attempt:', req.body.email);
-    const { email, password } = req.body;
+    try {
+        console.log('Login attempt:', req.body.email);
+        const { email, password } = req.body;
 
-    // Check for user email
-    const user = await User.findOne({ email }).select('+password');
+        if (!email || !password) {
+            res.status(400);
+            throw new Error('Please provide email and password');
+        }
 
-    if (user && (await user.matchPassword(password))) {
-        const System = require('../models/System');
-        const system = await System.findOne();
-        res.json({
-            _id: user.id,
-            name: user.name,
-            email: user.email,
-            role: user.role,
-            token: generateToken(user._id),
-            profileImage: user.profileImage,
-            schoolId: user.schoolId,
-            isMaintenanceMode: system?.isMaintenanceMode || false
-        });
-    } else {
-        res.status(401);
-        throw new Error('Invalid credentials');
+        // Check for user email (normalized to lowercase)
+        const user = await User.findOne({ email: email.toLowerCase() }).select('+password');
+
+        if (!user) {
+            console.warn(`Login failed: [USER_NOT_FOUND] email: ${email}`);
+            res.status(401);
+            throw new Error('Invalid credentials');
+        }
+
+        const isMatch = await user.matchPassword(password);
+        if (isMatch) {
+            console.log(`Login successful: [SUCCESS] email: ${email}, role: ${user.role}`);
+            const system = await System.findOne();
+            res.json({
+                _id: user.id,
+                name: user.name,
+                email: user.email,
+                role: user.role,
+                token: generateToken(user._id),
+                profileImage: user.profileImage,
+                schoolId: user.schoolId,
+                registerNumber: user.registerNumber,
+                department: user.department,
+                semester: user.semester,
+                cgpa: user.cgpa,
+                semesterGrades: user.semesterGrades || [0, 0, 0, 0, 0, 0, 0, 0],
+                isMaintenanceMode: system?.isMaintenanceMode || false
+            });
+        } else {
+            console.warn(`Login failed: [INCORRECT_PASSWORD] email: ${email}`);
+            res.status(401);
+            throw new Error('Invalid credentials');
+        }
+    } catch (error) {
+        console.error('Login Error:', error);
+        throw error;
     }
 });
 
@@ -100,7 +144,6 @@ const getMe = asyncHandler(async (req, res) => {
         throw new Error('User not found');
     }
 
-    const System = require('../models/System');
     const system = await System.findOne();
 
     res.status(200).json({
@@ -115,6 +158,8 @@ const getMe = asyncHandler(async (req, res) => {
         department: user.department,
         semester: user.semester,
         registerNumber: user.registerNumber,
+        profileImage: user.profileImage,
+        semesterGrades: user.semesterGrades || [0, 0, 0, 0, 0, 0, 0, 0],
         isMaintenanceMode: system?.isMaintenanceMode || false
     });
 });

@@ -13,7 +13,7 @@ const upsertMark = asyncHandler(async (req, res) => {
     }
 
     const mark = await Mark.findOneAndUpdate(
-        { student: studentId, subject, semester },
+        { student: studentId, subject, semester: semester.toString() },
         { score },
         { new: true, upsert: true, runValidators: true }
     );
@@ -48,8 +48,28 @@ const getMyMarks = asyncHandler(async (req, res) => {
     });
 });
 
+// @desc    Delete a mark
+// @route   DELETE /api/marks/:id
+// @access  Private/Admin
+const deleteMark = asyncHandler(async (req, res) => {
+    const mark = await Mark.findById(req.params.id);
+
+    if (!mark) {
+        res.status(404);
+        throw new Error('Mark not found');
+    }
+
+    await mark.deleteOne();
+
+    res.status(200).json({
+        success: true,
+        data: {}
+    });
+});
+
 module.exports = {
     upsertMark,
     getStudentMarks,
-    getMyMarks
+    getMyMarks,
+    deleteMark
 };

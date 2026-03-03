@@ -81,12 +81,6 @@ const Login = ({ isAdmin = false }) => {
                 <div className="p-8 md:p-11 relative">
                     <motion.div variants={itemVariants} className="text-center mb-10">
                         <div className="flex items-center justify-center gap-3 mb-6">
-                            <motion.div
-                                whileHover={{ scale: 1.1, rotate: 5 }}
-                                className="w-10 h-10 bg-slate-900 text-white rounded-xl flex items-center justify-center shadow-2xl transition-all duration-500"
-                            >
-                                <LuGraduationCap className="text-xl" />
-                            </motion.div>
                             <span className="text-2xl font-black tracking-tight text-slate-900">StudentIQ</span>
                         </div>
                         <div className="space-y-1">
@@ -173,14 +167,9 @@ const Login = ({ isAdmin = false }) => {
                     </form>
 
                     <motion.div variants={itemVariants} className="mt-10 text-center space-y-6">
-                        {!isAdmin && (
-                            <p className="text-[11px] font-bold text-slate-400 tracking-tight">
-                                Account missing?{' '}
-                                <Link to="/register" className="text-indigo-600 font-black hover:underline underline-offset-4 decoration-2">
-                                    Create Account
-                                </Link>
-                            </p>
-                        )}
+                        <p className="text-[11px] font-bold text-slate-400 tracking-tight italic">
+                            Contact Admin if you don't have an account
+                        </p>
                         <div className="pt-6 border-t border-slate-100">
                             {isAdmin ? (
                                 <Link to="/login" className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] hover:text-indigo-600 transition-colors flex items-center justify-center gap-2 group">

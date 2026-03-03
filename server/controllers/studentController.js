@@ -8,23 +8,68 @@ const asyncHandler = require('express-async-handler');
 exports.getStudents = asyncHandler(async (req, res, next) => {
     const students = await User.find({ role: 'Student' });
 
-    // Enhance students with attendance data
+    // Enhance students with attendance data using aggregation for accuracy
     const enhancedStudents = await Promise.all(students.map(async (student) => {
-        const totalAttendance = await Attendance.countDocuments({ student: student._id });
-        const presentAttendance = await Attendance.countDocuments({
-            student: student._id,
-            status: { $in: ['Present', 'Late'] }
-        });
+        try {
+            // Group by date to count "days" instead of "sessions"
+            const attendanceStats = await Attendance.aggregate([
+                { $match: { student: student._id } },
+                {
+                    $group: {
+                        _id: {
+                            $dateToString: { format: "%Y-%m-%d", date: "$date" }
+                        },
+                        sessions: {
+                            $push: {
+                                slot: "$slot",
+                                status: "$status"
+                            }
+                        }
+                    }
+                }
+            ]);
 
-        const attendancePercentage = totalAttendance > 0
-            ? Math.round((presentAttendance / totalAttendance) * 100)
-            : 0;
+            let totalPossible = 0;
+            let presentFN = 0;
+            let presentAN = 0;
 
-        return {
-            ...student._doc,
-            attendancePercentage,
-            totalClasses: totalAttendance
-        };
+            attendanceStats.forEach(day => {
+                day.sessions.forEach(session => {
+                    totalPossible += 0.5;
+                    if (['Present', 'Late'].includes(session.status)) {
+                        if (session.slot === 'FN') presentFN += 1;
+                        if (session.slot === 'AN') presentAN += 1;
+                    }
+                });
+            });
+
+            const attendancePercentage = totalPossible > 0
+                ? Math.round(((presentFN * 0.5 + presentAN * 0.5) / totalPossible) * 100)
+                : 100;
+
+            const fnPercentage = (totalPossible > 0) ? Math.round((presentFN * 0.5 / totalPossible) * 200) : 100; // Simplified for display
+            const anPercentage = (totalPossible > 0) ? Math.round((presentAN * 0.5 / totalPossible) * 200) : 100;
+
+            const studentData = student.toObject();
+            return {
+                ...studentData,
+                attendancePercentage,
+                fnPercentage,
+                anPercentage,
+                totalClasses: totalPossible,
+                semesterGrades: studentData.semesterGrades || [0, 0, 0, 0, 0, 0, 0, 0]
+            };
+        } catch (err) {
+            console.error(`[STATS_ERROR] student ${student._id}:`, err);
+            const studentData = student.toObject();
+            return {
+                ...studentData,
+                attendancePercentage: 0,
+                totalClasses: 0,
+                semesterGrades: studentData.semesterGrades || [0, 0, 0, 0, 0, 0, 0, 0],
+                processingError: true
+            };
+        }
     }));
 
     res.status(200).json({
@@ -67,10 +112,12 @@ exports.updateStudent = asyncHandler(async (req, res, next) => {
         throw new Error(`User with id ${req.params.id} is not a student`);
     }
 
-    student = await User.findByIdAndUpdate(req.params.id, req.body, {
-        new: true,
-        runValidators: true
+    // Update student fields
+    Object.keys(req.body).forEach(key => {
+        student[key] = req.body[key];
     });
+
+    await student.save();
 
     res.status(200).json({
         success: true,
@@ -91,13 +138,13 @@ exports.createStudent = asyncHandler(async (req, res, next) => {
         throw new Error('User already exists');
     }
 
-    // Auto-generate password from register number (default: registerNumber or 'student123')
-    const defaultPassword = registerNumber || 'student123';
+    // Use provided password or fallback to register number
+    const password = req.body.password || registerNumber || 'student123';
 
     const student = await User.create({
         name,
         email,
-        password: defaultPassword,
+        password,
         role: 'Student',
         registerNumber,
         department,
@@ -163,5 +210,95 @@ exports.getStudentRank = asyncHandler(async (req, res, next) => {
     res.status(200).json({
         success: true,
         rank
+    });
+});
+// @desc    Bulk update student details
+// @route   PUT /api/students/bulk
+// @access  Private/Admin
+exports.bulkUpdateStudents = asyncHandler(async (req, res, next) => {
+    const { students } = req.body;
+
+    if (!students || !Array.isArray(students)) {
+        res.status(400);
+        throw new Error('Please provide an array of students to update');
+    }
+
+    const updatedStudents = await Promise.all(students.map(async (item) => {
+        const { id, ...updateData } = item;
+
+        // Ensure numeric fields are correctly typed if present
+        if (updateData.cgpa !== undefined) {
+            updateData.cgpa = Number(updateData.cgpa) || 0;
+        }
+
+        return User.findByIdAndUpdate(id, updateData, {
+            new: true,
+            runValidators: true
+        });
+    }));
+
+    res.status(200).json({
+        success: true,
+        count: updatedStudents.filter(s => s !== null).length,
+        data: updatedStudents
+    });
+});
+// @desc    Bulk create student records from CSV/Array
+// @route   POST /api/students/bulk-upload
+// @access  Private/Admin
+exports.bulkCreateStudents = asyncHandler(async (req, res, next) => {
+    const { students } = req.body;
+
+    if (!students || !Array.isArray(students)) {
+        res.status(400);
+        throw new Error('Please provide an array of students');
+    }
+
+    const results = {
+        success: 0,
+        duplicates: 0,
+        errors: 0,
+        failedRecords: []
+    };
+
+    const createdStudents = await Promise.all(students.map(async (studentData) => {
+        try {
+            const { name, email, registerNumber, department, semester, password, cgpa } = studentData;
+
+            // Check if user already exists
+            const userExists = await User.findOne({ email });
+            if (userExists) {
+                results.duplicates++;
+                results.failedRecords.push({ email, reason: 'User already exists' });
+                return null;
+            }
+
+            const student = await User.create({
+                name,
+                email,
+                password: password || registerNumber || 'student123',
+                role: 'Student',
+                registerNumber,
+                department,
+                semester,
+                cgpa: cgpa || 0
+            });
+
+            results.success++;
+            return student;
+        } catch (error) {
+            results.errors++;
+            results.failedRecords.push({
+                email: studentData.email,
+                reason: error.message
+            });
+            return null;
+        }
+    }));
+
+    res.status(201).json({
+        success: true,
+        summary: results,
+        data: createdStudents.filter(s => s !== null)
     });
 });

@@ -77,8 +77,10 @@ const StudyMaterials = () => {
         <div className="space-y-10 animate-in fade-in duration-700">
             <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-8">
                 <div>
-                    <h1 className="text-4xl md:text-5xl font-black text-slate-900 tracking-tight">Resource Hub</h1>
-                    <p className="text-slate-500 font-bold mt-2">Access premium study materials and academic resources.</p>
+                    <h1 className="text-4xl md:text-5xl font-black text-slate-900 tracking-tight">
+                        Resource <span className="text-indigo-600">Hub</span>
+                    </h1>
+                    <p className="text-slate-500 font-bold text-base mt-2">Access premium study materials and academic resources.</p>
                 </div>
 
                 <div className="flex flex-col md:flex-row items-center gap-4">
@@ -110,8 +112,8 @@ const StudyMaterials = () => {
                         key={cat}
                         onClick={() => setFilterCategory(cat)}
                         className={`px-8 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all shadow-sm border ${filterCategory === cat
-                                ? 'bg-slate-900 text-white border-slate-900 scale-105'
-                                : 'bg-white text-slate-400 border-slate-100 hover:bg-slate-50'
+                            ? 'bg-slate-900 text-white border-slate-900 scale-105'
+                            : 'bg-white text-slate-400 border-slate-100 hover:bg-slate-50'
                             }`}
                     >
                         {cat}

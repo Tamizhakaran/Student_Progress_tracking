@@ -22,20 +22,14 @@ const Landing = () => {
             <nav className="sticky top-0 z-50 bg-white/70 backdrop-blur-xl border-b border-slate-200/50 transition-all">
                 <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
                     <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center shadow-lg shadow-indigo-200">
-                            <LuGraduationCap className="text-white text-xl" />
-                        </div>
                         <span className="text-2xl font-black tracking-tight text-slate-900 leading-none">
                             StudentIQ
                         </span>
                     </div>
 
                     <div className="flex items-center gap-8">
-                        <Link to="/login" className="text-[10px] font-black text-slate-700 hover:text-indigo-600 transition-all uppercase tracking-[0.2em]">
+                        <Link to="/login" className="bg-slate-900 text-white px-8 py-3 rounded-xl text-[10px] font-black shadow-xl shadow-indigo-200 hover:scale-105 transition-all uppercase tracking-[0.2em]">
                             Sign In
-                        </Link>
-                        <Link to="/register" className="bg-slate-900 text-white px-6 py-3 rounded-xl text-[10px] font-black shadow-xl shadow-slate-200 hover:scale-105 transition-all uppercase tracking-[0.2em] flex items-center gap-2">
-                            Join Now <FiAward className="text-indigo-400" />
                         </Link>
                     </div>
                 </div>
@@ -49,7 +43,7 @@ const Landing = () => {
                             <span className="flex h-2 w-2 rounded-full bg-indigo-500 animate-pulse"></span>
                             Student Progress Monitor
                         </span>
-                        <h1 className="text-5xl md:text-8xl font-black text-slate-900 mb-10 tracking-tighter leading-[0.95] italic">
+                        <h1 className="text-5xl md:text-8xl font-black text-slate-900 mb-10 tracking-tighter leading-[0.95]">
                             Track Your <br />
                             <span className="text-indigo-600 decoration-8 underline decoration-slate-200 underline-offset-8">Progress.</span>
                         </h1>
@@ -58,8 +52,8 @@ const Landing = () => {
                             Built for students and teachers at BIT Sathy.
                         </p>
                         <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
-                            <Link to="/register" className="w-full sm:w-auto bg-indigo-600 text-white px-10 py-5 rounded-2xl font-black text-xs uppercase tracking-widest shadow-2xl shadow-indigo-500/30 hover:bg-indigo-700 transform hover:-translate-y-1 transition-all flex items-center justify-center gap-4">
-                                Get Started <FiArrowRight className="text-xl" />
+                            <Link to="/login" className="w-full sm:w-auto bg-indigo-600 text-white px-10 py-5 rounded-2xl font-black text-xs uppercase tracking-widest shadow-2xl shadow-indigo-500/30 hover:bg-indigo-700 transform hover:-translate-y-1 transition-all flex items-center justify-center gap-4">
+                                Student Login <FiArrowRight className="text-xl" />
                             </Link>
                         </div>
                     </motion.div>

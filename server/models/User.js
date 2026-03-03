@@ -10,6 +10,7 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: [true, 'Please add an email'],
         unique: true,
+        lowercase: true,
         match: [
             /^[a-zA-Z0-9._%+-]+@bitsathy\.ac\.in$/,
             'Please add a valid @bitsathy.ac.in email'
@@ -55,6 +56,10 @@ const userSchema = new mongoose.Schema({
         type: Number,
         default: 0
     },
+    semesterGrades: {
+        type: [Number],
+        default: [0, 0, 0, 0, 0, 0, 0, 0]
+    },
     lastActivity: {
         type: Date,
         default: Date.now
@@ -69,14 +74,28 @@ const userSchema = new mongoose.Schema({
     timestamps: true
 });
 
-// Encrypt password using bcrypt
+// Encrypt password using bcrypt and normalize fields to uppercase
 userSchema.pre('save', async function (next) {
+    // Normalization to uppercase
+    if (this.name) this.name = this.name.toUpperCase();
+    if (this.registerNumber) this.registerNumber = this.registerNumber.toUpperCase();
+    if (this.department) this.department = this.department.toUpperCase();
+
     if (!this.isModified('password')) {
-        next();
+        return next();
     }
 
     const salt = await bcrypt.genSalt(10);
     this.password = await bcrypt.hash(this.password, salt);
+});
+
+// Normalize fields to uppercase on update
+userSchema.pre('findOneAndUpdate', function (next) {
+    const update = this.getUpdate();
+    if (update.name) update.name = update.name.toUpperCase();
+    if (update.registerNumber) update.registerNumber = update.registerNumber.toUpperCase();
+    if (update.department) update.department = update.department.toUpperCase();
+    next();
 });
 
 // Match user entered password to hashed password in database

@@ -6,7 +6,7 @@ import Layout from './components/Layout';
 import PrivateRoute from './components/PrivateRoute';
 import Login from './pages/Login';
 import AdminLogin from './pages/AdminLogin';
-import Register from './pages/Register';
+import AdminRegister from './pages/AdminRegister';
 import Landing from './pages/Landing';
 import Dashboard from './pages/Dashboard';
 import StudentManagement from './pages/StudentManagement';
@@ -19,11 +19,18 @@ import PerformanceManagement from './pages/PerformanceManagement';
 import ForgotPassword from './pages/ForgotPassword';
 import ResetPassword from './pages/ResetPassword';
 import MaintenancePage from './pages/MaintenancePage';
-
+import FeeManagement from './pages/FeeManagement';
+import StudentFees from './pages/StudentFees';
+import AchievementManagement from './pages/AchievementManagement';
+import Achievements from './pages/Achievements';
+import Leaves from './pages/Leaves';
+import LeaveManagement from './pages/LeaveManagement';
+import PlacementManagement from './pages/PlacementManagement';
+import SubjectManagement from './pages/SubjectManagement';
 
 function App() {
     return (
-        <Router>
+        <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
             <AuthProvider>
                 <Routes>
                     <Route path="/" element={<Landing />} />
@@ -31,7 +38,7 @@ function App() {
                     <Route path="/forgot-password" element={<ForgotPassword />} />
                     <Route path="/reset-password/:token" element={<ResetPassword />} />
                     <Route path="/admin/login" element={<AdminLogin />} />
-                    <Route path="/register" element={<Register />} />
+                    <Route path="/admin-register" element={<AdminRegister />} />
                     <Route path="/maintenance" element={<MaintenancePage />} />
 
                     <Route element={<PrivateRoute />}>
@@ -44,6 +51,14 @@ function App() {
                             <Route path="/performance" element={<Performance />} />
                             <Route path="/performance-management" element={<PerformanceManagement />} />
                             <Route path="/assignments" element={<Assignments />} />
+                            <Route path="/achievement-management" element={<AchievementManagement />} />
+                            <Route path="/achievements" element={<Achievements />} />
+                            <Route path="/leave-management" element={<LeaveManagement />} />
+                            <Route path="/leaves" element={<Leaves />} />
+                            <Route path="/fee-management" element={<FeeManagement />} />
+                            <Route path="/my-fees" element={<StudentFees />} />
+                            <Route path="/placement-management" element={<PlacementManagement />} />
+                            <Route path="/subject-management" element={<SubjectManagement />} />
                         </Route>
                     </Route>
 

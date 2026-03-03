@@ -1,0 +1,197 @@
+
+--- NEW BULK SUBMIT AT 2026-03-02T10:06:28.861Z ---
+Received 11 records.
+  [ERROR] student=69a1671bb920f62aab1e2424 slot=AN: Plan executor error during findAndModify :: caused by :: E11000 duplicate key error collection: edutrack_x.attendances index: student_1_date_1_subject_1 dup key: { student: ObjectId('69a1671bb920f62aab1e2424'), date: new Date(1772409600000), subject: "General" }
+  [ERROR] student=69a1671bb920f62aab1e2425 slot=AN: Plan executor error during findAndModify :: caused by :: E11000 duplicate key error collection: edutrack_x.attendances index: student_1_date_1_subject_1 dup key: { student: ObjectId('69a1671bb920f62aab1e2425'), date: new Date(1772409600000), subject: "General" }
+  [ERROR] student=69a1671bb920f62aab1e2426 slot=AN: Plan executor error during findAndModify :: caused by :: E11000 duplicate key error collection: edutrack_x.attendances index: student_1_date_1_subject_1 dup key: { student: ObjectId('69a1671bb920f62aab1e2426'), date: new Date(1772409600000), subject: "General" }
+  [ERROR] student=69a1671bb920f62aab1e2427 slot=AN: Plan executor error during findAndModify :: caused by :: E11000 duplicate key error collection: edutrack_x.attendances index: student_1_date_1_subject_1 dup key: { student: ObjectId('69a1671bb920f62aab1e2427'), date: new Date(1772409600000), subject: "General" }
+  [ERROR] student=69a1671bb920f62aab1e2428 slot=AN: Plan executor error during findAndModify :: caused by :: E11000 duplicate key error collection: edutrack_x.attendances index: student_1_date_1_subject_1 dup key: { student: ObjectId('69a1671bb920f62aab1e2428'), date: new Date(1772409600000), subject: "General" }
+  [ERROR] student=69a1671bb920f62aab1e2429 slot=AN: Plan executor error during findAndModify :: caused by :: E11000 duplicate key error collection: edutrack_x.attendances index: student_1_date_1_subject_1 dup key: { student: ObjectId('69a1671bb920f62aab1e2429'), date: new Date(1772409600000), subject: "General" }
+  [ERROR] student=69a1671bb920f62aab1e242a slot=AN: Plan executor error during findAndModify :: caused by :: E11000 duplicate key error collection: edutrack_x.attendances index: student_1_date_1_subject_1 dup key: { student: ObjectId('69a1671bb920f62aab1e242a'), date: new Date(1772409600000), subject: "General" }
+  [ERROR] student=69a1671bb920f62aab1e242b slot=AN: Plan executor error during findAndModify :: caused by :: E11000 duplicate key error collection: edutrack_x.attendances index: student_1_date_1_subject_1 dup key: { student: ObjectId('69a1671bb920f62aab1e242b'), date: new Date(1772409600000), subject: "General" }
+  [ERROR] student=69a1671bb920f62aab1e242c slot=AN: Plan executor error during findAndModify :: caused by :: E11000 duplicate key error collection: edutrack_x.attendances index: student_1_date_1_subject_1 dup key: { student: ObjectId('69a1671bb920f62aab1e242c'), date: new Date(1772409600000), subject: "General" }
+  [ERROR] student=69a175887ff00bc499cf908b slot=AN: Plan executor error during findAndModify :: caused by :: E11000 duplicate key error collection: edutrack_x.attendances index: student_1_date_1_subject_1 dup key: { student: ObjectId('69a175887ff00bc499cf908b'), date: new Date(1772409600000), subject: "General" }
+  [ERROR] student=69a1671bb920f62aab1e242d slot=AN: Plan executor error during findAndModify :: caused by :: E11000 duplicate key error collection: edutrack_x.attendances index: student_1_date_1_subject_1 dup key: { student: ObjectId('69a1671bb920f62aab1e242d'), date: new Date(1772409600000), subject: "General" }
+
+--- NEW BULK SUBMIT AT 2026-03-02T10:14:08.205Z ---
+Received 11 records.
+AUTO-FIX: Dropped conflicting index student_1_date_1_subject_1
+  [OK] student=69a1671bb920f62aab1e2424 slot=AN id=69a562f0793995e1dcddd0ae
+  [OK] student=69a1671bb920f62aab1e2427 slot=AN id=69a562f0793995e1dcddd0af
+  [OK] student=69a1671bb920f62aab1e2426 slot=AN id=69a562f0793995e1dcddd0ad
+  [OK] student=69a1671bb920f62aab1e2425 slot=AN id=69a562f0793995e1dcddd0b0
+  [OK] student=69a1671bb920f62aab1e2428 slot=AN id=69a562f0793995e1dcddd0b1
+  [OK] student=69a1671bb920f62aab1e2429 slot=AN id=69a562f0793995e1dcddd0b2
+  [OK] student=69a1671bb920f62aab1e242a slot=AN id=69a562f0793995e1dcddd0b3
+  [OK] student=69a1671bb920f62aab1e242b slot=AN id=69a562f0793995e1dcddd0b4
+  [OK] student=69a1671bb920f62aab1e242c slot=AN id=69a562f0793995e1dcddd0b5
+  [OK] student=69a1671bb920f62aab1e242d slot=AN id=69a562f0793995e1dcddd0b6
+  [OK] student=69a175887ff00bc499cf908b slot=AN id=69a562f0793995e1dcddd0b7
+
+--- NEW BULK SUBMIT AT 2026-03-02T13:02:26.630Z ---
+Received 11 records.
+  [OK] student=69a1671bb920f62aab1e242b slot=FN id=69a58a62793995e1dcddd0c0
+  [OK] student=69a1671bb920f62aab1e2427 slot=FN id=69a58a62793995e1dcddd0ba
+  [OK] student=69a1671bb920f62aab1e2424 slot=FN id=69a58a62793995e1dcddd0bc
+  [OK] student=69a1671bb920f62aab1e2425 slot=FN id=69a58a62793995e1dcddd0b9
+  [OK] student=69a1671bb920f62aab1e242a slot=FN id=69a58a62793995e1dcddd0bb
+  [OK] student=69a1671bb920f62aab1e2429 slot=FN id=69a58a62793995e1dcddd0be
+  [OK] student=69a1671bb920f62aab1e2428 slot=FN id=69a58a62793995e1dcddd0b8
+  [OK] student=69a175887ff00bc499cf908b slot=FN id=69a58a62793995e1dcddd0c2
+  [OK] student=69a1671bb920f62aab1e242c slot=FN id=69a58a62793995e1dcddd0c1
+  [OK] student=69a1671bb920f62aab1e242d slot=FN id=69a58a62793995e1dcddd0bd
+  [OK] student=69a1671bb920f62aab1e2426 slot=FN id=69a58a62793995e1dcddd0bf
+
+--- NEW BULK SUBMIT AT 2026-03-02T13:02:42.215Z ---
+Received 11 records.
+  [OK] student=69a1671bb920f62aab1e2424 slot=AN id=69a58a72793995e1dcddd0c3
+  [OK] student=69a1671bb920f62aab1e2426 slot=AN id=69a58a72793995e1dcddd0c4
+  [OK] student=69a1671bb920f62aab1e2427 slot=AN id=69a58a72793995e1dcddd0c5
+  [OK] student=69a1671bb920f62aab1e2425 slot=AN id=69a58a72793995e1dcddd0c6
+  [OK] student=69a1671bb920f62aab1e2428 slot=AN id=69a58a72793995e1dcddd0c7
+  [OK] student=69a1671bb920f62aab1e2429 slot=AN id=69a58a72793995e1dcddd0c8
+  [OK] student=69a1671bb920f62aab1e242a slot=AN id=69a58a72793995e1dcddd0c9
+  [OK] student=69a1671bb920f62aab1e242b slot=AN id=69a58a72793995e1dcddd0ca
+  [OK] student=69a1671bb920f62aab1e242c slot=AN id=69a58a72793995e1dcddd0cb
+  [OK] student=69a1671bb920f62aab1e242d slot=AN id=69a58a72793995e1dcddd0cc
+  [OK] student=69a175887ff00bc499cf908b slot=AN id=69a58a72793995e1dcddd0cd
+
+--- NEW BULK SUBMIT AT 2026-03-02T14:26:53.029Z ---
+Received 11 records.
+  [OK] student=69a1671bb920f62aab1e2424 slot=FN id=69a59e2d793995e1dcddd0cf
+  [OK] student=69a1671bb920f62aab1e2426 slot=FN id=69a59e2d793995e1dcddd0d1
+  [OK] student=69a1671bb920f62aab1e2425 slot=FN id=69a59e2d793995e1dcddd0d0
+  [OK] student=69a1671bb920f62aab1e2427 slot=FN id=69a59e2d793995e1dcddd0ce
+  [OK] student=69a1671bb920f62aab1e2428 slot=FN id=69a59e2d793995e1dcddd0d2
+  [OK] student=69a1671bb920f62aab1e2429 slot=FN id=69a59e2d793995e1dcddd0d3
+  [OK] student=69a1671bb920f62aab1e242a slot=FN id=69a59e2d793995e1dcddd0d4
+  [OK] student=69a1671bb920f62aab1e242b slot=FN id=69a59e2d793995e1dcddd0d5
+  [OK] student=69a1671bb920f62aab1e242c slot=FN id=69a59e2d793995e1dcddd0d6
+  [OK] student=69a1671bb920f62aab1e242d slot=FN id=69a59e2d793995e1dcddd0d7
+  [OK] student=69a175887ff00bc499cf908b slot=FN id=69a59e2d793995e1dcddd0d8
+
+--- NEW BULK SUBMIT AT 2026-03-02T14:27:07.835Z ---
+Received 11 records.
+  [OK] student=69a1671bb920f62aab1e2424 slot=AN id=69a59e3b793995e1dcddd0d9
+  [OK] student=69a1671bb920f62aab1e2426 slot=AN id=69a59e3b793995e1dcddd0db
+  [OK] student=69a1671bb920f62aab1e2425 slot=AN id=69a59e3b793995e1dcddd0dc
+  [OK] student=69a1671bb920f62aab1e2427 slot=AN id=69a59e3b793995e1dcddd0da
+  [OK] student=69a1671bb920f62aab1e2428 slot=AN id=69a59e3b793995e1dcddd0dd
+  [OK] student=69a1671bb920f62aab1e2429 slot=AN id=69a59e3b793995e1dcddd0de
+  [OK] student=69a1671bb920f62aab1e242a slot=AN id=69a59e3b793995e1dcddd0df
+  [OK] student=69a1671bb920f62aab1e242b slot=AN id=69a59e3b793995e1dcddd0e0
+  [OK] student=69a1671bb920f62aab1e242c slot=AN id=69a59e3b793995e1dcddd0e1
+  [OK] student=69a1671bb920f62aab1e242d slot=AN id=69a59e3b793995e1dcddd0e2
+  [OK] student=69a175887ff00bc499cf908b slot=AN id=69a59e3b793995e1dcddd0e3
+
+--- NEW BULK SUBMIT AT 2026-03-02T14:27:46.946Z ---
+Received 11 records.
+  [OK] student=69a1671bb920f62aab1e2424 slot=FN id=69a59e62793995e1dcddd0e4
+  [OK] student=69a1671bb920f62aab1e2426 slot=FN id=69a59e62793995e1dcddd0e5
+  [OK] student=69a1671bb920f62aab1e2427 slot=FN id=69a59e62793995e1dcddd0e6
+  [OK] student=69a1671bb920f62aab1e2425 slot=FN id=69a59e62793995e1dcddd0e7
+  [OK] student=69a1671bb920f62aab1e2429 slot=FN id=69a59e62793995e1dcddd0e9
+  [OK] student=69a1671bb920f62aab1e2428 slot=FN id=69a59e62793995e1dcddd0e8
+  [OK] student=69a1671bb920f62aab1e242a slot=FN id=69a59e62793995e1dcddd0ea
+  [OK] student=69a1671bb920f62aab1e242b slot=FN id=69a59e62793995e1dcddd0eb
+  [OK] student=69a1671bb920f62aab1e242c slot=FN id=69a59e62793995e1dcddd0ec
+  [OK] student=69a1671bb920f62aab1e242d slot=FN id=69a59e62793995e1dcddd0ed
+  [OK] student=69a175887ff00bc499cf908b slot=FN id=69a59e62793995e1dcddd0ee
+
+--- NEW BULK SUBMIT AT 2026-03-02T14:27:56.199Z ---
+Received 11 records.
+  [OK] student=69a1671bb920f62aab1e2424 slot=AN id=69a59e6c793995e1dcddd0f1
+  [OK] student=69a1671bb920f62aab1e2425 slot=AN id=69a59e6c793995e1dcddd0f2
+  [OK] student=69a1671bb920f62aab1e2427 slot=AN id=69a59e6c793995e1dcddd0ef
+  [OK] student=69a1671bb920f62aab1e2428 slot=AN id=69a59e6c793995e1dcddd0f3
+  [OK] student=69a1671bb920f62aab1e2426 slot=AN id=69a59e6c793995e1dcddd0f0
+  [OK] student=69a1671bb920f62aab1e2429 slot=AN id=69a59e6c793995e1dcddd0f5
+  [OK] student=69a1671bb920f62aab1e242a slot=AN id=69a59e6c793995e1dcddd0f4
+  [OK] student=69a1671bb920f62aab1e242b slot=AN id=69a59e6c793995e1dcddd0f6
+  [OK] student=69a1671bb920f62aab1e242c slot=AN id=69a59e6c793995e1dcddd0f7
+  [OK] student=69a1671bb920f62aab1e242d slot=AN id=69a59e6c793995e1dcddd0f8
+  [OK] student=69a175887ff00bc499cf908b slot=AN id=69a59e6c793995e1dcddd0f9
+
+--- NEW BULK SUBMIT AT 2026-03-02T14:29:40.315Z ---
+Received 11 records.
+  [OK] student=69a1671bb920f62aab1e2424 slot=FN id=69a59ed4793995e1dcddd0fa
+  [OK] student=69a1671bb920f62aab1e2426 slot=FN id=69a59ed4793995e1dcddd0fb
+  [OK] student=69a1671bb920f62aab1e2427 slot=FN id=69a59ed4793995e1dcddd0fc
+  [OK] student=69a1671bb920f62aab1e2425 slot=FN id=69a59ed4793995e1dcddd0fd
+  [OK] student=69a1671bb920f62aab1e2429 slot=FN id=69a59ed4793995e1dcddd0ff
+  [OK] student=69a1671bb920f62aab1e2428 slot=FN id=69a59ed4793995e1dcddd0fe
+  [OK] student=69a1671bb920f62aab1e242a slot=FN id=69a59ed4793995e1dcddd100
+  [OK] student=69a1671bb920f62aab1e242b slot=FN id=69a59ed4793995e1dcddd101
+  [OK] student=69a1671bb920f62aab1e242c slot=FN id=69a59ed4793995e1dcddd102
+  [OK] student=69a1671bb920f62aab1e242d slot=FN id=69a59ed4793995e1dcddd103
+  [OK] student=69a175887ff00bc499cf908b slot=FN id=69a59ed4793995e1dcddd104
+
+--- NEW BULK SUBMIT AT 2026-03-02T14:29:51.072Z ---
+Received 11 records.
+  [OK] student=69a1671bb920f62aab1e2424 slot=AN id=69a59edf793995e1dcddd105
+  [OK] student=69a1671bb920f62aab1e2426 slot=AN id=69a59edf793995e1dcddd106
+  [OK] student=69a1671bb920f62aab1e2427 slot=AN id=69a59edf793995e1dcddd107
+  [OK] student=69a1671bb920f62aab1e2425 slot=AN id=69a59edf793995e1dcddd108
+  [OK] student=69a1671bb920f62aab1e2428 slot=AN id=69a59edf793995e1dcddd109
+  [OK] student=69a1671bb920f62aab1e2429 slot=AN id=69a59edf793995e1dcddd10a
+  [OK] student=69a1671bb920f62aab1e242a slot=AN id=69a59edf793995e1dcddd10b
+  [OK] student=69a1671bb920f62aab1e242b slot=AN id=69a59edf793995e1dcddd10c
+  [OK] student=69a1671bb920f62aab1e242c slot=AN id=69a59edf793995e1dcddd10d
+  [OK] student=69a175887ff00bc499cf908b slot=AN id=69a59edf793995e1dcddd10f
+  [OK] student=69a1671bb920f62aab1e242d slot=AN id=69a59edf793995e1dcddd10e
+
+--- NEW BULK SUBMIT AT 2026-03-02T16:10:20.603Z ---
+Received 11 records.
+  [OK] student=69a1671bb920f62aab1e2424 slot=FN id=69a5b66c793995e1dcddd110
+  [OK] student=69a1671bb920f62aab1e2427 slot=FN id=69a5b66c793995e1dcddd112
+  [OK] student=69a1671bb920f62aab1e2426 slot=FN id=69a5b66c793995e1dcddd111
+  [OK] student=69a1671bb920f62aab1e2428 slot=FN id=69a5b66c793995e1dcddd114
+  [OK] student=69a1671bb920f62aab1e2425 slot=FN id=69a5b66c793995e1dcddd113
+  [OK] student=69a1671bb920f62aab1e2429 slot=FN id=69a5b66c793995e1dcddd115
+  [OK] student=69a1671bb920f62aab1e242b slot=FN id=69a5b66c793995e1dcddd116
+  [OK] student=69a1671bb920f62aab1e242a slot=FN id=69a5b66c793995e1dcddd117
+  [OK] student=69a1671bb920f62aab1e242c slot=FN id=69a5b66c793995e1dcddd118
+  [OK] student=69a1671bb920f62aab1e242d slot=FN id=69a5b66c793995e1dcddd119
+  [OK] student=69a175887ff00bc499cf908b slot=FN id=69a5b66c793995e1dcddd11a
+
+--- NEW BULK SUBMIT AT 2026-03-02T16:10:27.337Z ---
+Received 11 records.
+  [OK] student=69a1671bb920f62aab1e2424 slot=AN id=69a5b673793995e1dcddd11b
+  [OK] student=69a1671bb920f62aab1e2426 slot=AN id=69a5b673793995e1dcddd11c
+  [OK] student=69a1671bb920f62aab1e2427 slot=AN id=69a5b673793995e1dcddd11d
+  [OK] student=69a1671bb920f62aab1e2425 slot=AN id=69a5b673793995e1dcddd11e
+  [OK] student=69a1671bb920f62aab1e2429 slot=AN id=69a5b673793995e1dcddd120
+  [OK] student=69a1671bb920f62aab1e2428 slot=AN id=69a5b673793995e1dcddd11f
+  [OK] student=69a1671bb920f62aab1e242b slot=AN id=69a5b673793995e1dcddd122
+  [OK] student=69a1671bb920f62aab1e242a slot=AN id=69a5b673793995e1dcddd121
+  [OK] student=69a1671bb920f62aab1e242c slot=AN id=69a5b673793995e1dcddd123
+  [OK] student=69a175887ff00bc499cf908b slot=AN id=69a5b673793995e1dcddd125
+  [OK] student=69a1671bb920f62aab1e242d slot=AN id=69a5b673793995e1dcddd124
+
+--- NEW BULK SUBMIT AT 2026-03-03T09:06:49.515Z ---
+Received 11 records.
+  [OK] student=69a1671bb920f62aab1e2424 slot=FN id=69a6a4a9a2cf932e91a3ce25
+  [OK] student=69a1671bb920f62aab1e2429 slot=FN id=69a6a4a9a2cf932e91a3ce28
+  [OK] student=69a1671bb920f62aab1e2428 slot=FN id=69a6a4a9a2cf932e91a3ce29
+  [OK] student=69a1671bb920f62aab1e2427 slot=FN id=69a6a4a9a2cf932e91a3ce27
+  [OK] student=69a1671bb920f62aab1e2426 slot=FN id=69a6a4a9a2cf932e91a3ce26
+  [OK] student=69a1671bb920f62aab1e2425 slot=FN id=69a6a4a9a2cf932e91a3ce2a
+  [OK] student=69a1671bb920f62aab1e242a slot=FN id=69a6a4a9a2cf932e91a3ce2b
+  [OK] student=69a1671bb920f62aab1e242c slot=FN id=69a6a4a9a2cf932e91a3ce2c
+  [OK] student=69a1671bb920f62aab1e242b slot=FN id=69a6a4a9a2cf932e91a3ce2d
+  [OK] student=69a1671bb920f62aab1e242d slot=FN id=69a6a4a9a2cf932e91a3ce2e
+  [OK] student=69a175887ff00bc499cf908b slot=FN id=69a6a4a9a2cf932e91a3ce2f
+
+--- NEW BULK SUBMIT AT 2026-03-03T09:07:00.436Z ---
+Received 11 records.
+  [OK] student=69a1671bb920f62aab1e2424 slot=AN id=69a6a4b4a2cf932e91a3ce31
+  [OK] student=69a1671bb920f62aab1e2426 slot=AN id=69a6a4b4a2cf932e91a3ce30
+  [OK] student=69a1671bb920f62aab1e2427 slot=AN id=69a6a4b4a2cf932e91a3ce32
+  [OK] student=69a1671bb920f62aab1e2425 slot=AN id=69a6a4b4a2cf932e91a3ce33
+  [OK] student=69a1671bb920f62aab1e2428 slot=AN id=69a6a4b4a2cf932e91a3ce34
+  [OK] student=69a1671bb920f62aab1e2429 slot=AN id=69a6a4b4a2cf932e91a3ce35
+  [OK] student=69a1671bb920f62aab1e242a slot=AN id=69a6a4b4a2cf932e91a3ce36
+  [OK] student=69a1671bb920f62aab1e242b slot=AN id=69a6a4b4a2cf932e91a3ce37
+  [OK] student=69a1671bb920f62aab1e242d slot=AN id=69a6a4b4a2cf932e91a3ce39
+  [OK] student=69a175887ff00bc499cf908b slot=AN id=69a6a4b4a2cf932e91a3ce3a
+  [OK] student=69a1671bb920f62aab1e242c slot=AN id=69a6a4b4a2cf932e91a3ce38

@@ -85,7 +85,10 @@ const AdminLogin = () => {
                         </button>
                     </form>
 
-                    <div className="mt-10 pt-6 border-t border-slate-100 text-center">
+                    <div className="mt-10 pt-6 border-t border-slate-100 flex flex-col items-center gap-4">
+                        <Link to="/admin-register" className="text-[10px] font-black text-indigo-600 uppercase tracking-widest hover:text-indigo-700 transition-all flex items-center justify-center gap-2">
+                            Create Admin Account
+                        </Link>
                         <Link to="/login" className="text-[10px] font-black text-slate-500 uppercase tracking-widest hover:text-indigo-600 transition-all flex items-center justify-center gap-2">
                             <span className="w-1.5 h-1.5 rounded-full bg-slate-300" />
                             Student Portal

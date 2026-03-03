@@ -3,6 +3,7 @@ const dotenv = require('dotenv');
 const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
+const path = require('path');
 const connectDB = require('./config/db');
 const { errorHandler } = require('./middleware/errorMiddleware');
 
@@ -17,7 +18,13 @@ const app = express();
 // Middleware
 app.use(express.json());
 app.use(cors());
-app.use(helmet());
+
+// Serve static files
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+app.use(helmet({
+    crossOriginResourcePolicy: false,
+}));
 if (process.env.NODE_ENV === 'development') {
     app.use(morgan('dev'));
 }
@@ -29,7 +36,13 @@ app.use('/api/attendance', require('./routes/attendanceRoutes'));
 app.use('/api/study-materials', require('./routes/studyMaterialRoutes'));
 app.use('/api/schedules', require('./routes/scheduleRoutes'));
 app.use('/api/marks', require('./routes/markRoutes'));
+app.use('/api/fees', require('./routes/feeRoutes'));
 app.use('/api/system', require('./routes/systemRoutes'));
+app.use('/api/achievements', require('./routes/achievementRoutes'));
+app.use('/api/leaves', require('./routes/leaveRoutes'));
+app.use('/api/placements', require('./routes/placementRoutes'));
+app.use('/api/subjects', require('./routes/subjectRoutes'));
+app.use('/api/upload', require('./routes/uploadRoutes'));
 
 app.get('/', (req, res) => {
     res.send('API is running...');
@@ -39,7 +52,19 @@ app.get('/', (req, res) => {
 app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;
-
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
     console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`);
+});
+
+// Handle unhandled promise rejections
+process.on('unhandledRejection', (err, promise) => {
+    console.log(`Error: ${err.message}`);
+    // Close server & exit process
+    server.close(() => process.exit(1));
+});
+
+// Handle uncaught exceptions
+process.on('uncaughtException', (err) => {
+    console.log(`Error: ${err.message}`);
+    process.exit(1);
 });

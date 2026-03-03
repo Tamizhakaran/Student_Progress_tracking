@@ -4,11 +4,13 @@ const {
     upsertSchedule,
     getTodaySchedule,
     getAllSchedules,
-    deleteSchedule
+    deleteSchedule,
+    getMyExams
 } = require('../controllers/scheduleController');
 const { protect, authorize } = require('../middleware/authMiddleware');
 
 router.get('/today', protect, getTodaySchedule);
+router.get('/my-exams', protect, getMyExams);
 
 // Admin routes
 router.use(protect);

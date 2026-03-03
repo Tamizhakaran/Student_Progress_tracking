@@ -3,7 +3,8 @@ const router = express.Router();
 const {
     upsertMark,
     getStudentMarks,
-    getMyMarks
+    getMyMarks,
+    deleteMark
 } = require('../controllers/markController');
 const { protect, authorize } = require('../middleware/authMiddleware');
 
@@ -15,5 +16,6 @@ router.use(authorize('Admin'));
 
 router.post('/', upsertMark);
 router.get('/student/:studentId', getStudentMarks);
+router.delete('/:id', deleteMark);
 
 module.exports = router;

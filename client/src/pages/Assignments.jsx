@@ -30,11 +30,11 @@ const Assignments = () => {
     };
 
     return (
-        <div className="space-y-8 animate-in fade-in duration-700">
+        <div className="space-y-12 pb-20 min-h-screen">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
                 <div>
-                    <h1 className="text-4xl font-black text-slate-900 tracking-tight">Assignments</h1>
-                    <p className="text-slate-500 font-bold mt-1">Track and manage your assignments.</p>
+                    <h1 className="text-4xl md:text-5xl font-black text-slate-900 tracking-tight">Assignments</h1>
+                    <p className="text-slate-500 font-bold text-base mt-2">Track and manage your academic tasks and deadlines.</p>
                 </div>
             </div>
 

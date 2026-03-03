@@ -2,6 +2,8 @@ const sendEmail = async (options) => {
     // Fallback if SMTP settings are missing
     if (!process.env.SMTP_HOST || !process.env.SMTP_EMAIL || !process.env.SMTP_PASSWORD) {
         console.log('--- EMAIL FALLBACK (Local Development) ---');
+        console.log('IMPORTANT: SMTP settings are missing in .env file.');
+        console.log('To send actual emails, please configure SMTP_HOST, SMTP_EMAIL, and SMTP_PASSWORD.');
         console.log('To:', options.email);
         console.log('Subject:', options.subject);
         console.log('Message:', options.message);

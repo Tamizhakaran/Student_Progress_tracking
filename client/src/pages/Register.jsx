@@ -9,7 +9,7 @@ import { DEPARTMENTS } from '../utils/constants';
 
 const Register = () => {
     const { register, handleSubmit, formState: { errors }, watch } = useForm({
-        defaultValues: { role: 'Student' }
+        defaultValues: { role: 'Admin' }
     });
     const { register: registerUser } = useAuth();
     const navigate = useNavigate();
@@ -78,16 +78,13 @@ const Register = () => {
 
                     <div className="relative z-10">
                         <Link to="/" className="flex items-center gap-3 mb-12 group inline-flex">
-                            <motion.div whileHover={{ rotate: 5, scale: 1.1 }} className="w-9 h-9 bg-white text-slate-950 rounded-xl flex items-center justify-center shadow-2xl">
-                                <LuGraduationCap className="text-xl" />
-                            </motion.div>
                             <span className="text-xl font-black tracking-tight text-white">StudentIQ</span>
                         </Link>
 
                         <div className="space-y-6">
-                            <h1 className="text-4xl md:text-5xl font-black text-slate-900 tracking-tighter leading-none">
+                            <h1 className="text-4xl md:text-5xl font-black text-white tracking-tight leading-none">
                                 Start your <br />
-                                <span className="text-indigo-400">Account.</span>
+                                <span className="opacity-70">Account.</span>
                             </h1>
                             <p className="text-white/70 font-bold text-sm max-w-xs leading-relaxed">
                                 Join the next generation of academic intelligence and track your trajectory with precision.
@@ -111,7 +108,7 @@ const Register = () => {
                 <div className="flex-1 p-8 lg:p-14 bg-white">
                     <div className="mb-10">
                         <h2 className="text-[11px] font-black uppercase tracking-[0.3em] text-indigo-600 mb-8">
-                            {selectedRole === 'Admin' ? 'Admin Registration' : 'Student Sign Up'}
+                            Admin Registration
                         </h2>
                     </div>
 
@@ -123,9 +120,10 @@ const Register = () => {
                                     <FiUser className="absolute left-4 top-1/2 -translate-y-1/2 transition-colors text-slate-400 group-focus-within:text-indigo-600" />
                                     <input
                                         {...register('name', { required: 'Required' })}
-                                        className="w-full pl-12 pr-5 py-3.5 rounded-2xl transition-all font-bold text-sm outline-none border-2 bg-slate-100/30 border-transparent focus:bg-white"
+                                        className={`w-full pl-12 pr-5 py-3.5 rounded-2xl transition-all font-bold text-sm outline-none border-2 bg-slate-100/30 ${errors.name ? 'border-rose-500' : 'border-transparent'} focus:bg-white`}
                                         placeholder="Full Name"
                                     />
+                                    {errors.name && <p className="text-[10px] font-bold text-rose-500 mt-1 ml-2">{errors.name.message}</p>}
                                 </div>
                             </motion.div>
 
@@ -138,63 +136,30 @@ const Register = () => {
                                             required: 'Required',
                                             pattern: { value: /^[a-zA-Z0-9._%+-]+@bitsathy\.ac\.in$/, message: '@bitsathy.ac.in only' }
                                         })}
-                                        className="w-full pl-12 pr-5 py-3.5 rounded-2xl transition-all font-bold text-sm outline-none border-2 bg-slate-100/30 border-transparent focus:bg-white"
+                                        className={`w-full pl-12 pr-5 py-3.5 rounded-2xl transition-all font-bold text-sm outline-none border-2 bg-slate-100/30 ${errors.email ? 'border-rose-500' : 'border-transparent'} focus:bg-white`}
                                         placeholder="your-id@bitsathy.ac.in"
                                     />
+                                    {errors.email && <p className="text-[10px] font-bold text-rose-500 mt-1 ml-2">{errors.email.message}</p>}
                                 </div>
                             </motion.div>
                         </div>
 
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <motion.div variants={itemVariants} className="space-y-2">
-                                <label className="text-[10px] font-black uppercase tracking-widest ml-1 text-slate-400">Role</label>
-                                <select
-                                    {...register('role', { required: true })}
-                                    className="w-full px-5 py-3.5 rounded-2xl transition-all font-black text-sm outline-none appearance-none cursor-pointer border-2 bg-slate-100/30 border-transparent"
-                                >
-                                    <option value="Student">Active Student</option>
-                                    <option value="Admin">System Administrator</option>
-                                </select>
-                            </motion.div>
-
-                            <motion.div variants={itemVariants} className="space-y-2">
-                                <label className="text-[10px] font-black uppercase tracking-widest ml-1 text-slate-400">
-                                    {selectedRole === 'Student' ? 'Enrollment ID' : 'Access Code'}
-                                </label>
+                        <motion.div variants={itemVariants} className="space-y-2">
+                            <label className="text-[10px] font-black uppercase tracking-widest ml-1 text-slate-400">
+                                Admin Access Code
+                            </label>
+                            <div className="relative group">
                                 <input
-                                    {...register(selectedRole === 'Student' ? 'registerNumber' : 'schoolId', { required: 'Required' })}
-                                    className="w-full px-5 py-3.5 rounded-2xl transition-all font-bold text-sm outline-none border-2 bg-slate-100/30 border-transparent focus:bg-white"
-                                    placeholder={selectedRole === 'Student' ? "7376xxxxx" : "ADM-xxxx"}
+                                    {...register('schoolId', { required: 'Required' })}
+                                    className={`w-full px-5 py-3.5 rounded-2xl transition-all font-bold text-sm outline-none border-2 bg-slate-100/30 ${errors.schoolId ? 'border-rose-500' : 'border-transparent'} focus:bg-white`}
+                                    placeholder="BIT-ADM-xxxx"
                                 />
-                            </motion.div>
-                        </div>
+                                {errors.schoolId && (
+                                    <p className="text-[10px] font-bold text-rose-500 mt-1 ml-2">{errors.schoolId.message}</p>
+                                )}
+                            </div>
+                        </motion.div>
 
-                        {selectedRole === 'Student' && (
-                            <motion.div variants={itemVariants} className="grid grid-cols-2 gap-6 pb-2">
-                                <div className="space-y-2">
-                                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Department Branch</label>
-                                    <select
-                                        {...register('department')}
-                                        className="w-full px-5 py-3 rounded-xl bg-slate-100/30 border-2 border-transparent focus:bg-white transition-all font-black text-[12px] outline-none cursor-pointer appearance-none"
-                                    >
-                                        <option value="">Select Branch</option>
-                                        {DEPARTMENTS.map((dept) => (
-                                            <option key={dept.value} value={dept.value}>{dept.label}</option>
-                                        ))}
-                                    </select>
-                                </div>
-                                <div className="space-y-2">
-                                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Current Semester</label>
-                                    <select
-                                        {...register('semester')}
-                                        className="w-full px-5 py-3 rounded-xl bg-slate-100/30 border-2 border-transparent focus:bg-white transition-all font-black text-[12px] outline-none cursor-pointer appearance-none"
-                                    >
-                                        <option value="">Semester</option>
-                                        {[1, 2, 3, 4, 5, 6, 7, 8].map(s => <option key={s} value={s}>{s}</option>)}
-                                    </select>
-                                </div>
-                            </motion.div>
-                        )}
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <motion.div variants={itemVariants} className="space-y-2">
@@ -203,10 +168,11 @@ const Register = () => {
                                     <FiLock className="absolute left-4 top-1/2 -translate-y-1/2 transition-colors text-slate-400 group-focus-within:text-indigo-600" />
                                     <input
                                         type="password"
-                                        {...register('password', { required: 'Required', minLength: 6 })}
-                                        className="w-full pl-12 pr-5 py-3.5 rounded-2xl transition-all font-bold text-sm outline-none border-2 bg-slate-100/30 border-transparent focus:bg-white"
+                                        {...register('password', { required: 'Required', minLength: { value: 6, message: 'Min 6 chars' } })}
+                                        className={`w-full pl-12 pr-5 py-3.5 rounded-2xl transition-all font-bold text-sm outline-none border-2 bg-slate-100/30 ${errors.password ? 'border-rose-500' : 'border-transparent'} focus:bg-white`}
                                         placeholder="••••••••"
                                     />
+                                    {errors.password && <p className="text-[10px] font-bold text-rose-500 mt-1 ml-2">{errors.password.message}</p>}
                                 </div>
                             </motion.div>
 
@@ -220,9 +186,10 @@ const Register = () => {
                                             required: 'Required',
                                             validate: (v) => v === watch('password') || 'No Match'
                                         })}
-                                        className="w-full pl-12 pr-5 py-3.5 rounded-2xl transition-all font-bold text-sm outline-none border-2 bg-slate-100/30 border-transparent focus:bg-white"
+                                        className={`w-full pl-12 pr-5 py-3.5 rounded-2xl transition-all font-bold text-sm outline-none border-2 bg-slate-100/30 ${errors.confirmPassword ? 'border-rose-500' : 'border-transparent'} focus:bg-white`}
                                         placeholder="••••••••"
                                     />
+                                    {errors.confirmPassword && <p className="text-[10px] font-bold text-rose-500 mt-1 ml-2">{errors.confirmPassword.message}</p>}
                                 </div>
                             </motion.div>
                         </div>
@@ -239,7 +206,7 @@ const Register = () => {
                                 <div className="w-5 h-5 border-2 rounded-full animate-spin border-white/30 border-t-white" />
                             ) : (
                                 <>
-                                    {selectedRole === 'Admin' ? 'Register Admin' : 'Create Account'} <FiArrowRight className="text-base" />
+                                    Register Admin <FiArrowRight className="text-base" />
                                 </>
                             )}
                         </motion.button>

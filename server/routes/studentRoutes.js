@@ -5,6 +5,8 @@ const {
     updateStudent,
     createStudent,
     deleteStudent,
+    bulkUpdateStudents,
+    bulkCreateStudents,
     getStudentRank
 } = require('../controllers/studentController');
 
@@ -23,6 +25,9 @@ router.use(authorize('Admin'));
 router.route('/')
     .get(getStudents)
     .post(createStudent);
+
+router.put('/bulk', bulkUpdateStudents);
+router.post('/bulk-upload', bulkCreateStudents);
 
 router.route('/:id')
     .put(updateStudent)

@@ -106,9 +106,45 @@ const deleteSchedule = asyncHandler(async (req, res) => {
     });
 });
 
+// @desc    Get all upcoming exams for student
+// @route   GET /api/schedules/my-exams
+// @access  Private/Student
+const getMyExams = asyncHandler(async (req, res) => {
+    const currentUser = await User.findById(req.user.id);
+
+    if (!currentUser || currentUser.role !== 'Student') {
+        res.status(400);
+        throw new Error('Not authorized or student not found');
+    }
+
+    // Find all schedules for student's dept and sem that have 'Exam' type slots
+    const schedules = await Schedule.find({
+        department: currentUser.department,
+        semester: currentUser.semester,
+        'slots.type': 'Exam'
+    }).sort({ date: 1 });
+
+    // Flatten slots and add date
+    const exams = schedules.reduce((acc, sched) => {
+        const dayExams = sched.slots
+            .filter(s => s.type === 'Exam')
+            .map(s => ({
+                ...s.toObject(),
+                date: sched.date
+            }));
+        return [...acc, ...dayExams];
+    }, []);
+
+    res.status(200).json({
+        success: true,
+        data: exams
+    });
+});
+
 module.exports = {
     upsertSchedule,
     getTodaySchedule,
     getAllSchedules,
-    deleteSchedule
+    deleteSchedule,
+    getMyExams
 };

@@ -1,21 +1,64 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
+    :root {
+        --brand-primary: 243 75% 59%;
+        --brand-secondary: 270 91% 65%;
+        --accent-emerald: 161 94% 30%;
+        --accent-rose: 350 89% 60%;
+        --glass-bg: rgba(255, 255, 255, 0.7);
+        --glass-border: rgba(255, 255, 255, 0.5);
+    }
+
     body {
-        @apply bg-slate-50 text-slate-900 font-sans;
+        @apply bg-[#F8FAFC] text-slate-900 font-jakarta antialiased selection:bg-indigo-100 selection:text-indigo-900;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        @apply font-outfit;
     }
 }
 
 @layer utilities {
+    .font-jakarta {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    .font-outfit {
+        font-family: 'Outfit', sans-serif;
+    }
+
+    .premium-glass {
+        @apply bg-white/70 backdrop-blur-2xl border border-white transition-all duration-500;
+        box-shadow:
+            0 4px 24px -1px rgba(0, 0, 0, 0.03),
+            0 2px 8px -1px rgba(0, 0, 0, 0.02),
+            inset 0 0 20px rgba(255, 255, 255, 0.2);
+    }
+
+    .premium-glass:hover {
+        @apply bg-white/80 border-indigo-50/50;
+        box-shadow:
+            0 20px 40px -12px rgba(99, 102, 241, 0.08),
+            0 0 0 1px rgba(99, 102, 241, 0.05);
+    }
+
     .glass-morphism {
         @apply bg-white/70 backdrop-blur-xl border border-white/20 transition-all duration-300;
         box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
     }
 
     .text-gradient {
-        @apply bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-purple-600;
+        @apply bg-clip-text text-transparent bg-gradient-to-br from-indigo-600 via-purple-600 to-indigo-800;
     }
 
     .animated-gradient {
@@ -39,10 +82,10 @@
     }
 
     .mesh-gradient {
-        background: radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.1) 0px, transparent 50%),
-            radial-gradient(at 100% 0%, rgba(168, 85, 247, 0.1) 0px, transparent 50%),
-            radial-gradient(at 100% 100%, rgba(236, 72, 153, 0.1) 0px, transparent 50%),
-            radial-gradient(at 0% 100%, rgba(79, 70, 229, 0.1) 0px, transparent 50%);
+        background: radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.05) 0px, transparent 50%),
+            radial-gradient(at 100% 0%, rgba(168, 85, 247, 0.05) 0px, transparent 50%),
+            radial-gradient(at 100% 100%, rgba(236, 72, 153, 0.03) 0px, transparent 50%),
+            radial-gradient(at 0% 100%, rgba(79, 70, 229, 0.03) 0px, transparent 50%);
         background-size: 200% 200%;
         animation: mesh 20s ease infinite;
     }
@@ -61,34 +104,94 @@
         }
     }
 
+    .hover-lift {
+        @apply transition-all duration-500 ease-[cubic-bezier(0.34, 1.56, 0.64, 1)];
+    }
+
+    .hover-lift:hover {
+        @apply -translate-y-2 scale-[1.02];
+    }
+
     .grid-bg-overlay {
         background-image: radial-gradient(rgba(0, 0, 0, 0.03) 1px, transparent 1px);
         background-size: 24px 24px;
     }
 
-    .glow-input:focus {
+    .glow-indigo:focus-within {
         @apply ring-4 ring-indigo-500/10 border-indigo-500/30;
-        box-shadow: 0 0 20px rgba(99, 102, 241, 0.1);
+        box-shadow: 0 0 30px rgba(99, 102, 241, 0.12);
     }
 }
 
-.bg-pattern {
-    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%239C92AC' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-}
-
-::-webkit-scrollbar {
+.custom-scrollbar::-webkit-scrollbar {
     width: 6px;
 }
 
-::-webkit-scrollbar-track {
-    background: transparent;
-}
-
-::-webkit-scrollbar-thumb {
-    background: #e2e8f0;
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.02);
     border-radius: 10px;
 }
 
-::-webkit-scrollbar-thumb:hover {
-    background: #cbd5e1;
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: rgba(99, 102, 241, 0.2);
+    border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: rgba(99, 102, 241, 0.4);
+}
+
+.custom-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(99, 102, 241, 0.2) rgba(0, 0, 0, 0.02);
+}
+
+.bg-pattern {
+    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%236366f1' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+
+/* Print Styles */
+@media print {
+    @page {
+        margin: 0;
+        /* This removes the browser's default header/footer */
+        size: auto;
+    }
+
+    body {
+        margin: 0;
+        /* Ensures no spacing on the paper */
+        background-color: white !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+
+    .no-print {
+        display: none !important;
+    }
+
+    .print-only {
+        display: block !important;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        background: white !important;
+        z-index: 9999;
+    }
+
+    /* Force background colors and borders in print */
+    .print-only * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+
+    @page {
+        margin: 1cm;
+        size: auto;
+    }
+}
+
+.print-only {
+    display: none;
 }
