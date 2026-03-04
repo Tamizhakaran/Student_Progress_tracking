@@ -562,18 +562,35 @@ const Dashboard = () => {
 
                         <motion.div variants={itemVariants} className="lg:col-span-2 glass-morphism p-8 rounded-[2.5rem] border-white shadow-xl bg-white/40">
                             <h3 className="text-2xl font-black text-slate-900 mb-6">Subject Performance</h3>
-                            <div className="h-[300px]">
+                            <div className="h-[340px]">
                                 <ResponsiveContainer width="100%" height="100%">
-                                    <BarChart data={subjectData}>
+                                    <BarChart data={subjectData} margin={{ bottom: 60 }}>
                                         <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(0,0,0,0.03)" />
                                         <XAxis
                                             dataKey="subject"
                                             axisLine={false}
                                             tickLine={false}
-                                            tick={{ fill: '#94a3b8', fontSize: 10, fontWeight: 900 }}
-                                            angle={-30}
-                                            textAnchor="end"
-                                            height={80}
+                                            tick={(props) => {
+                                                const { x, y, payload } = props;
+                                                const words = payload.value.split(' ');
+                                                const mid = Math.ceil(words.length / 2);
+                                                const line1 = words.slice(0, mid).join(' ');
+                                                const line2 = words.slice(mid).join(' ');
+                                                return (
+                                                    <g transform={`translate(${x},${y})`}>
+                                                        <text x={0} y={0} dy={14} textAnchor="middle" fill="#94a3b8" fontSize={10} fontWeight={900}>
+                                                            {line1}
+                                                        </text>
+                                                        {line2 && (
+                                                            <text x={0} y={0} dy={26} textAnchor="middle" fill="#94a3b8" fontSize={10} fontWeight={900}>
+                                                                {line2}
+                                                            </text>
+                                                        )}
+                                                    </g>
+                                                );
+                                            }}
+                                            height={70}
+                                            interval={0}
                                         />
                                         <YAxis axisLine={false} tickLine={false} tick={{ fill: '#94a3b8', fontSize: 10, fontWeight: 900 }} />
                                         <Tooltip
