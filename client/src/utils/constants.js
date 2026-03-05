@@ -5,7 +5,6 @@ export const DEPARTMENTS = [
     { label: 'Biomedical Engineering', value: 'Biomedical Engineering' },
     { label: 'Biotechnology', value: 'Biotechnology' },
     { label: 'Civil Engineering', value: 'Civil Engineering' },
-    { label: 'Chemical Engineering', value: 'Chemical Engineering' },
     { label: 'Computer Science and Engineering', value: 'Computer Science and Engineering' },
     { label: 'Computer Science and Business Systems', value: 'Computer Science and Business Systems' },
     { label: 'Computer Technology', value: 'Computer Technology' },
