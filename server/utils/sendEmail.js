@@ -1,9 +1,9 @@
 const sendEmail = async (options) => {
     // Fallback if SMTP settings are missing
-    if (!process.env.SMTP_HOST || !process.env.SMTP_EMAIL || !process.env.SMTP_PASSWORD) {
+    if ((!process.env.SMTP_HOST && !process.env.SMTP_SERVICE) || !process.env.SMTP_EMAIL || !process.env.SMTP_PASSWORD) {
         console.log('--- EMAIL FALLBACK (Local Development) ---');
         console.log('IMPORTANT: SMTP settings are missing in .env file.');
-        console.log('To send actual emails, please configure SMTP_HOST, SMTP_EMAIL, and SMTP_PASSWORD.');
+        console.log('To send actual emails, please configure SMTP_HOST (or SMTP_SERVICE), SMTP_EMAIL, and SMTP_PASSWORD.');
         console.log('To:', options.email);
         console.log('Subject:', options.subject);
         console.log('Message:', options.message);
@@ -14,14 +14,34 @@ const sendEmail = async (options) => {
     try {
         const nodemailer = require('nodemailer');
 
-        const transporter = nodemailer.createTransport({
+        let transporterConfig = {
             host: process.env.SMTP_HOST,
             port: process.env.SMTP_PORT,
             auth: {
                 user: process.env.SMTP_EMAIL,
                 pass: process.env.SMTP_PASSWORD,
             },
-        });
+        };
+
+        if (process.env.SMTP_SERVICE) {
+            transporterConfig = {
+                service: process.env.SMTP_SERVICE,
+                auth: {
+                    user: process.env.SMTP_EMAIL,
+                    pass: process.env.SMTP_PASSWORD,
+                },
+            };
+        } else if (process.env.SMTP_HOST === 'smtp.gmail.com') {
+            transporterConfig = {
+                service: 'gmail',
+                auth: {
+                    user: process.env.SMTP_EMAIL,
+                    pass: process.env.SMTP_PASSWORD,
+                },
+            };
+        }
+
+        const transporter = nodemailer.createTransport(transporterConfig);
 
         const message = {
             from: `${process.env.FROM_NAME || 'EduTrack X'} <${process.env.FROM_EMAIL || 'noreply@bitsathy.ac.in'}>`,
@@ -39,6 +59,7 @@ const sendEmail = async (options) => {
         console.log('To:', options.email);
         console.log('Message:', options.message);
         console.log('-----------------------------------------------');
+        throw error; // Throw error so the API can return a 500 status
     }
 };
 

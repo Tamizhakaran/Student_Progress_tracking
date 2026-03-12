@@ -1,21 +1,17 @@
-const dotenv = require('dotenv');
-const path = require('path');
+require('dotenv').config();
 const sendEmail = require('./utils/sendEmail');
 
-dotenv.config({ path: path.join(__dirname, '.env') });
-
-async function testEmail() {
-    console.log('Starting SMTP test...');
+async function test() {
     try {
         await sendEmail({
-            email: process.env.FROM_EMAIL || 'test@example.com',
-            subject: 'SMTP Test Email',
-            message: 'This is a test email to verify SMTP configuration.',
+            email: 'tamizhakaran.me23@bitsathy.ac.in', // Sending to self for testing
+            subject: 'Test Email from EduTrack X',
+            message: 'This is a test email after fixing sendEmail.js. If you receive this, the email sending functionality is working.',
         });
-        console.log('SMTP test complete. Please check your inbox (or console if in fallback mode).');
+        console.log('Test email sent successfully');
     } catch (error) {
-        console.error('SMTP Test Failed:', error.message);
+        console.error('Test email failed', error);
     }
 }
 
-testEmail();
+test();
