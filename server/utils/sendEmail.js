@@ -14,16 +14,20 @@ const sendEmail = async (options) => {
     try {
         const nodemailer = require('nodemailer');
 
-        let transporterConfig = {
-            host: process.env.SMTP_HOST,
-            port: process.env.SMTP_PORT,
-            auth: {
-                user: process.env.SMTP_EMAIL,
-                pass: process.env.SMTP_PASSWORD,
-            },
-        };
+        let transporterConfig;
 
-        if (process.env.SMTP_SERVICE) {
+        if (process.env.SMTP_SERVICE === 'gmail' || process.env.SMTP_HOST === 'smtp.gmail.com') {
+            // Use explicit configuration for Gmail as it's more reliable than the 'service' shortcut
+            transporterConfig = {
+                host: 'smtp.gmail.com',
+                port: 465,
+                secure: true, // use SSL
+                auth: {
+                    user: process.env.SMTP_EMAIL,
+                    pass: process.env.SMTP_PASSWORD,
+                },
+            };
+        } else if (process.env.SMTP_SERVICE) {
             transporterConfig = {
                 service: process.env.SMTP_SERVICE,
                 auth: {
@@ -31,9 +35,11 @@ const sendEmail = async (options) => {
                     pass: process.env.SMTP_PASSWORD,
                 },
             };
-        } else if (process.env.SMTP_HOST === 'smtp.gmail.com') {
+        } else {
             transporterConfig = {
-                service: 'gmail',
+                host: process.env.SMTP_HOST,
+                port: process.env.SMTP_PORT || 587,
+                secure: process.env.SMTP_PORT === '465',
                 auth: {
                     user: process.env.SMTP_EMAIL,
                     pass: process.env.SMTP_PASSWORD,
