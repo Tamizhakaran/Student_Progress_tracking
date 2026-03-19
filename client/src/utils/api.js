@@ -1,9 +1,11 @@
 import axios from 'axios';
 
-console.log("API URL:", process.env.REACT_APP_API_URL);
+const vApi = import.meta.env.VITE_API_URL;
+const baseURL = (vApi && vApi !== "undefined") ? vApi + "/api" : "/api";
+console.log("Final Base URL:", baseURL);
 
 const api = axios.create({
-    baseURL: process.env.REACT_APP_API_URL + "/api",
+    baseURL,
 });
 
 // Add token interceptor
