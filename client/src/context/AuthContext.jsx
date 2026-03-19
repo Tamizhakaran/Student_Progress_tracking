@@ -45,9 +45,11 @@ export const AuthProvider = ({ children }) => {
             setUser(res.data);
             setIsMaintenanceMode(res.data.isMaintenanceMode);
             
+            toast.success(`Welcome back, ${res.data.name || 'User'}!`);
             return true;
         } catch (error) {
             console.error("Login error:", error);
+            toast.error(error.response?.data?.message || "Login failed");
             return false;
         }
     };
