@@ -31,16 +31,23 @@ export const AuthProvider = ({ children }) => {
     }, []);
 
     const login = async (email, password) => {
-        console.log("API calling /login with", email);
         try {
-            const { data } = await api.post('/login', { email, password });
-            localStorage.setItem('token', data.token);
-            setUser(data);
-            setIsMaintenanceMode(data.isMaintenanceMode);
-            toast.success(`Welcome back, ${data.name}!`);
+            console.log("Calling API..."); // debug
+
+            const res = await api.post("/login", {
+                email,
+                password
+            });
+
+            console.log("Response:", res.data);
+
+            localStorage.setItem("token", res.data.token);
+            setUser(res.data);
+            setIsMaintenanceMode(res.data.isMaintenanceMode);
+            
             return true;
         } catch (error) {
-            toast.error(error.response?.data?.message || 'Login failed');
+            console.error("Login error:", error);
             return false;
         }
     };
