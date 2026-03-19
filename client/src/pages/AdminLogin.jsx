@@ -12,6 +12,7 @@ const AdminLogin = () => {
     const [loading, setLoading] = useState(false);
 
     const onSubmit = async (data) => {
+        console.log("Admin Login clicked", data.email);
         setLoading(true);
         const success = await login(data.email, data.password);
         if (success) {
