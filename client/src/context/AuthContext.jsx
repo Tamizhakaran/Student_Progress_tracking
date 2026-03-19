@@ -16,7 +16,7 @@ export const AuthProvider = ({ children }) => {
             const token = localStorage.getItem('token');
             if (token) {
                 try {
-                    const { data } = await api.get('/auth/me');
+                    const { data } = await api.get('/me');
                     setUser(data);
                     setIsMaintenanceMode(data.isMaintenanceMode);
                 } catch (error) {
@@ -32,7 +32,7 @@ export const AuthProvider = ({ children }) => {
 
     const login = async (email, password) => {
         try {
-            const { data } = await api.post('/auth/login', { email, password });
+            const { data } = await api.post('/login', { email, password });
             localStorage.setItem('token', data.token);
             setUser(data);
             setIsMaintenanceMode(data.isMaintenanceMode);
@@ -46,7 +46,7 @@ export const AuthProvider = ({ children }) => {
 
     const register = async (userData) => {
         try {
-            await api.post('/auth/register', userData);
+            await api.post('/register', userData);
             toast.success('Registration successful! Please log in.');
             return true;
         } catch (error) {

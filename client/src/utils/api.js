@@ -1,13 +1,13 @@
 import axios from 'axios';
 
 const api = axios.create({
-    baseURL: '/api',
+    baseURL: (import.meta.env.VITE_API_URL || '') + '/api',  // ✅ FIX
     headers: {
         'Content-Type': 'application/json',
     },
 });
 
-// Add a request interceptor to add the auth token to headers
+// Add token interceptor
 api.interceptors.request.use(
     (config) => {
         const token = localStorage.getItem('token');
@@ -19,16 +19,12 @@ api.interceptors.request.use(
     (error) => Promise.reject(error)
 );
 
-// Add a response interceptor to handle 401 errors (e.g., token expired)
+// Response interceptor
 api.interceptors.response.use(
     (response) => response,
     (error) => {
         if (error.response && error.response.status === 401) {
-            // Clear local storage and redirect to login if unauthorized
-            // Note: We avoid direct window.location reload if possible, but for simplicity:
-            // localStorage.removeItem('token');
-            // window.location.href = '/login';
-            // Better to handle this in AuthContext or standard error flow
+            // handle unauthorized
         }
         return Promise.reject(error);
     }
