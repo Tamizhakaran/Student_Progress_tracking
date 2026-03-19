@@ -14,7 +14,7 @@ const ForgotPassword = () => {
     const onSubmit = async (data) => {
         setLoading(true);
         try {
-            await api.post('/auth/forgotpassword', data);
+            await api.post('/forgotpassword', data);
             setSent(true);
             toast.success('Reset link sent to your email');
         } catch (error) {

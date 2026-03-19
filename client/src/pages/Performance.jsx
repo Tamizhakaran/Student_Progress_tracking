@@ -44,7 +44,7 @@ const Performance = () => {
 
     const fetchPerformanceData = async () => {
         try {
-            const userResponse = await api.get('/auth/me');
+            const userResponse = await api.get('/me');
             const userData = userResponse.data;
             setStudentCgpa(userData.cgpa || 0);
             setUserSemester(userData.semester || '1');
@@ -65,7 +65,7 @@ const Performance = () => {
 
     const fetchCurriculum = async () => {
         try {
-            const userResponse = await api.get('/auth/me');
+            const userResponse = await api.get('/me');
             const userData = userResponse.data;
             if (!userData.department) return;
 
