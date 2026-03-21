@@ -40,7 +40,9 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
         ],
     };
 
-    const menus = roleMenus[user?.role] || roleMenus['Student'];
+    const role = user?.role?.toLowerCase() === 'admin' ? 'Admin' : 'Student';
+    console.log("Sidebar Detected Role:", role);
+    const menus = roleMenus[role];
 
     return (
         <motion.div

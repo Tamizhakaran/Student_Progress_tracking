@@ -20,7 +20,7 @@ const AdminRegister = () => {
         try {
             const user = await registerUser({ ...data, role: 'Admin' });
             if (user) {
-                if (user.role === 'Admin') {
+                if (user.role?.toLowerCase() === 'admin') {
                     navigate('/students');
                 } else {
                     navigate('/dashboard');

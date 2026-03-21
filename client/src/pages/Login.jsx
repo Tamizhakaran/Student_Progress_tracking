@@ -18,7 +18,7 @@ const Login = ({ isAdmin = false }) => {
         setLoading(true);
         const user = await login(data.email, data.password);
         if (user) {
-            if (user.role === 'Admin') {
+            if (user.role?.toLowerCase() === 'admin') {
                 navigate('/students');
             } else {
                 navigate('/dashboard');

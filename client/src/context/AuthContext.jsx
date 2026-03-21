@@ -17,6 +17,7 @@ export const AuthProvider = ({ children }) => {
             if (token) {
                 try {
                     const { data } = await api.get('/me');
+                    console.log("Session User Data:", data);
                     setUser(data);
                     setIsMaintenanceMode(data.isMaintenanceMode);
                     localStorage.setItem('role', data.role);
@@ -41,13 +42,14 @@ export const AuthProvider = ({ children }) => {
                 email,
                 password
             });
-
-            console.log("Response:", res.data);
+            console.log("Login User Data:", res.data);
 
             localStorage.setItem("token", res.data.token);
             localStorage.setItem("role", res.data.role);
             setUser(res.data);
             setIsMaintenanceMode(res.data.isMaintenanceMode);
+            console.log("User set after login:", res.data);
+            console.log("Role set after login:", res.data.role);
             
             toast.success(`Welcome back, ${res.data.name || 'User'}!`);
             return res.data;

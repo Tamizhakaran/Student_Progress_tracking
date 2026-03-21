@@ -14,15 +14,20 @@ const AdminLogin = () => {
     const onSubmit = async (data) => {
         console.log("Admin Login clicked", data.email);
         setLoading(true);
-        const user = await login(data.email, data.password);
-        if (user) {
-            if (user.role === 'Admin') {
-                navigate('/students');
-            } else {
-                navigate('/dashboard');
+        try {
+            const user = await login(data.email, data.password);
+            if (user) {
+                if (user.role?.toLowerCase() === 'admin') {
+                    navigate('/students');
+                } else {
+                    navigate('/dashboard');
+                }
             }
+        } catch (error) {
+            console.error("Admin Login Error:", error);
+        } finally {
+            setLoading(false);
         }
-        setLoading(false);
     };
 
     return (
