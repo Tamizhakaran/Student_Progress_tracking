@@ -12,13 +12,22 @@ const PrivateRoute = ({ roles }) => {
         return <Navigate to="/login" replace />;
     }
 
+    // Normalize role for internal comparison
+    const normalizedRole = user.role?.toLowerCase();
+    console.log("PrivateRoute Access Check - Role:", normalizedRole, "Maintenance:", isMaintenanceMode);
+
     // Redirect students to maintenance page if active
-    if (isMaintenanceMode && user.role !== 'Admin') {
+    if (isMaintenanceMode && normalizedRole !== 'admin') {
+        console.log("Redirecting student to maintenance");
         return <Navigate to="/maintenance" replace />;
     }
 
-    if (roles && !roles.includes(user.role)) {
-        return <Navigate to="/" replace />; // Or unauthorized page
+    if (roles) {
+        const normalizedRequiredRoles = roles.map(r => r.toLowerCase());
+        if (!normalizedRequiredRoles.includes(normalizedRole)) {
+            console.warn("Unauthorized access to route - Required:", normalizedRequiredRoles, "User:", normalizedRole);
+            return <Navigate to="/" replace />;
+        }
     }
 
     return <Outlet />;

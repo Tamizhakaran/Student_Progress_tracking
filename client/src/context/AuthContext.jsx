@@ -10,6 +10,13 @@ export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
     const [isMaintenanceMode, setIsMaintenanceMode] = useState(false);
+    
+    // Normalize role string to Title Case (e.g. 'Admin' or 'Student')
+    const normalizeRole = (role) => {
+        if (!role) return 'Student';
+        const r = role.toLowerCase().trim();
+        return r === 'admin' ? 'Admin' : 'Student';
+    };
 
     useEffect(() => {
         const checkUser = async () => {
@@ -17,10 +24,13 @@ export const AuthProvider = ({ children }) => {
             if (token) {
                 try {
                     const { data } = await api.get('/me');
-                    console.log("Session User Data:", data);
-                    setUser(data);
+                    const normalizedRole = normalizeRole(data.role);
+                    const userData = { ...data, role: normalizedRole };
+                    
+                    console.log("Session User Data (Normalized):", userData);
+                    setUser(userData);
                     setIsMaintenanceMode(data.isMaintenanceMode);
-                    localStorage.setItem('role', data.role);
+                    localStorage.setItem('role', normalizedRole);
                 } catch (error) {
                     console.error('Auth check failed:', error);
                     localStorage.removeItem('token');
@@ -44,11 +54,14 @@ export const AuthProvider = ({ children }) => {
             });
             console.log("Login User Data:", res.data);
 
+            const normalizedRole = normalizeRole(res.data.role);
+            const userData = { ...res.data, role: normalizedRole };
+
             localStorage.setItem("token", res.data.token);
-            localStorage.setItem("role", res.data.role);
-            setUser(res.data);
+            localStorage.setItem("role", normalizedRole);
+            setUser(userData);
             setIsMaintenanceMode(res.data.isMaintenanceMode);
-            console.log("User set after login:", res.data);
+            console.log("User set after login (Normalized):", userData);
             console.log("Role set after login:", res.data.role);
             
             toast.success(`Welcome back, ${res.data.name || 'User'}!`);
@@ -64,11 +77,15 @@ export const AuthProvider = ({ children }) => {
         try {
             const res = await api.post('/register', userData);
             if (res.data && res.data.token) {
+                const normalizedRole = normalizeRole(res.data.role);
+                const newUser = { ...res.data, role: normalizedRole };
+                
                 localStorage.setItem("token", res.data.token);
-                localStorage.setItem("role", res.data.role);
-                setUser(res.data);
+                localStorage.setItem("role", normalizedRole);
+                setUser(newUser);
+                console.log("User set after register (Normalized):", newUser);
                 toast.success('Registration successful!');
-                return res.data;
+                return newUser;
             }
             toast.success('Registration successful! Please log in.');
             return true;
