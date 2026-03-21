@@ -1,14 +1,21 @@
 import axios from 'axios';
 
+// Get API URL from env
 const API_URL = process.env.REACT_APP_API_URL;
-const baseURL = (API_URL && API_URL !== "undefined") ? API_URL + "/api" : "/api";
+
+// ✅ Ensure no trailing slash
+const cleanURL = API_URL ? API_URL.replace(/\/$/, "") : "";
+
+// ✅ Final base URL
+const baseURL = cleanURL ? `${cleanURL}/api` : "/api";
+
 console.log("Final Base URL:", baseURL);
 
 const api = axios.create({
     baseURL,
 });
 
-// Add token interceptor
+// 🔐 Add token interceptor
 api.interceptors.request.use(
     (config) => {
         const token = localStorage.getItem('token');
@@ -20,12 +27,12 @@ api.interceptors.request.use(
     (error) => Promise.reject(error)
 );
 
-// Response interceptor
+// 🔁 Response interceptor
 api.interceptors.response.use(
     (response) => response,
     (error) => {
         if (error.response && error.response.status === 401) {
-            // handle unauthorized
+            console.log("Unauthorized access");
         }
         return Promise.reject(error);
     }
