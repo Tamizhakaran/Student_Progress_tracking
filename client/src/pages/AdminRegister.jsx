@@ -18,9 +18,13 @@ const AdminRegister = () => {
         setLoading(true);
         setRegError(null);
         try {
-            const success = await registerUser(data);
-            if (success) {
-                navigate('/dashboard');
+            const user = await registerUser({ ...data, role: 'Admin' });
+            if (user) {
+                if (user.role === 'Admin') {
+                    navigate('/students');
+                } else {
+                    navigate('/dashboard');
+                }
             }
         } catch (error) {
             setRegError(error.response?.data?.message || 'Registration failed');
@@ -165,7 +169,7 @@ const AdminRegister = () => {
                                     <input
                                         {...register('schoolId', { required: 'Required' })}
                                         className={`w-full px-5 py-3.5 rounded-2xl transition-all font-bold text-sm outline-none border-2 bg-slate-100/30 ${errors.schoolId ? 'border-rose-500' : 'border-transparent'} focus:bg-white focus:border-indigo-100`}
-                                        placeholder="BIT-ADM-xxxx"
+                                        placeholder="BIT-ADM-2026"
                                     />
                                     {errors.schoolId && (
                                         <p className="text-[10px] font-bold text-rose-500 mt-1 ml-2">{errors.schoolId.message}</p>

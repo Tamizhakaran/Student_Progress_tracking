@@ -41,8 +41,10 @@ const registerUser = asyncHandler(async (req, res) => {
     // but for initial setup we might allow it or use a seed script.
     // Enhanced security: Validate admin access code
     if (role === 'Admin') {
-        const adminCode = req.body.schoolId?.trim();
-        if (adminCode !== process.env.ADMIN_ACCESS_CODE?.trim()) {
+        const adminCode = req.body.schoolId?.trim().toUpperCase();
+        const expectedCode = process.env.ADMIN_ACCESS_CODE?.trim().toUpperCase();
+        
+        if (adminCode !== expectedCode) {
             res.status(401);
             throw new Error('Invalid Admin Access Code');
         }

@@ -19,9 +19,11 @@ export const AuthProvider = ({ children }) => {
                     const { data } = await api.get('/me');
                     setUser(data);
                     setIsMaintenanceMode(data.isMaintenanceMode);
+                    localStorage.setItem('role', data.role);
                 } catch (error) {
                     console.error('Auth check failed:', error);
                     localStorage.removeItem('token');
+                    localStorage.removeItem('role');
                 }
             }
             setLoading(false);
@@ -43,26 +45,34 @@ export const AuthProvider = ({ children }) => {
             console.log("Response:", res.data);
 
             localStorage.setItem("token", res.data.token);
+            localStorage.setItem("role", res.data.role);
             setUser(res.data);
             setIsMaintenanceMode(res.data.isMaintenanceMode);
             
             toast.success(`Welcome back, ${res.data.name || 'User'}!`);
-            return true;
+            return res.data;
         } catch (error) {
             console.error("Login error:", error);
             toast.error(error.response?.data?.message || "Login failed");
-            return false;
+            return null;
         }
     };
 
     const register = async (userData) => {
         try {
-            await api.post('/register', userData);
+            const res = await api.post('/register', userData);
+            if (res.data && res.data.token) {
+                localStorage.setItem("token", res.data.token);
+                localStorage.setItem("role", res.data.role);
+                setUser(res.data);
+                toast.success('Registration successful!');
+                return res.data;
+            }
             toast.success('Registration successful! Please log in.');
             return true;
         } catch (error) {
             toast.error(error.response?.data?.message || 'Registration failed');
-            return false;
+            return null;
         }
     };
 
@@ -80,6 +90,7 @@ export const AuthProvider = ({ children }) => {
 
     const logout = () => {
         localStorage.removeItem('token');
+        localStorage.removeItem('role');
         setUser(null);
         toast.info('Logged out successfully');
     };

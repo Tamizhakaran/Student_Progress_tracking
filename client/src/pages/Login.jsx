@@ -16,9 +16,13 @@ const Login = ({ isAdmin = false }) => {
     const onSubmit = async (data) => {
         console.log("Login clicked", data.email);
         setLoading(true);
-        const success = await login(data.email, data.password);
-        if (success) {
-            navigate('/dashboard');
+        const user = await login(data.email, data.password);
+        if (user) {
+            if (user.role === 'Admin') {
+                navigate('/students');
+            } else {
+                navigate('/dashboard');
+            }
         }
         setLoading(false);
     };

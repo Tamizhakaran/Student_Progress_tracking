@@ -37,7 +37,7 @@ const departmentData = [
 
 const Dashboard = () => {
     const { user } = useAuth();
-    const isAdmin = user?.role === 'Admin';
+    const isAdmin = user?.role === 'Admin' || localStorage.getItem('role') === 'Admin';
     const [studentCount, setStudentCount] = useState(0);
     const [cgpaAverage, setCgpaAverage] = useState(0);
     const [attendanceAverage, setAttendanceAverage] = useState(0);
