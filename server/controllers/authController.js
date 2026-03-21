@@ -42,11 +42,13 @@ const registerUser = asyncHandler(async (req, res) => {
     // Enhanced security: Validate admin access code
     if (role === 'Admin') {
         const adminCode = req.body.schoolId?.trim().toUpperCase();
-        const expectedCode = process.env.ADMIN_ACCESS_CODE?.trim().toUpperCase();
+        // Fallback to BIT-ADM-2026 if env var is missing
+        const expectedCode = (process.env.ADMIN_ACCESS_CODE || 'BIT-ADM-2026').trim().toUpperCase();
         
         if (adminCode !== expectedCode) {
+            console.error(`Admin Code Mismatch: Got "${adminCode}", Expected "${expectedCode}"`);
             res.status(401);
-            throw new Error('Invalid Admin Access Code');
+            throw new Error('Invalid Admin Access Code. Please check the documentation.');
         }
     }
 

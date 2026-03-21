@@ -8,7 +8,7 @@ const connectDB = require('./config/db');
 const { errorHandler } = require('./middleware/errorMiddleware');
 
 // Load env vars
-dotenv.config();
+dotenv.config({ path: path.join(__dirname, '.env') });
 
 // Connect to database
 connectDB();
@@ -17,7 +17,10 @@ const app = express();
 
 // Middleware
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+    origin: "https://student-progress-tracking-nine.vercel.app",
+    credentials: true
+}));
 
 // Serve static files
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
