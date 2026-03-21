@@ -128,7 +128,7 @@ const AchievementManagement = () => {
                                             <p className="text-[10px] font-extrabold text-indigo-600 uppercase tracking-widest mt-1 mb-2">{a.eventName}</p>
                                             {a.certificate && (
                                                 <a
-                                                    href={`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${a.certificate}`}
+                                                    href={`${import.meta.env.VITE_API_URL || ''}${a.certificate}`}
                                                     target="_blank"
                                                     rel="noopener noreferrer"
                                                     className="inline-flex items-center gap-2 text-[10px] font-bold text-slate-500 hover:text-indigo-600 transition-colors uppercase tracking-widest"

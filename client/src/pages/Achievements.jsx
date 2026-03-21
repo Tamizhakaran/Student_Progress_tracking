@@ -135,7 +135,7 @@ const Achievements = () => {
                                         )}
                                         {achievement.certificate && (
                                             <a
-                                                href={`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${achievement.certificate}`}
+                                                href={`${import.meta.env.VITE_API_URL || ''}${achievement.certificate}`}
                                                 target="_blank"
                                                 rel="noopener noreferrer"
                                                 className="flex items-center gap-2 text-[10px] font-black text-indigo-600 uppercase tracking-widest hover:text-indigo-700 transition-colors"

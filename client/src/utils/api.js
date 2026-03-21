@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-const vApi = import.meta.env.VITE_API_URL;
-const baseURL = (vApi && vApi !== "undefined") ? vApi + "/api" : "/api";
+const API = process.env.REACT_APP_API_URL;
+const baseURL = (API && API !== "undefined") ? API + "/api" : "/api";
 console.log("Final Base URL:", baseURL);
 
 const api = axios.create({
