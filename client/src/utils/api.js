@@ -32,7 +32,8 @@ api.interceptors.response.use(
     (response) => response,
     (error) => {
         if (error.response && error.response.status === 401) {
-            console.log("Unauthorized access");
+            const message = error.response.data?.message || "Unauthorized access";
+            console.error("401 Unauthorized:", message);
         }
         return Promise.reject(error);
     }

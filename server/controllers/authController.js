@@ -41,9 +41,10 @@ const registerUser = asyncHandler(async (req, res) => {
     // but for initial setup we might allow it or use a seed script.
     // Enhanced security: Validate admin access code
     if (role === 'Admin') {
-        const adminCode = req.body.schoolId?.trim().toUpperCase();
-        // Fallback to BIT-ADM-2026 if env var is missing
-        const expectedCode = (process.env.ADMIN_ACCESS_CODE || 'BIT-ADM-2026').trim().toUpperCase();
+        const adminCode = req.body.schoolId?.trim().replace(/^["']|["']$/g, '').toUpperCase();
+        // Fallback to BIT-ADM-2026 if env var is missing, also strip quotes
+        const rawExpected = process.env.ADMIN_ACCESS_CODE || 'BIT-ADM-2026';
+        const expectedCode = rawExpected.trim().replace(/^["']|["']$/g, '').toUpperCase();
         
         if (adminCode !== expectedCode) {
             console.error(`Admin Code Mismatch: Got "${adminCode}", Expected "${expectedCode}"`);
