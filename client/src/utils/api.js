@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-const API = process.env.REACT_APP_API_URL;
-const baseURL = (API && API !== "undefined") ? API + "/api" : "/api";
+const API_URL = process.env.REACT_APP_API_URL;
+const baseURL = (API_URL && API_URL !== "undefined") ? API_URL + "/api" : "/api";
 console.log("Final Base URL:", baseURL);
 
 const api = axios.create({
