@@ -108,13 +108,14 @@ const loginUser = asyncHandler(async (req, res) => {
 
         const isMatch = await user.matchPassword(password);
         if (isMatch) {
-            console.log(`Login successful: [SUCCESS] email: ${email}, role: ${user.role}`);
+            console.log(`Login successful: [SUCCESS] email: ${email}`);
+            console.log('User role from DB:', user.role);
             const system = await System.findOne();
             res.json({
                 _id: user.id,
                 name: user.name,
                 email: user.email,
-                role: user.role,
+                role: user.role || 'Student',
                 token: generateToken(user._id),
                 profileImage: user.profileImage,
                 schoolId: user.schoolId,
