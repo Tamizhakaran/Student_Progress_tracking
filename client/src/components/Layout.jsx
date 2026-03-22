@@ -85,19 +85,9 @@ const Layout = () => {
                                         exit={{ opacity: 0, scale: 0.95, y: 20 }}
                                         className="relative w-full max-w-md bg-white rounded-[1.5rem] shadow-2xl overflow-hidden"
                                     >
-                                        <div className="flex justify-between items-center px-6 py-4 border-b border-slate-50">
-                                            <h3 className="text-xl font-black text-slate-800 tracking-tight">User Profile</h3>
-                                            <button
-                                                onClick={() => setProfileOpen(false)}
-                                                className="p-2 text-slate-400 hover:text-slate-600 transition-colors"
-                                            >
-                                                <FiX size={24} />
-                                            </button>
-                                        </div>
-
-                                        <div className="p-8 flex flex-col items-center">
-                                            <div className="relative mb-8">
-                                                <div className="w-48 h-48 rounded-full border-[6px] border-indigo-50/50 p-2 overflow-hidden bg-indigo-50 shadow-inner flex items-center justify-center">
+                                        <div className="p-10 flex flex-col items-center text-center">
+                                            <div className="relative mb-6">
+                                                <div className="w-40 h-40 rounded-full border-[6px] border-white p-1 overflow-hidden bg-indigo-50 shadow-2xl flex items-center justify-center relative z-10">
                                                     {user?.profileImage && user.profileImage !== 'no-photo.jpg' && getMediaURL(user.profileImage) ? (
                                                         <img
                                                             src={getMediaURL(user.profileImage)}
@@ -105,41 +95,53 @@ const Layout = () => {
                                                             className="w-full h-full object-cover rounded-full"
                                                             onError={(e) => {
                                                                 e.target.onerror = null;
-                                                                e.target.parentElement.innerHTML = `<span class="text-indigo-600 font-bold">${user?.name?.charAt(0) || '?'}</span>`;
+                                                                e.target.parentElement.innerHTML = `<span class="text-indigo-600 font-black text-6xl">${user?.name?.charAt(0) || '?'}</span>`;
                                                             }}
                                                         />
                                                     ) : (
                                                         <span className="w-full h-full flex items-center justify-center text-6xl font-black text-indigo-400 uppercase">
-                                                            {user?.name?.charAt(0)}
+                                                            {user?.name?.charAt(0) || '?'}
                                                         </span>
                                                     )}
                                                 </div>
+                                                <div className="absolute inset-0 bg-indigo-200/20 blur-2xl rounded-full translate-y-4 scale-90"></div>
                                             </div>
 
-                                            <div className="w-full space-y-4 mb-10">
-                                                {user?.role !== 'Admin' && (
-                                                    <div className="flex items-center justify-between py-4 border-b border-slate-100">
-                                                        <span className="text-sm font-black text-slate-500 uppercase tracking-[0.1em]">Roll Number</span>
-                                                        <span className="text-sm font-bold text-slate-900 uppercase">
-                                                            {user?.registerNumber || user?.rollNumber || '7376231ME151'}
-                                                        </span>
-                                                    </div>
-                                                )}
-                                                <div className="flex items-center justify-between py-4 border-b border-slate-100">
-                                                    <span className="text-sm font-black text-slate-500 uppercase tracking-[0.1em]">Name</span>
-                                                    <span className="text-sm font-bold text-slate-900 uppercase">
-                                                        {user?.name}
-                                                    </span>
+                                            <div className="mb-8">
+                                                <h3 className="text-2xl font-black text-slate-900 tracking-tight mb-2 uppercase">
+                                                    {user?.name || 'User'}
+                                                </h3>
+                                                <div className="inline-flex px-4 py-1.5 rounded-full bg-indigo-600 text-white text-[10px] font-black uppercase tracking-[0.2em] shadow-lg shadow-indigo-100">
+                                                    {user?.role || 'Member'}
                                                 </div>
                                             </div>
 
+                                            <div className="w-full bg-slate-50/80 rounded-[2rem] p-6 space-y-5 mb-8 border border-slate-100/50">
+                                                {user?.registerNumber && (
+                                                    <div className="flex flex-col items-center">
+                                                        <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.15em] mb-1">Registration ID</span>
+                                                        <span className="text-sm font-bold text-slate-700">{user.registerNumber}</span>
+                                                    </div>
+                                                )}
+                                                <div className="flex flex-col items-center">
+                                                    <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.15em] mb-1">Email Address</span>
+                                                    <span className="text-sm font-bold text-slate-700">{user?.email}</span>
+                                                </div>
+                                                {user?.department && (
+                                                    <div className="flex flex-col items-center">
+                                                        <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.15em] mb-1">Department</span>
+                                                        <span className="text-sm font-bold text-slate-700 uppercase tracking-tight">{user.department}</span>
+                                                    </div>
+                                                )}
+                                            </div>
+
                                             <motion.button
-                                                whileHover={{ scale: 1.02 }}
+                                                whileHover={{ scale: 1.02, translateY: -2 }}
                                                 whileTap={{ scale: 0.98 }}
                                                 onClick={() => setProfileOpen(false)}
-                                                className="w-full py-4 bg-[#8b5cf6] text-white rounded-xl font-black text-lg transition-all shadow-xl shadow-indigo-100/50 hover:bg-[#7c3aed]"
+                                                className="w-full py-4 bg-slate-900 text-white rounded-2xl font-black text-xs uppercase tracking-[0.2em] transition-all shadow-xl shadow-slate-200 hover:bg-slate-800"
                                             >
-                                                Close
+                                                Close Profile
                                             </motion.button>
                                         </div>
                                     </motion.div>
