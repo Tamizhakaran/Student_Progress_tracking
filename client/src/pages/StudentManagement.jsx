@@ -686,8 +686,8 @@ const StudentManagement = () => {
                                                     try {
                                                         setLoading(true);
                                                         const uploadFormData = new FormData();
-                                                        uploadFormData.append('image', file);
                                                         uploadFormData.append('uploadType', 'profiles');
+                                                        uploadFormData.append('image', file);
 
                                                         const { data: uploadData } = await api.post('/upload', uploadFormData, {
                                                             headers: { 'Content-Type': 'multipart/form-data' }

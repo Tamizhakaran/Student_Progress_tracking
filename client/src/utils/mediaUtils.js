@@ -1,7 +1,12 @@
 export const getMediaURL = (path) => {
     if (!path || path === 'no-photo.jpg' || path.endsWith('no-photo.jpg')) return null;
 
-    const API_URL = (process.env.REACT_APP_API_URL || "https://student-progress-tracking.onrender.com").replace(/\/$/, "");
+    // Check both standard prefixes for Vite and Create React App
+    const baseUrl = process.env.REACT_APP_API_URL || 
+                    import.meta.env?.VITE_API_URL || 
+                    "https://student-progress-tracking.onrender.com";
+    
+    const API_URL = baseUrl.replace(/\/$/, "");
 
     // If it's an absolute URL
     if (path.startsWith('http')) {
@@ -9,7 +14,6 @@ export const getMediaURL = (path) => {
         if (path.includes('localhost') || path.includes('127.0.0.1')) {
              const parts = path.split('/');
              const fileName = parts.pop();
-             // Often stored as http://localhost:5000/uploads/students/file.jpg
              if (path.includes('/uploads/')) {
                  const uploadIndex = parts.indexOf('uploads');
                  const relativePath = parts.slice(uploadIndex).join('/');

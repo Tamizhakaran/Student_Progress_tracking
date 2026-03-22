@@ -88,8 +88,8 @@ const PlacementManagement = () => {
 
             if (selectedFile) {
                 const uploadFormData = new FormData();
-                uploadFormData.append('image', selectedFile);
                 uploadFormData.append('uploadType', 'students');
+                uploadFormData.append('image', selectedFile);
 
                 const { data: uploadData } = await api.post('/upload', uploadFormData, {
                     headers: { 'Content-Type': 'multipart/form-data' }

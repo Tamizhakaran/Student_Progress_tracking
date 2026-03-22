@@ -55,7 +55,7 @@ const Layout = () => {
                                         className="w-full h-full object-cover"
                                         onError={(e) => {
                                             e.target.onerror = null;
-                                            e.target.parentElement.innerHTML = `<span class="text-white font-black text-sm">${user.name.charAt(0)}</span>`;
+                                            e.target.parentElement.innerHTML = `<span class="text-white font-black text-sm">${user?.name?.charAt(0) || '?'}</span>`;
                                         }}
                                     />
                                 ) : (
@@ -105,7 +105,7 @@ const Layout = () => {
                                                             className="w-full h-full object-cover rounded-full"
                                                             onError={(e) => {
                                                                 e.target.onerror = null;
-                                                                e.target.parentElement.innerHTML = `<span class="text-indigo-600 font-bold">${user.name.charAt(0)}</span>`;
+                                                                e.target.parentElement.innerHTML = `<span class="text-indigo-600 font-bold">${user?.name?.charAt(0) || '?'}</span>`;
                                                             }}
                                                         />
                                                     ) : (
