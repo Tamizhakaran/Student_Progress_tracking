@@ -79,75 +79,75 @@ const Layout = () => {
                                         className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm"
                                     />
 
-                                    <motion.div
-                                        initial={{ opacity: 0, scale: 0.95, y: 20 }}
-                                        animate={{ opacity: 1, scale: 1, y: 0 }}
-                                        exit={{ opacity: 0, scale: 0.95, y: 20 }}
-                                        className="relative w-full max-w-md bg-white rounded-[1.5rem] shadow-2xl overflow-hidden"
-                                    >
-                                        <div className="p-10 flex flex-col items-center text-center">
-                                            <div className="relative mb-6">
-                                                <div className="w-40 h-40 rounded-full border-[6px] border-white p-1 overflow-hidden bg-indigo-50 shadow-2xl flex items-center justify-center relative z-10">
+                                        <motion.div
+                                            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                                            exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                                            className="relative w-full max-w-sm bg-white rounded-[2.5rem] shadow-2xl overflow-visible"
+                                        >
+                                            <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50">
+                                                <div className="w-32 h-32 md:w-36 md:h-36 rounded-[2.5rem] border-[8px] border-white p-1 overflow-hidden bg-white shadow-2xl flex items-center justify-center relative transition-transform hover:scale-105">
                                                     {user?.profileImage && user.profileImage !== 'no-photo.jpg' && getMediaURL(user.profileImage) ? (
                                                         <img
                                                             src={getMediaURL(user.profileImage)}
                                                             alt={user.name}
-                                                            className="w-full h-full object-cover rounded-full"
+                                                            className="w-full h-full object-cover rounded-[2rem]"
                                                             onError={(e) => {
                                                                 e.target.onerror = null;
                                                                 e.target.parentElement.innerHTML = `<span class="text-indigo-600 font-black text-6xl">${user?.name?.charAt(0) || '?'}</span>`;
                                                             }}
                                                         />
                                                     ) : (
-                                                        <span className="w-full h-full flex items-center justify-center text-6xl font-black text-indigo-400 uppercase">
+                                                        <span className="w-full h-full flex items-center justify-center text-4xl md:text-5xl font-black text-indigo-400 uppercase">
                                                             {user?.name?.charAt(0) || '?'}
                                                         </span>
                                                     )}
                                                 </div>
-                                                <div className="absolute inset-0 bg-indigo-200/20 blur-2xl rounded-full translate-y-4 scale-90"></div>
+                                                <div className="absolute inset-0 bg-indigo-400/30 blur-3xl rounded-full scale-110 -z-10"></div>
                                             </div>
 
-                                            <div className="mb-8">
-                                                <h3 className="text-2xl font-black text-slate-900 tracking-tight mb-2 uppercase">
-                                                    {user?.name || 'User'}
-                                                </h3>
-                                                <div className="inline-flex px-4 py-1.5 rounded-full bg-indigo-600 text-white text-[10px] font-black uppercase tracking-[0.2em] shadow-lg shadow-indigo-100">
-                                                    {user?.role || 'Member'}
-                                                </div>
-                                            </div>
-
-                                            <div className="w-full bg-slate-50/80 rounded-[2rem] p-6 space-y-5 mb-8 border border-slate-100/50">
-                                                {user?.registerNumber && (
-                                                    <div className="flex flex-col items-center">
-                                                        <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.15em] mb-1">Registration ID</span>
-                                                        <span className="text-sm font-bold text-slate-700">{user.registerNumber}</span>
+                                            <div className="p-8 pt-20 md:pt-24 flex flex-col items-center text-center overflow-y-auto max-h-[80vh] custom-scrollbar">
+                                                <div className="mb-6">
+                                                    <h3 className="text-xl md:text-2xl font-black text-slate-900 tracking-tight mb-1 uppercase">
+                                                        {user?.name || 'User'}
+                                                    </h3>
+                                                    <div className="inline-flex px-4 py-1.5 rounded-full bg-indigo-600 text-white text-[10px] font-black uppercase tracking-[0.2em] shadow-lg shadow-indigo-100">
+                                                        {user?.role || 'Member'}
                                                     </div>
-                                                )}
-                                                <div className="flex flex-col items-center">
-                                                    <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.15em] mb-1">Email Address</span>
-                                                    <span className="text-sm font-bold text-slate-700">{user?.email}</span>
                                                 </div>
-                                                {user?.department && (
-                                                    <div className="flex flex-col items-center">
-                                                        <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.15em] mb-1">Department</span>
-                                                        <span className="text-sm font-bold text-slate-700 uppercase tracking-tight">{user.department}</span>
-                                                    </div>
-                                                )}
-                                            </div>
 
-                                            <motion.button
-                                                whileHover={{ scale: 1.02, translateY: -2 }}
-                                                whileTap={{ scale: 0.98 }}
-                                                onClick={() => setProfileOpen(false)}
-                                                className="w-full py-4 bg-slate-900 text-white rounded-2xl font-black text-xs uppercase tracking-[0.2em] transition-all shadow-xl shadow-slate-200 hover:bg-slate-800"
-                                            >
-                                                Close Profile
-                                            </motion.button>
-                                        </div>
-                                    </motion.div>
-                                </div>
-                            )}
-                        </AnimatePresence>
+                                                <div className="w-full bg-slate-50/80 rounded-[2.5rem] p-6 space-y-5 mb-8 border border-slate-100/50">
+                                                    {user?.registerNumber && (
+                                                        <div className="flex flex-col items-center">
+                                                            <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.15em] mb-1">Registration ID</span>
+                                                            <span className="text-sm font-bold text-slate-700">{user.registerNumber}</span>
+                                                        </div>
+                                                    )}
+                                                    <div className="flex flex-col items-center">
+                                                        <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.15em] mb-1">Email Address</span>
+                                                        <span className="text-xs md:text-sm font-bold text-slate-800 break-all">{user?.email}</span>
+                                                    </div>
+                                                    {user?.department && (
+                                                        <div className="flex flex-col items-center">
+                                                            <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.15em] mb-1">Department</span>
+                                                            <span className="text-xs md:text-sm font-bold text-slate-700 uppercase tracking-tight leading-tight">{user.department}</span>
+                                                        </div>
+                                                    )}
+                                                </div>
+
+                                                <motion.button
+                                                    whileHover={{ scale: 1.02, translateY: -2 }}
+                                                    whileTap={{ scale: 0.98 }}
+                                                    onClick={() => setProfileOpen(false)}
+                                                    className="w-full py-4 bg-slate-900 text-white rounded-2xl font-black text-xs uppercase tracking-[0.2em] transition-all shadow-xl shadow-slate-200 hover:bg-slate-800 shrink-0"
+                                                >
+                                                    Dismiss
+                                                </motion.button>
+                                            </div>
+                                        </motion.div>
+                                    </div>
+                                )}
+                            </AnimatePresence>
                     </div>
                 </header>
 
