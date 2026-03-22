@@ -6,7 +6,7 @@ const asyncHandler = require('express-async-handler');
 // @route   GET /api/students
 // @access  Private/Admin
 exports.getStudents = asyncHandler(async (req, res, next) => {
-    const students = await User.find({ role: 'Student' });
+    const students = await User.find({ role: 'Student', adminId: req.user._id });
 
     // Enhance students with attendance data using aggregation for accuracy
     const enhancedStudents = await Promise.all(students.map(async (student) => {
@@ -83,7 +83,11 @@ exports.getStudents = asyncHandler(async (req, res, next) => {
 // @route   GET /api/students/top-performers
 // @access  Private (all authenticated users)
 exports.getTopPerformers = asyncHandler(async (req, res, next) => {
-    const students = await User.find({ role: 'Student' })
+    const targetAdminId = req.user.role === 'Admin' ? req.user._id : req.user.adminId;
+    const query = { role: 'Student' };
+    if (targetAdminId) query.adminId = targetAdminId;
+
+    const students = await User.find(query)
         .select('name email department cgpa registerNumber')
         .sort({ cgpa: -1 })
         .limit(5);
@@ -110,6 +114,12 @@ exports.updateStudent = asyncHandler(async (req, res, next) => {
     if (student.role !== 'Student') {
         res.status(400);
         throw new Error(`User with id ${req.params.id} is not a student`);
+    }
+
+    // Ensure the admin owns this student
+    if (student.adminId && student.adminId.toString() !== req.user._id.toString()) {
+        res.status(403);
+        throw new Error('Not authorized to update this student');
     }
 
     // Update student fields
@@ -146,6 +156,7 @@ exports.createStudent = asyncHandler(async (req, res, next) => {
         email,
         password,
         role: 'Student',
+        adminId: req.user._id,
         registerNumber,
         department,
         semester,
@@ -174,6 +185,12 @@ exports.deleteStudent = asyncHandler(async (req, res, next) => {
         throw new Error('Cannot delete non-student accounts via this endpoint');
     }
 
+    // Ensure the admin owns this student
+    if (student.adminId && student.adminId.toString() !== req.user._id.toString()) {
+        res.status(403);
+        throw new Error('Not authorized to delete this student');
+    }
+
     await User.findByIdAndDelete(req.params.id);
 
     res.status(200).json({
@@ -200,6 +217,7 @@ exports.getStudentRank = asyncHandler(async (req, res, next) => {
 
     const higherRankCount = await User.countDocuments({
         role: 'Student',
+        adminId: currentUser.adminId,
         cgpa: { $gt: currentUser.cgpa || 0 }
     });
 
@@ -231,10 +249,11 @@ exports.bulkUpdateStudents = asyncHandler(async (req, res, next) => {
             updateData.cgpa = Number(updateData.cgpa) || 0;
         }
 
-        return User.findByIdAndUpdate(id, updateData, {
-            new: true,
-            runValidators: true
-        });
+        return User.findOneAndUpdate(
+            { _id: id, adminId: req.user._id },
+            updateData,
+            { new: true, runValidators: true }
+        );
     }));
 
     res.status(200).json({
@@ -278,6 +297,7 @@ exports.bulkCreateStudents = asyncHandler(async (req, res, next) => {
                 email,
                 password: password || registerNumber || 'student123',
                 role: 'Student',
+                adminId: req.user._id,
                 registerNumber,
                 department,
                 semester,

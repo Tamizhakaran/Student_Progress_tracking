@@ -27,6 +27,10 @@ const userSchema = new mongoose.Schema({
         enum: ['Admin', 'Student'],
         default: 'Student'
     },
+    adminId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    },
     schoolId: {
         type: String
     },
