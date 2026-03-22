@@ -168,11 +168,12 @@ const Dashboard = () => {
             if (!isAdmin) {
                 const schedRes = await api.get('/schedules/today');
                 console.log('Dashboard Today Schedule:', schedRes.data.data);
-                setTodaySchedule(schedRes.data.data);
+                const scheduleData = schedRes.data?.data;
+                setTodaySchedule(scheduleData && typeof scheduleData === 'object' && !Array.isArray(scheduleData) ? scheduleData : { slots: [] });
             }
 
             const topRes = await api.get('/students/top-performers');
-            setStudentTopPerformers(topRes.data.data);
+            setStudentTopPerformers(topRes.data?.data || []);
 
             const marksRes = await api.get('/marks/my-marks');
             if (marksRes.data.data && marksRes.data.data.length > 0) {
@@ -191,11 +192,11 @@ const Dashboard = () => {
             setAchievementCount(achievementRes.data.verifiedCount);
 
             const myAchievementsRes = await api.get('/achievements/my');
-            setRecentAchievements(myAchievementsRes.data.data.slice(0, 4));
+            setRecentAchievements((myAchievementsRes.data?.data || []).slice(0, 4));
 
             // Fetch Exams for Student
             const examRes = await api.get('/schedules/my-exams');
-            setExamTimetable(examRes.data.data);
+            setExamTimetable(examRes.data?.data || []);
             // Fetch Placements
             fetchPlacements();
         } catch (error) {
