@@ -1,12 +1,11 @@
-import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { FiPlus, FiTrash2, FiEdit2, FiCheckCircle, FiX, FiBriefcase, FiCalendar, FiUsers, FiDollarSign } from 'react-icons/fi';
-import api from '../utils/api';
+import { useAuth } from '../context/AuthContext';
 import { toast } from 'react-toastify';
 import { DEPARTMENTS } from '../utils/constants';
 import { getMediaURL } from '../utils/mediaUtils';
 
 const PlacementManagement = () => {
+    const { user } = useAuth();
+    const isOriginalAdmin = user?.email === 'admin@bitsathy.ac.in';
     const [placements, setPlacements] = useState([]);
     const [loading, setLoading] = useState(true);
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -138,14 +137,16 @@ const PlacementManagement = () => {
                         Manage placement offers and upcoming campus drives
                     </p>
                 </div>
-                <motion.button
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    onClick={() => handleOpenModal()}
-                    className="flex items-center gap-3 px-8 py-4 bg-slate-900 text-white rounded-3xl font-black text-xs uppercase tracking-widest shadow-2xl hover:bg-slate-800 transition-all"
-                >
-                    <FiPlus size={18} /> Add New Entry
-                </motion.button>
+                {isOriginalAdmin && (
+                    <motion.button
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        onClick={() => handleOpenModal()}
+                        className="flex items-center gap-3 px-8 py-4 bg-slate-900 text-white rounded-3xl font-black text-xs uppercase tracking-widest shadow-2xl hover:bg-slate-800 transition-all"
+                    >
+                        <FiPlus size={18} /> Add New Entry
+                    </motion.button>
+                )}
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -158,7 +159,9 @@ const PlacementManagement = () => {
                         <h2 className="text-2xl font-black text-slate-800 tracking-tight">Placement Offers</h2>
                     </div>
                     <div className="space-y-4">
-                        {placements.filter(p => p.type === 'Offer').length > 0 ? (
+                        {!isOriginalAdmin ? (
+                            <EmptyState label="Restricted Access" />
+                        ) : placements.filter(p => p.type === 'Offer').length > 0 ? (
                             placements.filter(p => p.type === 'Offer').map(p => (
                                 <PlacementCard key={p._id} placement={p} onEdit={handleOpenModal} onDelete={handleDelete} />
                             ))
@@ -177,7 +180,9 @@ const PlacementManagement = () => {
                         <h2 className="text-2xl font-black text-slate-800 tracking-tight">Upcoming Companies</h2>
                     </div>
                     <div className="space-y-4">
-                        {placements.filter(p => p.type === 'Upcoming').length > 0 ? (
+                        {!isOriginalAdmin ? (
+                            <EmptyState label="Restricted Access" />
+                        ) : placements.filter(p => p.type === 'Upcoming').length > 0 ? (
                             placements.filter(p => p.type === 'Upcoming').map(p => (
                                 <PlacementCard key={p._id} placement={p} onEdit={handleOpenModal} onDelete={handleDelete} />
                             ))

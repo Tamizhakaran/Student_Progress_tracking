@@ -10,6 +10,7 @@ import { toast } from 'react-toastify';
 
 const StudyMaterials = () => {
     const { user } = useAuth();
+    const isOriginalAdmin = user?.email === 'admin@bitsathy.ac.in';
     const isAdmin = user?.role === 'Admin';
     const [materials, setMaterials] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -84,7 +85,7 @@ const StudyMaterials = () => {
                 </div>
 
                 <div className="flex flex-col md:flex-row items-center gap-4">
-                    {isAdmin && (
+                    {isAdmin && isOriginalAdmin && (
                         <button
                             onClick={() => setIsUploadModalOpen(true)}
                             className="w-full md:w-auto px-8 py-4 bg-slate-900 text-white rounded-[2rem] font-black text-sm shadow-xl hover:scale-105 transition-all flex items-center justify-center gap-3"
@@ -124,7 +125,8 @@ const StudyMaterials = () => {
             {/* Materials Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
                 <AnimatePresence mode='popLayout'>
-                    {filteredMaterials.map((material) => (
+                    {!isAdmin || isOriginalAdmin ? (
+                        filteredMaterials.map((material) => (
                         <motion.div
                             layout
                             initial={{ opacity: 0, y: 20 }}
@@ -179,7 +181,12 @@ const StudyMaterials = () => {
                                 </div>
                             </div>
                         </motion.div>
-                    ))}
+                    ))
+                ) : (
+                    <div className="col-span-full py-20 text-center border-2 border-dashed border-slate-100 rounded-[2rem]">
+                        <p className="text-slate-300 font-black uppercase tracking-widest text-[10px]">Restricted Access to Materials</p>
+                    </div>
+                )}
                 </AnimatePresence>
             </div>
 

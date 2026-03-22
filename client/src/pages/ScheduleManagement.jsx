@@ -1,11 +1,11 @@
-import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { FiClock, FiPlus, FiTrash2, FiSave, FiCalendar, FiBook, FiLayers, FiX, FiCheckCircle, FiMinusCircle, FiActivity, FiSearch, FiTriangle } from 'react-icons/fi';
+import { useAuth } from '../context/AuthContext';
 import { toast } from 'react-toastify';
 import api from '../utils/api';
 import { DEPARTMENTS } from '../utils/constants';
 
 const ScheduleManagement = () => {
+    const { user } = useAuth();
+    const isOriginalAdmin = user?.email === 'admin@bitsathy.ac.in';
     const [department, setDepartment] = useState('');
     const [semester, setSemester] = useState('');
     const [date, setDate] = useState(() => {
@@ -260,16 +260,22 @@ const ScheduleManagement = () => {
                             </div>
                         </div>
 
-                        <motion.button
-                            whileHover={{ scale: 1.02, translateY: -5 }}
-                            whileTap={{ scale: 0.98 }}
-                            onClick={handleSave}
-                            disabled={loading}
-                            className="w-full flex items-center justify-center gap-4 h-20 bg-slate-950 text-white rounded-[2rem] font-black uppercase tracking-[0.2em] text-xs hover:bg-slate-900 transition-all shadow-2xl shadow-indigo-200/20 disabled:opacity-50 relative z-10 overflow-hidden group/btn"
-                        >
-                            <div className="absolute inset-0 bg-gradient-to-r from-indigo-600/0 via-white/10 to-indigo-600/0 -translate-x-full group-hover/btn:animate-shimmer"></div>
-                            <FiSave className="text-lg" /> {loading ? 'Synchronizing...' : 'Commit to Record'}
-                        </motion.button>
+                        {isOriginalAdmin ? (
+                            <motion.button
+                                whileHover={{ scale: 1.02, translateY: -5 }}
+                                whileTap={{ scale: 0.98 }}
+                                onClick={handleSave}
+                                disabled={loading}
+                                className="w-full flex items-center justify-center gap-4 h-20 bg-slate-950 text-white rounded-[2rem] font-black uppercase tracking-[0.2em] text-xs hover:bg-slate-900 transition-all shadow-2xl shadow-indigo-200/20 disabled:opacity-50 relative z-10 overflow-hidden group/btn"
+                            >
+                                <div className="absolute inset-0 bg-gradient-to-r from-indigo-600/0 via-white/10 to-indigo-600/0 -translate-x-full group-hover/btn:animate-shimmer"></div>
+                                <FiSave className="text-lg" /> {loading ? 'Synchronizing...' : 'Commit to Record'}
+                            </motion.button>
+                        ) : (
+                            <div className="w-full flex items-center justify-center gap-4 h-20 bg-slate-50 text-slate-400 rounded-[2rem] font-black uppercase tracking-[0.2em] text-xs border border-dashed border-slate-200">
+                                Restricted Access
+                            </div>
+                        )}
                     </div>
                 </motion.div>
 
@@ -291,7 +297,14 @@ const ScheduleManagement = () => {
                         </div>
 
                         <div className="flex-1 relative z-10">
-                            {schedules.length === 0 ? (
+                            {!isOriginalAdmin ? (
+                                <div className="flex flex-col items-center justify-center py-32 text-center">
+                                    <div className="w-24 h-24 rounded-[2.5rem] bg-slate-50 border border-slate-100 flex items-center justify-center text-4xl text-slate-200 mb-8">
+                                        <FiClock />
+                                    </div>
+                                    <p className="font-black text-slate-300 uppercase tracking-[0.3em] text-[10px]">Restricted Access to Timelines</p>
+                                </div>
+                            ) : schedules.length === 0 ? (
                                 <div className="flex flex-col items-center justify-center py-32 text-center">
                                     <div className="w-24 h-24 rounded-[2.5rem] bg-slate-50 border border-slate-100 flex items-center justify-center text-4xl text-slate-200 mb-8 animate-pulse">
                                         <FiClock />
