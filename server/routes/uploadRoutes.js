@@ -16,11 +16,9 @@ router.post('/', protect, upload.single('image'), asyncHandler(async (req, res) 
 
     // Convert backslashes to forward slashes for URL compatibility
     const filePath = req.file.path.replace(/\\/g, '/');
-    const baseUrl = req.protocol + '://' + req.get('host');
-
     res.status(200).json({
         success: true,
-        data: `${baseUrl}/${filePath}`,
+        data: filePath,
         fileName: req.file.filename
     });
 }));

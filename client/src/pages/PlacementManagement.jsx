@@ -4,6 +4,7 @@ import { FiPlus, FiTrash2, FiEdit2, FiCheckCircle, FiX, FiBriefcase, FiCalendar,
 import api from '../utils/api';
 import { toast } from 'react-toastify';
 import { DEPARTMENTS } from '../utils/constants';
+import { getMediaURL } from '../utils/mediaUtils';
 
 const PlacementManagement = () => {
     const [placements, setPlacements] = useState([]);
@@ -282,9 +283,16 @@ const PlacementManagement = () => {
                                                     <span className="truncate">{selectedFile ? selectedFile.name : 'Choose Photo'}</span>
                                                     <FiPlus className="text-slate-400" />
                                                 </label>
-                                                {formData.studentPhoto && formData.studentPhoto !== 'no-photo.jpg' && (
+                                                {formData.studentPhoto && formData.studentPhoto !== 'no-photo.jpg' && getMediaURL(formData.studentPhoto) && (
                                                     <div className="w-14 h-14 rounded-xl overflow-hidden border border-slate-100">
-                                                        <img src={formData.studentPhoto} alt="Preview" className="w-full h-full object-cover" />
+                                                        <img 
+                                                            src={getMediaURL(formData.studentPhoto)} 
+                                                            alt="Preview" 
+                                                            className="w-full h-full object-cover" 
+                                                            onError={(e) => {
+                                                                e.target.style.display = 'none';
+                                                            }}
+                                                        />
                                                     </div>
                                                 )}
                                             </div>
@@ -322,8 +330,16 @@ const PlacementCard = ({ placement, onEdit, onDelete }) => {
                 <div className="flex items-center gap-4">
                     {placement.type === 'Offer' ? (
                         <div className="w-14 h-14 rounded-2xl overflow-hidden shadow-sm border border-slate-100 shrink-0">
-                            {placement.studentPhoto && placement.studentPhoto !== 'no-photo.jpg' ? (
-                                <img src={placement.studentPhoto} alt={placement.studentName} className="w-full h-full object-cover" />
+                            {placement.studentPhoto && placement.studentPhoto !== 'no-photo.jpg' && getMediaURL(placement.studentPhoto) ? (
+                                <img 
+                                    src={getMediaURL(placement.studentPhoto)} 
+                                    alt={placement.studentName} 
+                                    className="w-full h-full object-cover" 
+                                    onError={(e) => {
+                                        e.target.onerror = null;
+                                        e.target.parentElement.innerHTML = `<div class="w-full h-full bg-indigo-50 text-indigo-600 flex items-center justify-center font-black text-xl uppercase">${placement.studentName?.charAt(0)}</div>`;
+                                    }}
+                                />
                             ) : (
                                 <div className="w-full h-full bg-indigo-50 text-indigo-600 flex items-center justify-center font-black text-xl uppercase">
                                     {placement.studentName?.charAt(0)}

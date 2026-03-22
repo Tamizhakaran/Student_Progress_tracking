@@ -4,6 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiMenu, FiX } from 'react-icons/fi';
+import { getMediaURL } from '../utils/mediaUtils';
 
 const Layout = () => {
     const [sidebarOpen, setSidebarOpen] = React.useState(false);
@@ -47,14 +48,18 @@ const Layout = () => {
                             className="flex items-center gap-2 md:gap-4 bg-slate-50 hover:bg-slate-100 p-1 md:p-1.5 md:pr-4 rounded-xl md:rounded-2xl transition-all border border-slate-100 group"
                         >
                             <div className="h-8 w-8 md:h-10 md:w-10 rounded-lg md:rounded-xl bg-indigo-600 text-white flex items-center justify-center font-black shadow-lg shadow-indigo-200 group-hover:rotate-3 transition-transform overflow-hidden text-xs md:text-base">
-                                {user?.profileImage && user.profileImage !== 'no-photo.jpg' ? (
+                                {user?.profileImage && user.profileImage !== 'no-photo.jpg' && getMediaURL(user.profileImage) ? (
                                     <img
-                                        src={user.profileImage}
+                                        src={getMediaURL(user.profileImage)}
                                         alt={user.name}
                                         className="w-full h-full object-cover"
+                                        onError={(e) => {
+                                            e.target.onerror = null;
+                                            e.target.parentElement.innerHTML = `<span class="text-white font-black text-sm">${user.name.charAt(0)}</span>`;
+                                        }}
                                     />
                                 ) : (
-                                    user?.name?.charAt(0).toUpperCase()
+                                    <span className="text-white font-black text-sm">{user?.name?.charAt(0)}</span>
                                 )}
                             </div>
                             <div className="text-left hidden sm:block">
@@ -93,16 +98,20 @@ const Layout = () => {
                                         <div className="p-8 flex flex-col items-center">
                                             <div className="relative mb-8">
                                                 <div className="w-48 h-48 rounded-full border-[6px] border-indigo-50/50 p-2 overflow-hidden bg-indigo-50 shadow-inner flex items-center justify-center">
-                                                    {user?.profileImage && user.profileImage !== 'no-photo.jpg' ? (
+                                                    {user?.profileImage && user.profileImage !== 'no-photo.jpg' && getMediaURL(user.profileImage) ? (
                                                         <img
-                                                            src={user.profileImage}
+                                                            src={getMediaURL(user.profileImage)}
                                                             alt={user.name}
                                                             className="w-full h-full object-cover rounded-full"
+                                                            onError={(e) => {
+                                                                e.target.onerror = null;
+                                                                e.target.parentElement.innerHTML = `<span class="text-indigo-600 font-bold">${user.name.charAt(0)}</span>`;
+                                                            }}
                                                         />
                                                     ) : (
-                                                        <div className="w-full h-full flex items-center justify-center text-6xl font-black text-indigo-400 uppercase">
+                                                        <span className="w-full h-full flex items-center justify-center text-6xl font-black text-indigo-400 uppercase">
                                                             {user?.name?.charAt(0)}
-                                                        </div>
+                                                        </span>
                                                     )}
                                                 </div>
                                             </div>

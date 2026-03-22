@@ -17,6 +17,7 @@ import { toast } from 'react-toastify';
 import api from '../utils/api';
 import { calcAttendancePercentage } from '../utils/attendanceUtils';
 import { DEPARTMENTS } from '../utils/constants';
+import { getMediaURL } from '../utils/mediaUtils';
 
 // Performance data is now dynamic based on student's semester grades
 
@@ -441,15 +442,23 @@ const Dashboard = () => {
                                 placements.filter(p => p.type === 'Offer').map(p => (
                                     <div key={p._id} className="p-6 rounded-[2rem] bg-white/60 border border-slate-100 shadow-sm hover:shadow-md transition-all">
                                         <div className="flex items-center gap-4">
-                                            <div className="w-12 h-12 rounded-xl overflow-hidden shadow-sm border border-slate-100 shrink-0">
-                                                {p.studentPhoto && p.studentPhoto !== 'no-photo.jpg' ? (
-                                                    <img src={p.studentPhoto} alt={p.studentName} className="w-full h-full object-cover" />
-                                                ) : (
-                                                    <div className="w-full h-full bg-indigo-50 text-indigo-600 flex items-center justify-center font-black text-lg border border-indigo-100">
-                                                        {p.studentName?.charAt(0)}
-                                                    </div>
-                                                )}
-                                            </div>
+                                             <div className="w-12 h-12 rounded-xl overflow-hidden shadow-sm border border-slate-100 shrink-0">
+                                                 {(p.studentPhoto && p.studentPhoto !== 'no-photo.jpg' && getMediaURL(p.studentPhoto)) ? (
+                                                     <img
+                                                         src={getMediaURL(p.studentPhoto)}
+                                                         alt={p.studentName}
+                                                         className="w-full h-full object-cover"
+                                                         onError={(e) => {
+                                                             e.target.onerror = null;
+                                                             e.target.parentElement.innerHTML = `<div class="w-full h-full bg-indigo-50 text-indigo-600 flex items-center justify-center font-black text-lg border border-indigo-100">${p.studentName?.charAt(0)}</div>`;
+                                                         }}
+                                                     />
+                                                 ) : (
+                                                     <div className="w-full h-full bg-indigo-50 text-indigo-600 flex items-center justify-center font-black text-lg border border-indigo-100">
+                                                         {p.studentName?.charAt(0)}
+                                                     </div>
+                                                 )}
+                                             </div>
                                             <div className="flex-1 min-w-0">
                                                 <h4 className="font-black text-slate-900 text-sm truncate">{p.studentName}</h4>
                                                 <div className="flex items-center gap-1.5 overflow-hidden">

@@ -5,6 +5,7 @@ import { LuGraduationCap } from 'react-icons/lu';
 import api from '../utils/api';
 import { toast } from 'react-toastify';
 import { DEPARTMENTS } from '../utils/constants';
+import { getMediaURL } from '../utils/mediaUtils';
 
 const StudentManagement = () => {
     const [students, setStudents] = useState([]);
@@ -329,11 +330,15 @@ const StudentManagement = () => {
                                     <td className="px-10 py-8">
                                         <div className="flex items-center gap-5">
                                             <div className="w-14 h-14 rounded-[1.25rem] bg-indigo-50 text-indigo-600 flex items-center justify-center font-black text-xl shadow-inner border border-indigo-100/50 overflow-hidden">
-                                                {student.profileImage && student.profileImage !== 'no-photo.jpg' ? (
+                                                {student.profileImage && student.profileImage !== 'no-photo.jpg' && getMediaURL(student.profileImage) ? (
                                                     <img
-                                                        src={student.profileImage}
+                                                        src={getMediaURL(student.profileImage)}
                                                         alt={student.name}
                                                         className="w-full h-full object-cover"
+                                                        onError={(e) => {
+                                                            e.target.onerror = null;
+                                                            e.target.parentElement.innerHTML = student.name.charAt(0);
+                                                        }}
                                                     />
                                                 ) : (
                                                     student.name.charAt(0)
@@ -647,8 +652,16 @@ const StudentManagement = () => {
                             </button>
                             <div className="absolute -bottom-16 left-12 p-2 bg-white rounded-[2.5rem]">
                                 <div className="w-32 h-32 rounded-[2rem] bg-slate-900 overflow-hidden shadow-xl border-4 border-white flex items-center justify-center text-4xl text-white font-black">
-                                    {selectedStudent.profileImage && selectedStudent.profileImage !== 'no-photo.jpg' ? (
-                                        <img src={selectedStudent.profileImage} alt={selectedStudent.name} className="w-full h-full object-cover" />
+                                    {selectedStudent.profileImage && selectedStudent.profileImage !== 'no-photo.jpg' && getMediaURL(selectedStudent.profileImage) ? (
+                                        <img
+                                            src={getMediaURL(selectedStudent.profileImage)}
+                                            alt={selectedStudent.name}
+                                            className="w-full h-full object-cover"
+                                            onError={(e) => {
+                                                e.target.onerror = null;
+                                                e.target.parentElement.innerHTML = selectedStudent.name.charAt(0);
+                                            }}
+                                        />
                                     ) : (
                                         selectedStudent.name.charAt(0)
                                     )}
