@@ -17,7 +17,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
 
     const roleMenus = {
         'Admin': [
-            { name: 'Home', icon: FiHome, path: '/dashboard' },
+            { name: 'Home', icon: FiHome, path: '/adminpage' },
             { name: 'Students', icon: LuGraduationCap, path: '/students' },
             { name: 'Attendance', icon: FiCalendar, path: '/attendance' },
             { name: 'Performance', icon: FiActivity, path: '/performance-management' },
@@ -30,7 +30,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
             { name: 'Study Materials', icon: FiLayers, path: '/study-materials' },
         ],
         'Student': [
-            { name: 'Home', icon: FiHome, path: '/dashboard' },
+            { name: 'Home', icon: FiHome, path: '/studentpage' },
             { name: 'Performance', icon: FiActivity, path: '/performance' },
             { name: 'Attendance', icon: FiCalendar, path: '/attendance' },
             { name: 'Achievements', icon: FiAward, path: '/achievements' },

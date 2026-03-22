@@ -18,9 +18,9 @@ const AdminLogin = () => {
             const user = await login(data.email, data.password);
             if (user) {
                 if (user.role?.toLowerCase() === 'admin') {
-                    navigate('/students');
+                    navigate('/adminpage');
                 } else {
-                    navigate('/dashboard');
+                    navigate('/studentpage');
                 }
             }
         } catch (error) {
