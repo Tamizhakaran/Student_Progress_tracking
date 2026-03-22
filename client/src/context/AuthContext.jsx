@@ -52,7 +52,7 @@ export const AuthProvider = ({ children }) => {
                 email,
                 password
             });
-            console.log("Login User Data:", res.data);
+            console.log("Login Full Response Data:", JSON.stringify(res.data, null, 2));
 
             const normalizedRole = normalizeRole(res.data.role);
             const userData = { ...res.data, role: normalizedRole };
