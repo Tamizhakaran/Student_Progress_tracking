@@ -21,15 +21,23 @@ const allowedOrigins = [
     "https://student-progress-tracking-nine.vercel.app",
     "https://student-progress-tracking.onrender.com",
     "https://student-progress-track.vercel.app",
+    "https://student-progress-tracking-git-main-tamizhakarans-projects.vercel.app",
     "http://localhost:3000",
     "http://localhost:5173",
 ];
 
 app.use(cors({
     origin: function (origin, callback) {
-        if (!origin || allowedOrigins.includes(origin)) {
+        // Allow if no origin (like mobile apps or curl requests)
+        if (!origin) return callback(null, true);
+
+        const isAllowed = allowedOrigins.includes(origin) || 
+                         (origin.includes("student-progress-tracking") && origin.endsWith(".vercel.app"));
+
+        if (isAllowed) {
             callback(null, true);
         } else {
+            console.log("CORS blocked origin:", origin);
             callback(new Error('Not allowed by CORS'));
         }
     },
