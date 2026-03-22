@@ -8,18 +8,18 @@ import { FiMenu, FiX } from 'react-icons/fi';
 const Layout = () => {
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const [profileOpen, setProfileOpen] = useState(false);
+    const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
     const { user } = useAuth();
     const dropdownRef = useRef(null);
 
-    // Close on click outside if needed (though backdrop handles it for modal)
     useEffect(() => {
-        const handleClickOutside = (event) => {
-            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-                // setProfileOpen(false);
-            }
+        const handleResize = () => {
+            const mobile = window.innerWidth < 768;
+            setIsMobile(mobile);
+            if (!mobile) setSidebarOpen(false);
         };
-        document.addEventListener('mousedown', handleClickOutside);
-        return () => document.removeEventListener('mousedown', handleClickOutside);
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
     }, []);
 
     return (
@@ -27,15 +27,17 @@ const Layout = () => {
             {/* Sidebar - Mobile & Desktop */}
             <Sidebar isOpen={sidebarOpen} setIsOpen={setSidebarOpen} />
 
-            <div className="flex-1 flex flex-col overflow-hidden">
+            <div className="flex-1 flex flex-col overflow-hidden relative">
                 {/* Header */}
                 <header className="h-16 bg-white/80 backdrop-blur-md shadow-sm flex items-center justify-between px-4 md:px-6 z-20 no-print sticky top-0">
-                    <button
-                        className="md:hidden p-2 text-slate-600 text-2xl hover:bg-slate-100 rounded-xl transition-all"
-                        onClick={() => setSidebarOpen(true)}
-                    >
-                        <FiMenu />
-                    </button>
+                    {isMobile && (
+                        <button
+                            className="p-2 text-slate-600 text-2xl hover:bg-slate-100 rounded-xl transition-all"
+                            onClick={() => setSidebarOpen(true)}
+                        >
+                            <FiMenu />
+                        </button>
+                    )}
 
                     <div className="flex items-center gap-2 md:gap-4 ml-auto relative" ref={dropdownRef}>
                         <motion.button
@@ -148,7 +150,7 @@ const Layout = () => {
 
             {/* Mobile Sidebar Overlay */}
             <AnimatePresence>
-                {sidebarOpen && (
+                {sidebarOpen && isMobile && (
                     <motion.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}

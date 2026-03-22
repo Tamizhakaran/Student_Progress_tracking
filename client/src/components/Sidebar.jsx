@@ -14,6 +14,13 @@ import { motion } from 'framer-motion';
 const Sidebar = ({ isOpen, setIsOpen }) => {
     const { user, logout, isMaintenanceMode, toggleMaintenanceMode } = useAuth();
     const location = useLocation();
+    const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+
+    useEffect(() => {
+        const handleResize = () => setIsMobile(window.innerWidth < 768);
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
 
     const roleMenus = {
         'Admin': [
@@ -41,21 +48,28 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
     };
 
     const role = user?.role?.toLowerCase() === 'admin' ? 'Admin' : 'Student';
-    console.log("Sidebar Detected Role:", role);
     const menus = roleMenus[role];
+
+    const variants = {
+        mobileOpen: { width: '260px', x: 0, opacity: 1 },
+        mobileClosed: { width: '0px', x: -260, opacity: 0 },
+        desktopOpen: { width: '260px', x: 0, opacity: 1 },
+        desktopCollapsed: { width: '64px', x: 0, opacity: 1 }
+    };
 
     return (
         <motion.div
             initial={false}
-            animate={{
-                width: isOpen ? '260px' : (window.innerWidth < 768 ? '0px' : '64px'),
-                x: (window.innerWidth < 768 && !isOpen) ? -260 : 0
-            }}
+            animate={
+                isMobile
+                    ? (isOpen ? 'mobileOpen' : 'mobileClosed')
+                    : (isOpen ? 'desktopOpen' : 'desktopCollapsed')
+            }
+            variants={variants}
             transition={{ type: 'spring', damping: 25, stiffness: 200 }}
             className={clsx(
-                "glass-morphism h-screen flex flex-col z-[100] transition-all duration-300 fixed md:relative border-r border-slate-200/50 shadow-2xl shadow-slate-900/5 no-print",
-                isOpen ? "translate-x-0" : "md:translate-x-0",
-                !isOpen && "overflow-hidden md:overflow-visible w-0 md:w-[64px]"
+                "glass-morphism h-screen flex flex-col z-[100] fixed md:relative border-r border-slate-200/50 shadow-2xl shadow-slate-900/5 no-print",
+                !isOpen && "overflow-hidden md:overflow-visible"
             )}
         >
             {/* Logo space removed */}
@@ -82,12 +96,12 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                                             ? "w-11 h-11 bg-slate-950 text-white rounded-xl shadow-xl shadow-slate-900/40"
                                             : "w-10 h-10 text-slate-400 hover:text-indigo-600"
                                     )}
-                                    onClick={() => window.innerWidth < 768 && setIsOpen(false)}
+                                    onClick={() => isMobile && setIsOpen(false)}
                                 >
                                     <Icon className={clsx("text-lg transition-all duration-300", isActive ? "scale-110" : "opacity-60 group-hover:opacity-100 group-hover:scale-125")} />
 
-                                    {!isOpen && (
-                                        <div className="absolute left-[calc(100%+12px)] top-1/2 -translate-y-1/2 px-4 py-2.5 rounded-2xl bg-indigo-600 text-white hidden md:flex items-center gap-3 shadow-[0_10px_40px_-10px_rgba(79,70,229,0.5)] opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none z-[100] whitespace-nowrap">
+                                    {!isOpen && !isMobile && (
+                                        <div className="absolute left-[calc(100%+12px)] top-1/2 -translate-y-1/2 px-4 py-2.5 rounded-2xl bg-indigo-600 text-white flex items-center gap-3 shadow-[0_10px_40px_-10px_rgba(79,70,229,0.5)] opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none z-[100] whitespace-nowrap">
                                             <div className="w-8 h-8 rounded-lg bg-white/20 flex items-center justify-center shrink-0">
                                                 <Icon className="text-xl" />
                                             </div>
@@ -120,8 +134,8 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                 >
                     <FiLogOut className="text-lg relative z-10 transition-transform duration-300" />
 
-                    {!isOpen && (
-                        <div className="absolute left-[calc(100%+12px)] top-1/2 -translate-y-1/2 px-4 py-2.5 rounded-2xl bg-rose-600 text-white hidden md:flex items-center gap-3 shadow-[0_10px_40px_-10px_rgba(225,29,72,0.5)] opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none z-[100] whitespace-nowrap">
+                    {!isOpen && !isMobile && (
+                        <div className="absolute left-[calc(100%+12px)] top-1/2 -translate-y-1/2 px-4 py-2.5 rounded-2xl bg-rose-600 text-white flex items-center gap-3 shadow-[0_10px_40px_-10px_rgba(225,29,72,0.5)] opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none z-[100] whitespace-nowrap">
                             <div className="w-8 h-8 rounded-lg bg-white/20 flex items-center justify-center shrink-0">
                                 <FiLogOut className="text-xl" />
                             </div>
@@ -145,8 +159,8 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                     >
                         <LuAlertTriangle className={clsx("text-lg transition-transform group-hover:scale-110", isMaintenanceMode && "animate-pulse")} />
 
-                        {!isOpen && (
-                            <div className="absolute left-[calc(100%+12px)] top-1/2 -translate-y-1/2 px-4 py-2.5 rounded-2xl bg-amber-600 text-white hidden md:flex items-center gap-3 shadow-[0_10px_40px_-10px_rgba(217,119,6,0.5)] opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none z-[100] whitespace-nowrap">
+                        {!isOpen && !isMobile && (
+                            <div className="absolute left-[calc(100%+12px)] top-1/2 -translate-y-1/2 px-4 py-2.5 rounded-2xl bg-amber-600 text-white flex items-center gap-3 shadow-[0_10px_40px_-10px_rgba(217,119,6,0.5)] opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none z-[100] whitespace-nowrap">
                                 <div className="w-8 h-8 rounded-lg bg-white/20 flex items-center justify-center shrink-0">
                                     <LuAlertTriangle className="text-xl" />
                                 </div>
