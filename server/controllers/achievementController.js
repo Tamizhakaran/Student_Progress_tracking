@@ -77,7 +77,10 @@ exports.getMyAchievements = async (req, res) => {
 // @access  Private (Admin)
 exports.getAllAchievements = async (req, res) => {
     try {
-        const achievements = await Achievement.find()
+        const students = await User.find({ role: 'Student', adminId: req.user._id }).select('_id');
+        const studentIds = students.map(s => s._id);
+
+        const achievements = await Achievement.find({ student: { $in: studentIds } })
             .populate('student', 'name registerNumber department')
             .sort({ createdAt: -1 });
 

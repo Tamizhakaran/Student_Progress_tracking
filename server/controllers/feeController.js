@@ -6,8 +6,9 @@ const asyncHandler = require('express-async-handler');
 // @route   GET /api/fees
 // @access  Private/Admin
 exports.getFees = asyncHandler(async (req, res) => {
-    const students = await User.find({ role: 'Student' }).select('name registerNumber email department semester');
-    const fees = await Fee.find().populate('student', 'name registerNumber email department semester');
+    const students = await User.find({ role: 'Student', adminId: req.user._id }).select('name registerNumber email department semester');
+    const studentIds = students.map(s => s._id);
+    const fees = await Fee.find({ student: { $in: studentIds } }).populate('student', 'name registerNumber email department semester');
 
     const data = students.map(student => {
         const studentFee = fees.find(f => f.student && f.student._id.toString() === student._id.toString());

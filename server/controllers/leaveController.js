@@ -40,7 +40,10 @@ const getMyLeaves = asyncHandler(async (req, res) => {
 // @route   GET /api/leaves/admin/all
 // @access  Private (Admin)
 const getAllLeaves = asyncHandler(async (req, res) => {
-    const leaves = await Leave.find()
+    const students = await User.find({ role: 'Student', adminId: req.user._id }).select('_id');
+    const studentIds = students.map(s => s._id);
+
+    const leaves = await Leave.find({ student: { $in: studentIds } })
         .populate('student', 'name registerNumber department')
         .sort({ createdAt: -1 });
 

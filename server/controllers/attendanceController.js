@@ -6,7 +6,10 @@ const User = require('../models/User');
 // @route   GET /api/attendance
 // @access  Private/Admin
 const getAllAttendance = asyncHandler(async (req, res) => {
-    const attendance = await Attendance.find({})
+    const students = await User.find({ role: 'Student', adminId: req.user._id }).select('_id');
+    const studentIds = students.map(s => s._id);
+
+    const attendance = await Attendance.find({ student: { $in: studentIds } })
         .populate('student', 'name email registerNumber department class')
         .populate('recordedBy', 'name role')
         .sort({ date: -1 });
@@ -172,11 +175,13 @@ const bulkUpdateAttendance = asyncHandler(async (req, res) => {
     });
 });
 
-// @desc    Clear all attendance records (Admin)
+// @desc    Clear all attendance records for admin's students
 // @route   DELETE /api/attendance
 // @access  Private/Admin
 const clearAttendance = asyncHandler(async (req, res) => {
-    await Attendance.deleteMany({});
+    const students = await User.find({ role: 'Student', adminId: req.user._id }).select('_id');
+    const studentIds = students.map(s => s._id);
+    await Attendance.deleteMany({ student: { $in: studentIds } });
     res.json({ success: true, message: 'All attendance records cleared' });
 });
 
@@ -199,7 +204,9 @@ const deleteAttendance = asyncHandler(async (req, res) => {
 // @route   GET /api/attendance/debug
 // @access  Private/Admin
 const debugAttendance = asyncHandler(async (req, res) => {
-    const rawData = await Attendance.find({}).lean();
+    const students = await User.find({ role: 'Student', adminId: req.user._id }).select('_id');
+    const studentIds = students.map(s => s._id);
+    const rawData = await Attendance.find({ student: { $in: studentIds } }).lean();
     res.json({
         success: true,
         count: rawData.length,
