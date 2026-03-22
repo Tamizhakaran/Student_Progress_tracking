@@ -6,8 +6,9 @@ const System = require('../models/System');
 
 // Generate JWT
 const generateToken = (id) => {
-    return jwt.sign({ id }, process.env.JWT_SECRET, {
-        expiresIn: process.env.JWT_EXPIRE,
+    const secret = process.env.JWT_SECRET || 'your_super_secret_key_123';
+    return jwt.sign({ id }, secret, {
+        expiresIn: process.env.JWT_EXPIRE || '30d',
     });
 };
 
