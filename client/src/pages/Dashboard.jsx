@@ -253,36 +253,36 @@ const Dashboard = () => {
             initial="hidden"
             animate="visible"
             variants={containerVariants}
-            className="space-y-10 pb-20 px-4 md:px-0 pt-6"
+            className="space-y-6 md:space-y-10 pb-20 px-0 md:px-0 pt-2 md:pt-6"
         >
             {/* Greeting Section */}
-            <motion.div variants={itemVariants} className="flex flex-col lg:flex-row lg:items-end justify-between gap-8 py-6">
-                <div className="space-y-4">
-                    <h1 className="text-4xl md:text-5xl font-black text-slate-900 tracking-tight mb-4">
-                        {getGreeting()}, <span className="text-indigo-600">{user?.name}</span>
+            <motion.div variants={itemVariants} className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 md:gap-8 py-4 md:py-6">
+                <div className="space-y-2 md:space-y-4">
+                    <h1 className="text-3xl md:text-5xl font-black text-slate-900 tracking-tight">
+                        {getGreeting()}, <span className="text-indigo-600 block sm:inline">{user?.name}</span>
                     </h1>
-                    <p className="text-slate-500 font-bold text-base max-w-2xl leading-relaxed">
+                    <p className="text-slate-500 font-bold text-sm md:text-base max-w-2xl leading-relaxed">
                         {isAdmin
                             ? "Here's an overview of the academic performance across your departments."
                             : <>Your academic progress is looking <span className="text-slate-900 underline decoration-indigo-500 decoration-4 underline-offset-8">great</span> today.</>}
                     </p>
                 </div>
                 <div className="flex items-center gap-4">
-                    <div className="px-6 py-3 rounded-2xl glass-morphism border-white shadow-sm flex items-center gap-4">
+                    <div className="px-4 md:px-6 py-2 md:py-3 rounded-xl md:rounded-2xl glass-morphism border-white shadow-sm flex items-center gap-3 md:gap-4">
                         <div className="text-right">
-                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">System Status</p>
-                            <p className="text-xs font-bold text-slate-900">Online</p>
+                            <p className="text-[8px] md:text-[10px] font-black text-slate-400 uppercase tracking-widest">System Status</p>
+                            <p className="text-[10px] md:text-xs font-bold text-slate-900">Online</p>
                         </div>
-                        <div className="relative flex h-3 w-3">
+                        <div className="relative flex h-2.5 w-2.5 md:h-3 md:w-3">
                             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
-                            <span className="relative inline-flex rounded-full h-3 w-3 bg-indigo-600"></span>
+                            <span className="relative inline-flex rounded-full h-2.5 w-2.5 md:h-3 md:w-3 bg-indigo-600"></span>
                         </div>
                     </div>
                 </div>
             </motion.div>
 
             {/* Stats Cards */}
-            <motion.div variants={itemVariants} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <motion.div variants={itemVariants} className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
                 {isAdmin ? (
                     <>
                         <StatCard icon={<FiUsers />} label="Total Students" value={studentCount} trend="+12.4%" color="indigo" />

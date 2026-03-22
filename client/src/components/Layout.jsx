@@ -29,22 +29,22 @@ const Layout = () => {
 
             <div className="flex-1 flex flex-col overflow-hidden">
                 {/* Header */}
-                <header className="h-16 bg-white shadow-sm flex items-center justify-between px-6 z-10 no-print">
+                <header className="h-16 bg-white/80 backdrop-blur-md shadow-sm flex items-center justify-between px-4 md:px-6 z-20 no-print sticky top-0">
                     <button
-                        className="md:hidden text-slate-600 text-2xl"
+                        className="md:hidden p-2 text-slate-600 text-2xl hover:bg-slate-100 rounded-xl transition-all"
                         onClick={() => setSidebarOpen(true)}
                     >
                         <FiMenu />
                     </button>
 
-                    <div className="flex items-center gap-4 ml-auto relative" ref={dropdownRef}>
+                    <div className="flex items-center gap-2 md:gap-4 ml-auto relative" ref={dropdownRef}>
                         <motion.button
                             whileHover={{ scale: 1.02 }}
                             whileTap={{ scale: 0.98 }}
                             onClick={() => setProfileOpen(true)}
-                            className="flex items-center gap-4 bg-slate-50 hover:bg-slate-100 p-1.5 pr-4 rounded-2xl transition-all border border-slate-100 group"
+                            className="flex items-center gap-2 md:gap-4 bg-slate-50 hover:bg-slate-100 p-1 md:p-1.5 md:pr-4 rounded-xl md:rounded-2xl transition-all border border-slate-100 group"
                         >
-                            <div className="h-10 w-10 rounded-xl bg-indigo-600 text-white flex items-center justify-center font-black shadow-lg shadow-indigo-200 group-hover:rotate-3 transition-transform overflow-hidden">
+                            <div className="h-8 w-8 md:h-10 md:w-10 rounded-lg md:rounded-xl bg-indigo-600 text-white flex items-center justify-center font-black shadow-lg shadow-indigo-200 group-hover:rotate-3 transition-transform overflow-hidden text-xs md:text-base">
                                 {user?.profileImage && user.profileImage !== 'no-photo.jpg' ? (
                                     <img
                                         src={user.profileImage}
@@ -56,15 +56,14 @@ const Layout = () => {
                                 )}
                             </div>
                             <div className="text-left hidden sm:block">
-                                <p className="text-xs font-black text-slate-900 leading-none mb-1 uppercase tracking-tight">{user?.name}</p>
-                                <p className="text-[10px] font-bold text-indigo-500 uppercase tracking-widest">{user?.role}</p>
+                                <p className="text-[10px] md:text-xs font-black text-slate-900 leading-none mb-1 uppercase tracking-tight">{user?.name}</p>
+                                <p className="text-[8px] md:text-[10px] font-bold text-indigo-500 uppercase tracking-widest">{user?.role}</p>
                             </div>
                         </motion.button>
 
                         <AnimatePresence>
                             {profileOpen && (
                                 <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
-                                    {/* Backdrop */}
                                     <motion.div
                                         initial={{ opacity: 0 }}
                                         animate={{ opacity: 1 }}
@@ -73,7 +72,6 @@ const Layout = () => {
                                         className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm"
                                     />
 
-                                    {/* Modal Content */}
                                     <motion.div
                                         initial={{ opacity: 0, scale: 0.95, y: 20 }}
                                         animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -86,12 +84,11 @@ const Layout = () => {
                                                 onClick={() => setProfileOpen(false)}
                                                 className="p-2 text-slate-400 hover:text-slate-600 transition-colors"
                                             >
-                                                <FiX className="text-xl" />
+                                                <FiX size={24} />
                                             </button>
                                         </div>
 
                                         <div className="p-8 flex flex-col items-center">
-                                            {/* Profile Image Wrap */}
                                             <div className="relative mb-8">
                                                 <div className="w-48 h-48 rounded-full border-[6px] border-indigo-50/50 p-2 overflow-hidden bg-indigo-50 shadow-inner flex items-center justify-center">
                                                     {user?.profileImage && user.profileImage !== 'no-photo.jpg' ? (
@@ -108,7 +105,6 @@ const Layout = () => {
                                                 </div>
                                             </div>
 
-                                            {/* Details Section */}
                                             <div className="w-full space-y-4 mb-10">
                                                 {user?.role !== 'Admin' && (
                                                     <div className="flex items-center justify-between py-4 border-b border-slate-100">
@@ -126,7 +122,6 @@ const Layout = () => {
                                                 </div>
                                             </div>
 
-                                            {/* Action Button */}
                                             <motion.button
                                                 whileHover={{ scale: 1.02 }}
                                                 whileTap={{ scale: 0.98 }}
@@ -144,7 +139,7 @@ const Layout = () => {
                 </header>
 
                 {/* Main Content */}
-                <main className="flex-1 overflow-x-hidden overflow-y-auto bg-slate-50 p-6">
+                <main className="flex-1 overflow-x-hidden overflow-y-auto bg-slate-50 p-4 md:p-8">
                     <div className="container mx-auto max-w-7xl">
                         <Outlet />
                     </div>
@@ -152,12 +147,17 @@ const Layout = () => {
             </div>
 
             {/* Mobile Sidebar Overlay */}
-            {sidebarOpen && (
-                <div
-                    className="fixed inset-0 bg-slate-500/20 backdrop-blur-sm z-20 md:hidden"
-                    onClick={() => setSidebarOpen(false)}
-                />
-            )}
+            <AnimatePresence>
+                {sidebarOpen && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[90] md:hidden"
+                        onClick={() => setSidebarOpen(false)}
+                    />
+                )}
+            </AnimatePresence>
         </div>
     );
 };
