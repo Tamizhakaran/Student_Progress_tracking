@@ -59,7 +59,7 @@ const PerformanceManagement = () => {
         setLoading(true);
         try {
             const { data } = await api.get('/students');
-            setStudents(data.data);
+            setStudents(data?.data || []);
         } catch (error) {
             toast.error('Failed to fetch students');
         } finally {
@@ -70,7 +70,7 @@ const PerformanceManagement = () => {
     const fetchStudentMarks = async (studentId, currentSubjects = []) => {
         try {
             const { data } = await api.get(`/marks/student/${studentId}`);
-            const filteredMarks = data.data.filter(m => m.semester.toString() === semester.toString());
+            const filteredMarks = (data?.data || []).filter(m => m.semester.toString() === semester.toString());
 
             let newMarks = [];
 

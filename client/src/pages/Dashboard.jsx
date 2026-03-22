@@ -83,7 +83,7 @@ const Dashboard = () => {
     const fetchStats = async () => {
         try {
             const { data } = await api.get('/students');
-            const students = data.data;
+            const students = data?.data || [];
             setStudentCount(data.count);
 
             const totalCgpa = students.reduce((acc, s) => acc + (s.cgpa || 0), 0);
@@ -113,7 +113,7 @@ const Dashboard = () => {
 
             // Fetch Fee Stats - Grouped by Student
             const feeRes = await api.get('/fees');
-            const allFees = feeRes.data.data;
+            const allFees = feeRes.data?.data || [];
 
             const studentFeeGroups = allFees.reduce((acc, f) => {
                 const studentId = f.student?._id || f.student;
@@ -130,12 +130,12 @@ const Dashboard = () => {
             setFullPaidCount(paidCount);
 
             const achRes = await api.get('/achievements/admin/all');
-            const pendingAch = achRes.data.data.filter(a => a.status === 'Pending').slice(0, 5);
+            const pendingAch = (achRes.data?.data || []).filter(a => a.status === 'Pending').slice(0, 5);
             setRecentAchievements(pendingAch);
 
             // Fetch Exams for Admin
             const scheduleRes = await api.get('/schedules');
-            const exams = scheduleRes.data.data.reduce((acc, sched) => {
+            const exams = (scheduleRes.data?.data || []).reduce((acc, sched) => {
                 const dayExams = (sched.slots || [])
                     .filter(s => s.type === 'Exam')
                     .map(s => ({ ...s, date: sched.date }));
@@ -152,7 +152,7 @@ const Dashboard = () => {
     const fetchStudentStats = async () => {
         try {
             const attRes = await api.get('/attendance/my-attendance');
-            const records = attRes.data.data;
+            const records = attRes.data?.data || [];
             // Use two-session rule: FN+AN present = 1 day, one session = 0.5 days
             const percentage = calcAttendancePercentage(records);
             setStudentAttendance(percentage);
@@ -206,7 +206,7 @@ const Dashboard = () => {
     const fetchPlacements = async () => {
         try {
             const { data } = await api.get('/placements');
-            let placementsData = data.data;
+            let placementsData = data?.data || [];
 
             // Only show placement offers updated within the last 24 hours for students
             if (!isAdmin) {
