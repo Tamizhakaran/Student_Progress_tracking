@@ -1,4 +1,5 @@
 const Leave = require('../models/Leave');
+const User = require('../models/User');
 const asyncHandler = require('express-async-handler');
 
 // @desc    Apply for leave

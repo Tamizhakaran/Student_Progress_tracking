@@ -136,11 +136,11 @@ const Dashboard = () => {
             // Fetch Exams for Admin
             const scheduleRes = await api.get('/schedules');
             const exams = (scheduleRes.data?.data || []).reduce((acc, sched) => {
-                const dayExams = (sched.slots || [])
-                    .filter(s => s.type === 'Exam')
+                const dayExams = (sched?.slots || [])
+                    .filter(s => s?.type === 'Exam')
                     .map(s => ({ ...s, date: sched.date }));
                 return [...acc, ...dayExams];
-            }, []).sort((a, b) => new Date(a.date) - new Date(b.date));
+            }, []).sort((a, b) => new Date(a?.date) - new Date(b?.date));
             setExamTimetable(exams);
 
             fetchPlacements();
@@ -179,9 +179,9 @@ const Dashboard = () => {
             if (marksRes.data.data && marksRes.data.data.length > 0) {
                 const allMarks = marksRes.data.data;
                 // Find the latest semester available in the database
-                const latestSemester = Math.max(...allMarks.map(m => Number(m.semester)));
+                const latestSemester = Math.max(...allMarks.map(m => Number(m.semester || 0)));
 
-                const filteredMarks = allMarks.filter(m => m.semester.toString() === latestSemester.toString());
+                const filteredMarks = allMarks.filter(m => (m.semester || '').toString() === (latestSemester || '').toString());
                 setSubjectData(filteredMarks.map(m => ({
                     subject: m.subject,
                     score: m.score

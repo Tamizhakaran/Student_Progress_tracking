@@ -180,9 +180,10 @@ const AttendanceManagement = () => {
 
             // Re-fetch to update the display with new records
             const freshData = await api.get(isAdmin ? '/attendance' : '/attendance/my-attendance');
-            console.log('[AttendanceMark] Fresh attendance count after submit:', freshData.data.data?.length);
-            const anCount = freshData.data.data?.filter(r => r.slot === 'AN').length;
-            const fnCount = freshData.data.data?.filter(r => r.slot === 'FN').length;
+            const dataArray = freshData.data.data || [];
+            console.log('[AttendanceMark] Fresh attendance count after submit:', dataArray.length);
+            const anCount = dataArray.filter(r => r.slot === 'AN').length;
+            const fnCount = dataArray.filter(r => r.slot === 'FN').length;
             console.log(`[AttendanceMark] FN records: ${fnCount}, AN records: ${anCount}`);
             setAttendance(freshData.data.data);
             // fetchStudentTotalCount(); // Removed as it is not defined

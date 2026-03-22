@@ -70,7 +70,7 @@ const PerformanceManagement = () => {
     const fetchStudentMarks = async (studentId, currentSubjects = []) => {
         try {
             const { data } = await api.get(`/marks/student/${studentId}`);
-            const filteredMarks = (data?.data || []).filter(m => m.semester.toString() === semester.toString());
+            const filteredMarks = (data?.data || []).filter(m => (m.semester || '').toString() === (semester || '').toString());
 
             let newMarks = [];
 
@@ -80,7 +80,7 @@ const PerformanceManagement = () => {
                     id: m._id, // Stable ID for keys
                     subject: m.subject,
                     score: m.score,
-                    semester: m.semester.toString(),
+                    semester: (m.semester || '').toString(),
                     isCustom: !currentSubjects.includes(m.subject)
                 }));
             }

@@ -89,8 +89,8 @@ const Performance = () => {
             const { data } = await api.get('/marks/my-marks');
             if (data.data && data.data.length > 0) {
                 const allMarks = data.data;
-                const latestSem = Math.max(...allMarks.map(m => Number(m.semester)));
-                const filtered = allMarks.filter(m => m.semester.toString() === latestSem.toString());
+                const latestSem = Math.max(...allMarks.map(m => Number(m.semester || 0)));
+                const filtered = allMarks.filter(m => (m.semester || '').toString() === (latestSem || '').toString());
                 const formatted = filtered.map(m => ({
                     subject: m.subject,
                     score: m.score
