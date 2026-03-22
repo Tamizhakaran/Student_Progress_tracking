@@ -13,6 +13,21 @@ const getStudyMaterials = asyncHandler(async (req, res) => {
     if (req.query.subject) query.subject = req.query.subject;
     if (req.query.category) query.category = req.query.category;
 
+    // Admin isolation logic
+    if (req.user) {
+        if (req.user.role === 'Admin') {
+            // Super Admin sees everything, others see only their own
+            if (req.user.email !== 'admin@bitsathy.ac.in') {
+                query.uploadedBy = req.user._id;
+            }
+        } else if (req.user.role === 'Student') {
+            // Students see materials from their own admin
+            if (req.user.adminId) {
+                query.uploadedBy = req.user.adminId;
+            }
+        }
+    }
+
     const materials = await StudyMaterial.find(query)
         .populate('uploadedBy', 'name')
         .sort({ createdAt: -1 });
@@ -56,6 +71,12 @@ const deleteStudyMaterial = asyncHandler(async (req, res) => {
     if (!material) {
         res.status(404);
         throw new Error('Study material not found');
+    }
+
+    // Admin isolation - Only the uploader or super admin can delete
+    if (req.user.role === 'Admin' && req.user.email !== 'admin@bitsathy.ac.in' && material.uploadedBy.toString() !== req.user._id.toString()) {
+        res.status(403);
+        throw new Error('Action restricted: You can only delete your own materials');
     }
 
     await material.deleteOne();

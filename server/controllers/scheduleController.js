@@ -25,8 +25,8 @@ const upsertSchedule = asyncHandler(async (req, res) => {
     });
 
     const schedule = await Schedule.findOneAndUpdate(
-        { department, semester, date: scheduleDate },
-        { department, semester, date: scheduleDate, slots },
+        { department, semester, date: scheduleDate, adminId: req.user._id },
+        { department, semester, date: scheduleDate, slots, adminId: req.user._id },
         { new: true, upsert: true, runValidators: true }
     );
 
@@ -58,11 +58,18 @@ const getTodaySchedule = asyncHandler(async (req, res) => {
         queryDateUTC: today.toISOString()
     });
 
-    const schedule = await Schedule.findOne({
+    const query = {
         department: currentUser.department,
         semester: currentUser.semester,
         date: today
-    });
+    };
+
+    // Filter by student's admin
+    if (currentUser.adminId) {
+        query.adminId = currentUser.adminId;
+    }
+
+    const schedule = await Schedule.findOne(query);
 
     console.log('Backend getTodaySchedule result:', schedule ? 'Found' : 'Not Found');
 
@@ -76,7 +83,12 @@ const getTodaySchedule = asyncHandler(async (req, res) => {
 // @route   GET /api/schedules
 // @access  Private/Admin
 const getAllSchedules = asyncHandler(async (req, res) => {
-    const schedules = await Schedule.find({}).sort({ date: -1 });
+    let query = {};
+    if (req.user.email !== 'admin@bitsathy.ac.in') {
+        query.adminId = req.user._id;
+    }
+
+    const schedules = await Schedule.find(query).sort({ date: -1 });
 
     res.status(200).json({
         success: true,
@@ -117,12 +129,18 @@ const getMyExams = asyncHandler(async (req, res) => {
         throw new Error('Not authorized or student not found');
     }
 
-    // Find all schedules for student's dept and sem that have 'Exam' type slots
-    const schedules = await Schedule.find({
+    const query = {
         department: currentUser.department,
         semester: currentUser.semester,
         'slots.type': 'Exam'
-    }).sort({ date: 1 });
+    };
+
+    if (currentUser.adminId) {
+        query.adminId = currentUser.adminId;
+    }
+
+    // Find all schedules for student's dept and sem that have 'Exam' type slots
+    const schedules = await Schedule.find(query).sort({ date: 1 });
 
     // Flatten slots and add date
     const exams = schedules.reduce((acc, sched) => {

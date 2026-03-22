@@ -137,7 +137,7 @@ const PlacementManagement = () => {
                         Manage placement offers and upcoming campus drives
                     </p>
                 </div>
-                {isOriginalAdmin && (
+                {isAdmin && (
                     <motion.button
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
@@ -159,9 +159,7 @@ const PlacementManagement = () => {
                         <h2 className="text-2xl font-black text-slate-800 tracking-tight">Placement Offers</h2>
                     </div>
                     <div className="space-y-4">
-                        {!isOriginalAdmin ? (
-                            <EmptyState label="Restricted Access" />
-                        ) : placements.filter(p => p.type === 'Offer').length > 0 ? (
+                        {placements.filter(p => p.type === 'Offer').length > 0 ? (
                             placements.filter(p => p.type === 'Offer').map(p => (
                                 <PlacementCard key={p._id} placement={p} onEdit={handleOpenModal} onDelete={handleDelete} />
                             ))
@@ -180,9 +178,7 @@ const PlacementManagement = () => {
                         <h2 className="text-2xl font-black text-slate-800 tracking-tight">Upcoming Companies</h2>
                     </div>
                     <div className="space-y-4">
-                        {!isOriginalAdmin ? (
-                            <EmptyState label="Restricted Access" />
-                        ) : placements.filter(p => p.type === 'Upcoming').length > 0 ? (
+                        {placements.filter(p => p.type === 'Upcoming').length > 0 ? (
                             placements.filter(p => p.type === 'Upcoming').map(p => (
                                 <PlacementCard key={p._id} placement={p} onEdit={handleOpenModal} onDelete={handleDelete} />
                             ))

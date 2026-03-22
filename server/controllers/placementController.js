@@ -5,7 +5,24 @@ const asyncHandler = require('express-async-handler');
 // @route   GET /api/placements
 // @access  Public
 const getPlacements = asyncHandler(async (req, res) => {
-    const placements = await Placement.find().sort({ createdAt: -1 });
+    let query = {};
+    
+    // Admin isolation logic
+    if (req.user) {
+        if (req.user.role === 'Admin') {
+            // Super Admin sees everything, others see only their own
+            if (req.user.email !== 'admin@bitsathy.ac.in') {
+                query.adminId = req.user._id;
+            }
+        } else if (req.user.role === 'Student') {
+            // Students see placements from their own admin
+            if (req.user.adminId) {
+                query.adminId = req.user.adminId;
+            }
+        }
+    }
+
+    const placements = await Placement.find(query).sort({ createdAt: -1 });
     res.status(200).json({
         success: true,
         count: placements.length,
@@ -17,7 +34,10 @@ const getPlacements = asyncHandler(async (req, res) => {
 // @route   POST /api/placements
 // @access  Private/Admin
 const createPlacement = asyncHandler(async (req, res) => {
-    const placement = await Placement.create(req.body);
+    const placement = await Placement.create({
+        ...req.body,
+        adminId: req.user._id
+    });
     res.status(201).json({
         success: true,
         data: placement

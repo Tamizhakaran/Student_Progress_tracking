@@ -43,6 +43,11 @@ const placementSchema = new mongoose.Schema({
     studentPhoto: {
         type: String,
         default: 'no-photo.jpg'
+    },
+    adminId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
     }
 }, {
     timestamps: true

@@ -30,6 +30,11 @@ const scheduleSchema = new mongoose.Schema({
             }
         }
     ],
+    adminId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
+    },
     createdAt: {
         type: Date,
         default: Date.now
@@ -60,7 +65,7 @@ scheduleSchema.pre('findOneAndUpdate', function (next) {
     next();
 });
 
-// Index for quick lookup
-scheduleSchema.index({ date: 1, department: 1, semester: 1 }, { unique: true });
+// Index for quick lookup (unique per admin)
+scheduleSchema.index({ date: 1, department: 1, semester: 1, adminId: 1 }, { unique: true });
 
 module.exports = mongoose.model('Schedule', scheduleSchema);

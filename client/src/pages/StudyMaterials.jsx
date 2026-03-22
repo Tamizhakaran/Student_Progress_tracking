@@ -10,8 +10,8 @@ import { toast } from 'react-toastify';
 
 const StudyMaterials = () => {
     const { user } = useAuth();
-    const isOriginalAdmin = user?.email === 'admin@bitsathy.ac.in';
     const isAdmin = user?.role === 'Admin';
+    const isSuperAdmin = user?.email === 'admin@bitsathy.ac.in';
     const [materials, setMaterials] = useState([]);
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
@@ -85,7 +85,7 @@ const StudyMaterials = () => {
                 </div>
 
                 <div className="flex flex-col md:flex-row items-center gap-4">
-                    {isAdmin && isOriginalAdmin && (
+                    {isAdmin && (
                         <button
                             onClick={() => setIsUploadModalOpen(true)}
                             className="w-full md:w-auto px-8 py-4 bg-slate-900 text-white rounded-[2rem] font-black text-sm shadow-xl hover:scale-105 transition-all flex items-center justify-center gap-3"
@@ -125,8 +125,7 @@ const StudyMaterials = () => {
             {/* Materials Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
                 <AnimatePresence mode='popLayout'>
-                    {!isAdmin || isOriginalAdmin ? (
-                        filteredMaterials.map((material) => (
+                    {filteredMaterials.map((material) => (
                         <motion.div
                             layout
                             initial={{ opacity: 0, y: 20 }}
@@ -170,7 +169,7 @@ const StudyMaterials = () => {
                                     >
                                         <FiDownload />
                                     </a>
-                                    {isAdmin && (
+                                    {isAdmin && (isSuperAdmin || material.uploadedBy?._id === user?._id || material.uploadedBy === user?._id) && (
                                         <button
                                             onClick={() => handleDelete(material._id)}
                                             className="p-3 bg-rose-50 text-rose-600 rounded-xl hover:bg-rose-600 hover:text-white transition-all shadow-sm"
@@ -181,12 +180,7 @@ const StudyMaterials = () => {
                                 </div>
                             </div>
                         </motion.div>
-                    ))
-                ) : (
-                    <div className="col-span-full py-20 text-center border-2 border-dashed border-slate-100 rounded-[2rem]">
-                        <p className="text-slate-300 font-black uppercase tracking-widest text-[10px]">Restricted Access to Materials</p>
-                    </div>
-                )}
+                    ))}
                 </AnimatePresence>
             </div>
 

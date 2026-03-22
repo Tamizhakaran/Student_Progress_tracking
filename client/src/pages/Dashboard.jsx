@@ -378,7 +378,7 @@ const Dashboard = () => {
                                     <span className="text-[10px] font-black text-amber-600 uppercase tracking-widest text-center">Ingest Data</span>
                                 </div>
                             </Link>
-                            {(user?.email === 'admin@bitsathy.ac.in') && (
+                            {isAdmin && (
                                 <Link to="/study-materials">
                                     <div className="h-full bg-rose-100/50 hover:bg-rose-100 border border-rose-200/50 p-6 rounded-[2rem] flex flex-col items-center justify-center gap-3 transition-all cursor-pointer hover:-translate-y-1">
                                         <FiBook className="text-rose-500 text-2xl" />
@@ -404,9 +404,7 @@ const Dashboard = () => {
                             </div>
                         </div>
                         <div className="space-y-4 flex-1 overflow-y-auto max-h-[400px] pr-2 custom-scrollbar">
-                            {(isAdmin && user?.email !== 'admin@bitsathy.ac.in') ? (
-                                <div className="h-40 flex items-center justify-center text-[10px] font-black text-slate-300 uppercase tracking-widest italic">Restricted Access</div>
-                            ) : placements.filter(p => p.type === 'Upcoming').length > 0 ? (
+                            {placements.filter(p => p.type === 'Upcoming').length > 0 ? (
                                 placements.filter(p => p.type === 'Upcoming').map(p => (
                                     <div key={p._id} className="p-6 rounded-[2rem] bg-white/60 border border-slate-100 shadow-sm hover:shadow-md transition-all">
                                         <div className="flex justify-between items-start mb-4">
@@ -443,9 +441,7 @@ const Dashboard = () => {
                             </div>
                         </div>
                         <div className="space-y-4 flex-1 overflow-y-auto max-h-[400px] pr-2 custom-scrollbar">
-                            {(isAdmin && user?.email !== 'admin@bitsathy.ac.in') ? (
-                                <div className="h-40 flex items-center justify-center text-[10px] font-black text-slate-300 uppercase tracking-widest italic">Restricted Access</div>
-                            ) : placements.filter(p => p.type === 'Offer').length > 0 ? (
+                            {placements.filter(p => p.type === 'Offer').length > 0 ? (
                                 placements.filter(p => p.type === 'Offer').map(p => (
                                     <div key={p._id} className="p-6 rounded-[2rem] bg-white/60 border border-slate-100 shadow-sm hover:shadow-md transition-all">
                                         <div className="flex items-center gap-4">
