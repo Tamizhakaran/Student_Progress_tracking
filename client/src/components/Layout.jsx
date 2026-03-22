@@ -1,18 +1,18 @@
 import { Outlet } from 'react-router-dom';
 import Sidebar from './Sidebar';
 import { useAuth } from '../context/AuthContext';
-import { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiMenu, FiX } from 'react-icons/fi';
 
 const Layout = () => {
-    const [sidebarOpen, setSidebarOpen] = useState(false);
-    const [profileOpen, setProfileOpen] = useState(false);
-    const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+    const [sidebarOpen, setSidebarOpen] = React.useState(false);
+    const [profileOpen, setProfileOpen] = React.useState(false);
+    const [isMobile, setIsMobile] = React.useState(window.innerWidth < 768);
     const { user } = useAuth();
     const dropdownRef = useRef(null);
 
-    useEffect(() => {
+    React.useEffect(() => {
         const handleResize = () => {
             const mobile = window.innerWidth < 768;
             setIsMobile(mobile);

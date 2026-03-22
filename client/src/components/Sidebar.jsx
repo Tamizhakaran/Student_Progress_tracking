@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import {
@@ -15,9 +15,9 @@ import { motion } from 'framer-motion';
 const Sidebar = ({ isOpen, setIsOpen }) => {
     const { user, logout, isMaintenanceMode, toggleMaintenanceMode } = useAuth();
     const location = useLocation();
-    const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+    const [isMobile, setIsMobile] = React.useState(window.innerWidth < 768);
 
-    useEffect(() => {
+    React.useEffect(() => {
         const handleResize = () => setIsMobile(window.innerWidth < 768);
         window.addEventListener('resize', handleResize);
         return () => window.removeEventListener('resize', handleResize);
