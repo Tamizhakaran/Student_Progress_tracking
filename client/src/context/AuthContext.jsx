@@ -65,7 +65,7 @@ export const AuthProvider = ({ children }) => {
             console.log("Role set after login:", res.data.role);
             
             toast.success(`Welcome back, ${res.data.name || 'User'}!`);
-            return res.data;
+            return userData;
         } catch (error) {
             console.error("Login error:", error);
             toast.error(error.response?.data?.message || "Login failed");

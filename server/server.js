@@ -17,8 +17,22 @@ const app = express();
 
 // Middleware
 app.use(express.json());
+const allowedOrigins = [
+    "https://student-progress-tracking-nine.vercel.app",
+    "https://student-progress-tracking.onrender.com",
+    "https://student-progress-track.vercel.app",
+    "http://localhost:3000",
+    "http://localhost:5173",
+];
+
 app.use(cors({
-    origin: "https://student-progress-tracking-nine.vercel.app",
+    origin: function (origin, callback) {
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
     credentials: true
 }));
 

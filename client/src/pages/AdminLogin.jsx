@@ -17,9 +17,12 @@ const AdminLogin = () => {
         try {
             const user = await login(data.email, data.password);
             if (user) {
+                console.log("Login Success - Role:", user.role);
                 if (user.role?.toLowerCase() === 'admin') {
+                    console.log("Navigating to /adminpage");
                     navigate('/adminpage');
                 } else {
+                    console.log("Navigating to /studentpage");
                     navigate('/studentpage');
                 }
             }
