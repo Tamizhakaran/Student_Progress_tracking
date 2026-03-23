@@ -13,15 +13,19 @@ const sendEmail = async (options) => {
         try {
             console.log('--- SEND_EMAIL_DIAGNOSTIC: Attempting SMTP (Nodemailer) ---');
             
+            // Try Port 465 (SSL) first as it's often more reliable on cloud providers
             const smtpConfig = {
-                service: process.env.SMTP_SERVICE || 'gmail',
+                host: 'smtp.gmail.com',
+                port: 465,
+                secure: true, // SSL
                 auth: {
                     user: process.env.SMTP_EMAIL.trim(),
                     pass: process.env.SMTP_PASSWORD.trim(),
                 },
+                connectionTimeout: 10000,
             };
 
-            console.log(`Diagnostic: Using service: ${smtpConfig.service} for user: ${smtpConfig.auth.user}`);
+            console.log(`Diagnostic: Attempting SMTP via ${smtpConfig.host}:${smtpConfig.port} (SSL: ${smtpConfig.secure})`);
             const transporter = nodemailer.createTransport(smtpConfig);
 
             const mailOptions = {
