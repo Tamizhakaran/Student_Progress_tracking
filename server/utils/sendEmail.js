@@ -17,11 +17,9 @@ const sendEmail = async (options) => {
         let transporterConfig;
 
         if (process.env.SMTP_SERVICE === 'gmail' || process.env.SMTP_HOST === 'smtp.gmail.com') {
-            // Use explicit configuration for Gmail as it's more reliable than the 'service' shortcut
+            // Service shortcut is often more resilient for Gmail
             transporterConfig = {
-                host: 'smtp.gmail.com',
-                port: 465,
-                secure: true, // use SSL
+                service: 'gmail',
                 auth: {
                     user: process.env.SMTP_EMAIL,
                     pass: process.env.SMTP_PASSWORD,
