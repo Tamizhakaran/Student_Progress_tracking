@@ -176,7 +176,8 @@ const getMe = asyncHandler(async (req, res) => {
 // @route   POST /api/auth/forgotpassword
 // @access  Public
 const forgotPassword = asyncHandler(async (req, res) => {
-    const user = await User.findOne({ email: req.body.email });
+    const email = req.body.email ? req.body.email.toLowerCase() : '';
+    const user = await User.findOne({ email });
 
     if (!user) {
         res.status(404);

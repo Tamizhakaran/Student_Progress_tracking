@@ -59,7 +59,7 @@ const sendEmail = async (options) => {
         const info = await transporter.sendMail(message);
         console.log('Message sent: %s', info.messageId);
     } catch (error) {
-        console.error('Email Error:', error.message);
+        console.error(`Email Error to ${options.email}:`, error.message);
         // Still log to console so the link isn't lost
         console.log('--- EMAIL CONTENT (Failed to send via SMTP) ---');
         console.log('To:', options.email);
