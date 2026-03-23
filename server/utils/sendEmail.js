@@ -16,14 +16,15 @@ const sendEmail = async (options) => {
 
         let transporterConfig;
 
-        if (process.env.SMTP_SERVICE === 'gmail' || process.env.SMTP_HOST === 'smtp.gmail.com') {
-            // Service shortcut is often more resilient for Gmail
             transporterConfig = {
                 service: 'gmail',
                 auth: {
-                    user: process.env.SMTP_EMAIL,
-                    pass: process.env.SMTP_PASSWORD,
+                    user: process.env.SMTP_EMAIL?.trim(),
+                    pass: process.env.SMTP_PASSWORD?.trim(),
                 },
+                tls: {
+                    rejectUnauthorized: false
+                }
             };
         } else if (process.env.SMTP_SERVICE) {
             transporterConfig = {
