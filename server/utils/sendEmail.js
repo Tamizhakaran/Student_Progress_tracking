@@ -12,6 +12,7 @@ const sendEmail = async (options) => {
     }
 
     try {
+        console.log('--- SEND_EMAIL_VERSION: 4 ---');
         const nodemailer = require('nodemailer');
 
         let transporterConfig;
