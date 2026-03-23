@@ -21,7 +21,7 @@ const sendEmail = async (options) => {
             transporterConfig = {
                 host: 'smtp.gmail.com',
                 port: 587,
-                secure: false, 
+                secure: false,
                 auth: {
                     user: process.env.SMTP_EMAIL?.trim(),
                     pass: process.env.SMTP_PASSWORD?.trim(),
