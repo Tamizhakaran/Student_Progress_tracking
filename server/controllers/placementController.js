@@ -10,10 +10,8 @@ const getPlacements = asyncHandler(async (req, res) => {
     // Admin isolation logic
     if (req.user) {
         if (req.user.role === 'Admin') {
-            // Super Admin sees everything, others see only their own
-            if (req.user.email !== 'admin@bitsathy.ac.in') {
-                query.adminId = req.user._id;
-            }
+            // Each admin sees ONLY their own data
+            query.adminId = req.user._id;
         } else if (req.user.role === 'Student') {
             // Students see placements from their own admin
             if (req.user.adminId) {

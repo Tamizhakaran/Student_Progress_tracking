@@ -40,31 +40,34 @@ const getStudentAttendance = asyncHandler(async (req, res) => {
 // @route   PUT /api/attendance/:id
 // @access  Private/Admin
 const updateAttendance = asyncHandler(async (req, res) => {
-    const attendance = await Attendance.findById(req.params.id);
-
-    if (attendance) {
-        attendance.status = req.body.status || attendance.status;
-
-        if (req.body.date) {
-            const dateObj = new Date(req.body.date);
-            const y = dateObj.getUTCFullYear();
-            const m = String(dateObj.getUTCMonth() + 1).padStart(2, '0');
-            const d = String(dateObj.getUTCDate()).padStart(2, '0');
-            attendance.date = new Date(`${y}-${m}-${d}T00:00:00.000Z`);
-        }
-
-        attendance.slot = req.body.slot || attendance.slot;
-
-        attendance.recordedBy = req.user._id;
-        const updatedAttendance = await attendance.save();
-        res.json({
-            success: true,
-            data: updatedAttendance
-        });
-    } else {
+    const attendance = await Attendance.findById(req.params.id).populate('student');
+    if (!attendance) {
         res.status(404);
         throw new Error('Attendance not found');
     }
+
+    // Check if the student belongs to this admin
+    if (attendance.student.adminId.toString() !== req.user._id.toString()) {
+        res.status(403);
+        throw new Error('Not authorized to access this attendance record');
+    }
+
+    attendance.status = req.body.status || attendance.status;
+    if (req.body.date) {
+        const dateObj = new Date(req.body.date);
+        const y = dateObj.getUTCFullYear();
+        const m = String(dateObj.getUTCMonth() + 1).padStart(2, '0');
+        const d = String(dateObj.getUTCDate()).padStart(2, '0');
+        attendance.date = new Date(`${y}-${m}-${d}T00:00:00.000Z`);
+    }
+    attendance.slot = req.body.slot || attendance.slot;
+    attendance.recordedBy = req.user._id;
+
+    const updatedAttendance = await attendance.save();
+    res.json({
+        success: true,
+        data: updatedAttendance
+    });
 });
 
 // @desc    Add or bulk update attendance (Admin)
@@ -189,15 +192,20 @@ const clearAttendance = asyncHandler(async (req, res) => {
 // @route   DELETE /api/attendance/:id
 // @access  Private/Admin
 const deleteAttendance = asyncHandler(async (req, res) => {
-    const attendance = await Attendance.findById(req.params.id);
-
-    if (attendance) {
-        await attendance.deleteOne();
-        res.json({ success: true, message: 'Attendance record removed' });
-    } else {
+    const attendance = await Attendance.findById(req.params.id).populate('student');
+    if (!attendance) {
         res.status(404);
         throw new Error('Attendance not found');
     }
+
+    // Check if the student belongs to this admin
+    if (attendance.student.adminId.toString() !== req.user._id.toString()) {
+        res.status(403);
+        throw new Error('Not authorized to delete this attendance record');
+    }
+
+    await attendance.deleteOne();
+    res.json({ success: true, message: 'Attendance record removed' });
 });
 
 // @desc    Debug endpoint to see raw records

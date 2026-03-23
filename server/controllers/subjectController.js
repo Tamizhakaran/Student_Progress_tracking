@@ -7,6 +7,12 @@ const asyncHandler = require('express-async-handler');
 const getSubjects = asyncHandler(async (req, res) => {
     const { semester, department } = req.query;
     const query = {};
+    
+    // Each admin sees ONLY their own data
+    if (req.user.role === 'Admin') {
+        query.createdBy = req.user._id;
+    }
+    
     if (semester) query.semester = Number(semester);
     if (department) {
         // Use a case-insensitive regex for department matching

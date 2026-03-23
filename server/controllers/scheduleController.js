@@ -84,9 +84,8 @@ const getTodaySchedule = asyncHandler(async (req, res) => {
 // @access  Private/Admin
 const getAllSchedules = asyncHandler(async (req, res) => {
     let query = {};
-    if (req.user.email !== 'admin@bitsathy.ac.in') {
-        query.adminId = req.user._id;
-    }
+    // Each admin sees ONLY their own data
+    query.adminId = req.user._id;
 
     const schedules = await Schedule.find(query).sort({ date: -1 });
 
@@ -101,12 +100,10 @@ const getAllSchedules = asyncHandler(async (req, res) => {
 // @access  Private/Admin
 const deleteSchedule = asyncHandler(async (req, res) => {
     console.log('Backend: Deleting schedule ID:', req.params.id);
-    const schedule = await Schedule.findById(req.params.id);
-
-    if (!schedule) {
-        console.log('Backend: Schedule not found for ID:', req.params.id);
-        res.status(404);
-        throw new Error('Schedule not found');
+    // Admin isolation - Only the owner can delete
+    if (schedule.adminId.toString() !== req.user._id.toString()) {
+        res.status(403);
+        throw new Error('Not authorized to delete this schedule');
     }
 
     await schedule.deleteOne();

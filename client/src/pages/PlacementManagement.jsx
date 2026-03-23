@@ -12,6 +12,7 @@ import { getMediaURL } from '../utils/mediaUtils';
 
 const PlacementManagement = () => {
     const { user } = useAuth();
+    const isAdmin = user?.role === 'Admin';
     const isOriginalAdmin = user?.email === 'admin@bitsathy.ac.in';
     const [placements, setPlacements] = useState([]);
     const [loading, setLoading] = useState(true);

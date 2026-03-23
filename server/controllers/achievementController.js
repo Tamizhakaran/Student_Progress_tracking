@@ -111,22 +111,26 @@ exports.verifyAchievement = async (req, res) => {
             });
         }
 
-        const achievement = await Achievement.findByIdAndUpdate(
-            req.params.id,
-            {
-                status,
-                verifiedBy: req.user._id,
-                adminRemark: req.body.remark || ''
-            },
-            { new: true }
-        );
-
+        const achievement = await Achievement.findById(req.params.id).populate('student');
         if (!achievement) {
             return res.status(404).json({
                 success: false,
                 message: 'Achievement not found'
             });
         }
+
+        // Check if student belongs to this admin
+        if (achievement.student.adminId.toString() !== req.user._id.toString()) {
+            return res.status(403).json({
+                success: false,
+                message: 'Not authorized to verify this achievement'
+            });
+        }
+
+        achievement.status = status;
+        achievement.verifiedBy = req.user._id;
+        achievement.adminRemark = req.body.remark || '';
+        await achievement.save();
 
         res.status(200).json({
             success: true,
