@@ -1,5 +1,5 @@
 const sendEmail = async (options) => {
-    // Version 7: Using Resend API (HTTP Port 443) to bypass Render port blocking
+    // Version 7: Using Resend API (HTTP Port 443) - FORCE DEPLOY
     // Fallback if RESEND_API_KEY is missing
     if (!process.env.RESEND_API_KEY) {
         console.log('--- EMAIL FALLBACK (Local Development) ---');
