@@ -50,7 +50,12 @@ const sendEmail = async (options) => {
             };
         }
 
-        const transporter = nodemailer.createTransport(transporterConfig);
+        const transporter = nodemailer.createTransport({
+            ...transporterConfig,
+            connectionTimeout: 20000, // 20 seconds
+            greetingTimeout: 20000,
+            socketTimeout: 20000
+        });
 
         const message = {
             from: `${process.env.FROM_NAME || 'EduTrack X'} <${process.env.FROM_EMAIL || process.env.SMTP_EMAIL || 'noreply@bitsathy.ac.in'}>`,
@@ -65,6 +70,8 @@ const sendEmail = async (options) => {
         console.error(`Email Error to ${options.email}:`, error);
         console.log('--- EMAIL CONFIG DIAGNOSTIC ---');
         console.log('SMTP_EMAIL:', process.env.SMTP_EMAIL);
+        console.log('SMTP_HOST:', transporterConfig?.host || transporterConfig?.service);
+        console.log('SMTP_PORT:', transporterConfig?.port);
         console.log('FROM_EMAIL:', process.env.FROM_EMAIL);
         console.log('FROM_NAME:', process.env.FROM_NAME);
         console.log('-------------------------------');
