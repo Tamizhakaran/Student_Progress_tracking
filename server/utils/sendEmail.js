@@ -1,21 +1,35 @@
 const nodemailer = require('nodemailer');
 
+/**
+ * Send email utility that supports multiple delivery methods
+ * @param {Object} options - Email options (email, subject, message)
+ */
 const sendEmail = async (options) => {
     const fromName = process.env.FROM_NAME || 'EduTrack X';
     const fromEmail = process.env.SMTP_EMAIL || 'onboarding@resend.dev';
 
-    // Mode 1: SMTP (Nodemailer) - Prioritize if credentials exist
+    // Mode 1: SMTP (Nodemailer) - Highly recommended for custom domains/testing
     if (process.env.SMTP_EMAIL && process.env.SMTP_PASSWORD) {
         try {
-            console.log('--- SEND_EMAIL_VERSION: 8 (SMTP/Nodemailer) ---');
+            console.log('--- SEND_EMAIL_DIAGNOSTIC: Attempting SMTP (Nodemailer) ---');
             
-            const transporter = nodemailer.createTransport({
-                service: process.env.SMTP_SERVICE || 'gmail',
+            // Explicit configuration for better reliability
+            const smtpConfig = {
+                host: process.env.SMTP_HOST || 'smtp.gmail.com',
+                port: parseInt(process.env.SMTP_PORT) || 587,
+                secure: process.env.SMTP_SECURE === 'true' || false, // true for 465, false for 587
                 auth: {
-                    user: process.env.SMTP_EMAIL,
-                    pass: process.env.SMTP_PASSWORD,
+                    user: process.env.SMTP_EMAIL.trim(),
+                    pass: process.env.SMTP_PASSWORD.trim(),
                 },
-            });
+                // Add longer timeout for cloud environments
+                connectionTimeout: 10000, 
+                greetingTimeout: 5000,
+                socketTimeout: 15000,
+            };
+
+            console.log(`Diagnostic: Connecting to ${smtpConfig.host}:${smtpConfig.port} (Secure: ${smtpConfig.secure})`);
+            const transporter = nodemailer.createTransport(smtpConfig);
 
             const mailOptions = {
                 from: `"${fromName}" <${fromEmail}>`,
@@ -25,24 +39,29 @@ const sendEmail = async (options) => {
             };
 
             const info = await transporter.sendMail(mailOptions);
-            console.log(`Email successfully sent to ${options.email} via SMTP. ID: ${info.messageId}`);
-            return;
+            console.log(`✅ Success: Email sent to ${options.email} via SMTP. ID: ${info.messageId}`);
+            return true;
         } catch (error) {
-            console.error(`SMTP Error to ${options.email}:`, error.message);
-            console.log('Falling back to Resend API if available...');
+            console.error(`❌ SMTP Failed: ${error.message}`);
+            // If Resend is available, we fall back. Otherwise we throw.
+            if (!process.env.RESEND_API_KEY) {
+                throw new Error(`Email delivery failed (SMTP Error: ${error.message})`);
+            }
+            console.log('Falling back to Resend API...');
         }
     }
 
-    // Mode 2: Resend API
+    // Mode 2: Resend API (Alternative fallback)
     if (process.env.RESEND_API_KEY) {
         try {
-            console.log('--- SEND_EMAIL_VERSION: 8 (Resend API) ---');
+            console.log('--- SEND_EMAIL_DIAGNOSTIC: Attempting Resend API ---');
+            const apiKey = process.env.RESEND_API_KEY.trim();
             
             const response = await fetch('https://api.resend.com/emails', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${process.env.RESEND_API_KEY.trim()}`,
+                    'Authorization': `Bearer ${apiKey}`,
                 },
                 body: JSON.stringify({
                     from: `"${fromName}" <onboarding@resend.dev>`,
@@ -55,24 +74,24 @@ const sendEmail = async (options) => {
             const result = await response.json();
 
             if (response.ok) {
-                console.log(`Email successfully sent to ${options.email} via Resend. ID: ${result.id}`);
-                return;
+                console.log(`✅ Success: Email sent to ${options.email} via Resend. ID: ${result.id}`);
+                return true;
             } else {
-                console.error('Resend API Error:', result);
-                throw new Error(result.message || 'Failed to send email via Resend');
+                // Return descriptive error from Resend (e.g. Sandbox restriction)
+                const errorMsg = result.message || 'Resend error';
+                console.error(`❌ Resend Failed: ${errorMsg}`);
+                throw new Error(`Email delivery failed (Resend Error: ${errorMsg})`);
             }
         } catch (error) {
-            console.error(`Resend Error to ${options.email}:`, error.message);
+            console.error(`❌ Dispatch Error: ${error.message}`);
             throw error;
         }
     }
 
-    // Fallback if no method is configured
-    console.warn('--- EMAIL NOT SENT (No Configuration Found) ---');
-    console.log('Please provide either SMTP_EMAIL/SMTP_PASSWORD or RESEND_API_KEY in .env');
-    console.log('To:', options.email);
-    console.log('Subject:', options.subject);
-    console.log('------------------------------------------');
+    // Final Fallback: Missing configuration
+    const configError = 'No email configuration found. Please set SMTP_EMAIL/PASS or RESEND_API_KEY.';
+    console.warn(`⚠️ Warning: ${configError}`);
+    throw new Error(configError);
 };
 
 module.exports = sendEmail;
