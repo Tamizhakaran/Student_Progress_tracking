@@ -4,14 +4,15 @@ const sendEmail = require('./utils/sendEmail');
 async function test() {
     try {
         await sendEmail({
-            email: 'tamizhakaran.me23@bitsathy.ac.in', // Sending to self for testing
-            subject: 'Test Email from EduTrack X',
-            message: 'This is a test email after fixing sendEmail.js. If you receive this, the email sending functionality is working.',
+            email: 'tamizhakaran10@gmail.com', // testing self-send
+            subject: 'Test Email',
+            message: 'This is a test'
         });
         console.log('Test email sent successfully');
-    } catch (error) {
-        console.error('Test email failed', error);
+        process.exit(0);
+    } catch (err) {
+        console.error('Test email failed:', err);
+        process.exit(1);
     }
 }
-
 test();

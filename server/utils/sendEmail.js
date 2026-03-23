@@ -50,7 +50,7 @@ const sendEmail = async (options) => {
         const transporter = nodemailer.createTransport(transporterConfig);
 
         const message = {
-            from: `${process.env.FROM_NAME || 'EduTrack X'} <${process.env.FROM_EMAIL || 'noreply@bitsathy.ac.in'}>`,
+            from: `${process.env.FROM_NAME || 'EduTrack X'} <${process.env.FROM_EMAIL || process.env.SMTP_EMAIL || 'noreply@bitsathy.ac.in'}>`,
             to: options.email,
             subject: options.subject,
             text: options.message,
