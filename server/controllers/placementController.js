@@ -53,6 +53,12 @@ const updatePlacement = asyncHandler(async (req, res) => {
         throw new Error('Placement record not found');
     }
 
+    // Admin isolation - Only the owner can update
+    if (placement.adminId.toString() !== req.user._id.toString()) {
+        res.status(403);
+        throw new Error('Not authorized to update this placement record');
+    }
+
     placement = await Placement.findByIdAndUpdate(req.params.id, req.body, {
         new: true,
         runValidators: true
@@ -73,6 +79,12 @@ const deletePlacement = asyncHandler(async (req, res) => {
     if (!placement) {
         res.status(404);
         throw new Error('Placement record not found');
+    }
+
+    // Admin isolation - Only the owner can delete
+    if (placement.adminId.toString() !== req.user._id.toString()) {
+        res.status(403);
+        throw new Error('Not authorized to delete this placement record');
     }
 
     await placement.deleteOne();

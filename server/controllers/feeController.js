@@ -53,10 +53,10 @@ exports.getStudentFees = asyncHandler(async (req, res) => {
 exports.createFee = asyncHandler(async (req, res) => {
     const { studentEmail, totalAmount, dueDate, category, academicYear, notes } = req.body;
 
-    const student = await User.findOne({ email: studentEmail });
+    const student = await User.findOne({ email: studentEmail, adminId: req.user._id });
     if (!student) {
         res.status(404);
-        throw new Error('Student not found with this email');
+        throw new Error('Student not found with this email or you are not authorized');
     }
 
     const today = new Date();
@@ -92,11 +92,17 @@ exports.createFee = asyncHandler(async (req, res) => {
 // @route   PUT /api/fees/:id
 // @access  Private/Admin
 exports.updateFee = asyncHandler(async (req, res) => {
-    let fee = await Fee.findById(req.params.id);
+    const fee = await Fee.findById(req.params.id).populate('student');
 
     if (!fee) {
         res.status(404);
         throw new Error(`Fee record not found with id of ${req.params.id}`);
+    }
+
+    // Check if student belongs to this admin
+    if (fee.student.adminId.toString() !== req.user._id.toString()) {
+        res.status(403);
+        throw new Error('Not authorized to update this fee record');
     }
 
     fee = await Fee.findByIdAndUpdate(req.params.id, req.body, {
@@ -129,11 +135,17 @@ exports.updateFee = asyncHandler(async (req, res) => {
 // @route   DELETE /api/fees/:id
 // @access  Private/Admin
 exports.deleteFee = asyncHandler(async (req, res) => {
-    const fee = await Fee.findById(req.params.id);
+    const fee = await Fee.findById(req.params.id).populate('student');
 
     if (!fee) {
         res.status(404);
         throw new Error(`Fee record not found with id of ${req.params.id}`);
+    }
+
+    // Check if student belongs to this admin
+    if (fee.student.adminId.toString() !== req.user._id.toString()) {
+        res.status(403);
+        throw new Error('Not authorized to delete this fee record');
     }
 
     await Fee.findByIdAndDelete(req.params.id);
@@ -164,7 +176,7 @@ exports.bulkUpdateFees = asyncHandler(async (req, res) => {
         if (isPlaceholder || (_id && _id.toString().startsWith('temp-'))) {
             // Create
             const studentId = student?._id || student;
-            const studentUser = await User.findById(studentId);
+            const studentUser = await User.findOne({ _id: studentId, adminId: req.user._id });
             if (!studentUser) return null;
 
             const totalAmount = Number(data.totalAmount) || 0;
@@ -195,8 +207,8 @@ exports.bulkUpdateFees = asyncHandler(async (req, res) => {
             });
         } else {
             // Update
-            let fee = await Fee.findById(_id);
-            if (!fee) return null;
+            let fee = await Fee.findById(_id).populate('student');
+            if (!fee || fee.student.adminId.toString() !== req.user._id.toString()) return null;
 
             // Ensure numbers are handled correctly
             if (data.totalAmount !== undefined) data.totalAmount = Number(data.totalAmount);

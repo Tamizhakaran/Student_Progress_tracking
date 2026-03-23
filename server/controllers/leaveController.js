@@ -66,20 +66,22 @@ const updateLeaveStatus = asyncHandler(async (req, res) => {
         throw new Error('Invalid status');
     }
 
-    const leave = await Leave.findByIdAndUpdate(
-        req.params.id,
-        {
-            status,
-            adminRemark: adminRemark || '',
-            approvedBy: req.user._id
-        },
-        { new: true }
-    );
-
+    const leave = await Leave.findById(req.params.id).populate('student');
     if (!leave) {
         res.status(404);
         throw new Error('Leave request not found');
     }
+
+    // Check if student belongs to this admin
+    if (leave.student.adminId.toString() !== req.user._id.toString()) {
+        res.status(403);
+        throw new Error('Not authorized to update this leave request');
+    }
+
+    leave.status = status;
+    leave.adminRemark = adminRemark || '';
+    leave.approvedBy = req.user._id;
+    await leave.save();
 
     res.status(200).json({
         success: true,

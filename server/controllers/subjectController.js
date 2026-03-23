@@ -59,6 +59,12 @@ const updateSubject = asyncHandler(async (req, res) => {
         throw new Error('Subject not found');
     }
 
+    // Admin isolation - Only the owner can update
+    if (subject.createdBy && subject.createdBy.toString() !== req.user._id.toString()) {
+        res.status(403);
+        throw new Error('Not authorized to update this subject');
+    }
+
     subject = await Subject.findByIdAndUpdate(req.params.id, req.body, {
         new: true,
         runValidators: true
@@ -79,6 +85,12 @@ const deleteSubject = asyncHandler(async (req, res) => {
     if (!subject) {
         res.status(404);
         throw new Error('Subject not found');
+    }
+
+    // Admin isolation - Only the owner can delete
+    if (subject.createdBy && subject.createdBy.toString() !== req.user._id.toString()) {
+        res.status(403);
+        throw new Error('Not authorized to delete this subject');
     }
 
     await subject.deleteOne();

@@ -128,6 +128,11 @@ const bulkUpdateAttendance = asyncHandler(async (req, res) => {
                 const d = String(dateObj.getUTCDate()).padStart(2, '0');
                 const utcDate = new Date(`${y}-${m}-${d}T00:00:00.000Z`);
 
+                const student = await User.findOne({ _id: studentId, adminId: req.user._id });
+                if (!student) {
+                    throw new Error(`Not authorized to update attendance for student ${studentId}`);
+                }
+
                 const saved = await Attendance.findOneAndUpdate(
                     { student: studentId, date: utcDate, slot: slot },
                     {

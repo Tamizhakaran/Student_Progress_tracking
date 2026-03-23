@@ -9,9 +9,10 @@ const {
 
 const { protect, authorize } = require('../middleware/authMiddleware');
 
+router.use(protect);
 router.route('/')
     .get(getPlacements)
-    .post(protect, authorize('Admin'), createPlacement);
+    .post(authorize('Admin'), createPlacement);
 
 router.route('/:id')
     .put(protect, authorize('Admin'), updatePlacement)
