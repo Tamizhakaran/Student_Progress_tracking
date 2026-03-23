@@ -13,22 +13,15 @@ const sendEmail = async (options) => {
         try {
             console.log('--- SEND_EMAIL_DIAGNOSTIC: Attempting SMTP (Nodemailer) ---');
             
-            // Explicit configuration for better reliability
             const smtpConfig = {
-                host: process.env.SMTP_HOST || 'smtp.gmail.com',
-                port: parseInt(process.env.SMTP_PORT) || 587,
-                secure: process.env.SMTP_SECURE === 'true' || false, // true for 465, false for 587
+                service: process.env.SMTP_SERVICE || 'gmail',
                 auth: {
                     user: process.env.SMTP_EMAIL.trim(),
                     pass: process.env.SMTP_PASSWORD.trim(),
                 },
-                // Add longer timeout for cloud environments
-                connectionTimeout: 10000, 
-                greetingTimeout: 5000,
-                socketTimeout: 15000,
             };
 
-            console.log(`Diagnostic: Connecting to ${smtpConfig.host}:${smtpConfig.port} (Secure: ${smtpConfig.secure})`);
+            console.log(`Diagnostic: Using service: ${smtpConfig.service} for user: ${smtpConfig.auth.user}`);
             const transporter = nodemailer.createTransport(smtpConfig);
 
             const mailOptions = {
@@ -43,6 +36,8 @@ const sendEmail = async (options) => {
             return true;
         } catch (error) {
             console.error(`❌ SMTP Failed: ${error.message}`);
+            console.log('Error Details:', error); // Full error object for better debugging in Render logs
+            
             // If Resend is available, we fall back. Otherwise we throw.
             if (!process.env.RESEND_API_KEY) {
                 throw new Error(`Email delivery failed (SMTP Error: ${error.message})`);
