@@ -51,13 +51,13 @@ const sendEmail = async (options) => {
 
         const message = {
             from: `${process.env.FROM_NAME || 'EduTrack X'} <${process.env.FROM_EMAIL || process.env.SMTP_EMAIL || 'noreply@bitsathy.ac.in'}>`,
-            to: options.email,
+            to: options.email.toLowerCase(),
             subject: options.subject,
             text: options.message,
         };
 
         const info = await transporter.sendMail(message);
-        console.log('Message sent: %s', info.messageId);
+        console.log(`Email successfully sent to ${options.email}. Message ID: ${info.messageId}`);
     } catch (error) {
         console.error(`Email Error to ${options.email}:`, error);
         console.log('--- EMAIL CONFIG DIAGNOSTIC ---');
