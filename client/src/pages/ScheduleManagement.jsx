@@ -1,3 +1,9 @@
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { 
+    FiBook, FiActivity, FiLayers, FiCheckCircle, FiMinusCircle, 
+    FiClock, FiCalendar, FiTriangle, FiSave, FiX, FiPlus, FiTrash2 
+} from 'react-icons/fi';
 import { useAuth } from '../context/AuthContext';
 import { toast } from 'react-toastify';
 import api from '../utils/api';

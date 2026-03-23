@@ -1,5 +1,12 @@
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { 
+    FiPlus, FiUsers, FiBriefcase, FiX, FiCheckCircle, 
+    FiEdit2, FiTrash2, FiCalendar 
+} from 'react-icons/fi';
 import { useAuth } from '../context/AuthContext';
 import { toast } from 'react-toastify';
+import api from '../utils/api';
 import { DEPARTMENTS } from '../utils/constants';
 import { getMediaURL } from '../utils/mediaUtils';
 
