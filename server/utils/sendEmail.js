@@ -16,8 +16,12 @@ const sendEmail = async (options) => {
 
         let transporterConfig;
 
+        if (process.env.SMTP_SERVICE === 'gmail' || process.env.SMTP_HOST === 'smtp.gmail.com') {
+            // Port 587 with STARTTLS is usually more resilient in cloud environments like Render
             transporterConfig = {
-                service: 'gmail',
+                host: 'smtp.gmail.com',
+                port: 587,
+                secure: false, 
                 auth: {
                     user: process.env.SMTP_EMAIL?.trim(),
                     pass: process.env.SMTP_PASSWORD?.trim(),
@@ -30,8 +34,8 @@ const sendEmail = async (options) => {
             transporterConfig = {
                 service: process.env.SMTP_SERVICE,
                 auth: {
-                    user: process.env.SMTP_EMAIL,
-                    pass: process.env.SMTP_PASSWORD,
+                    user: process.env.SMTP_EMAIL?.trim(),
+                    pass: process.env.SMTP_PASSWORD?.trim(),
                 },
             };
         } else {
@@ -40,8 +44,8 @@ const sendEmail = async (options) => {
                 port: process.env.SMTP_PORT || 587,
                 secure: process.env.SMTP_PORT === '465',
                 auth: {
-                    user: process.env.SMTP_EMAIL,
-                    pass: process.env.SMTP_PASSWORD,
+                    user: process.env.SMTP_EMAIL?.trim(),
+                    pass: process.env.SMTP_PASSWORD?.trim(),
                 },
             };
         }
