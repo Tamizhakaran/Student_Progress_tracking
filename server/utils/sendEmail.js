@@ -13,15 +13,15 @@ const sendEmail = async (options) => {
 
     let transporterConfig;
     try {
-        console.log('--- SEND_EMAIL_VERSION: 5 ---');
+        console.log('--- SEND_EMAIL_VERSION: 6 ---');
         const nodemailer = require('nodemailer');
 
-        if (process.env.SMTP_SERVICE === 'gmail' || process.env.SMTP_HOST === 'smtp.gmail.com') {
-            // Port 587 with STARTTLS is usually more resilient in cloud environments like Render
+        if (process.env.SMTP_SERVICE === 'gmail' || process.env.SMTP_HOST === 'smtp.gmail.com' || process.env.SMTP_HOST === 'smtp.googlemail.com') {
+            // Version 6: Explicit Port 587 configuration that is known to work on Render
             transporterConfig = {
                 host: 'smtp.gmail.com',
                 port: 587,
-                secure: false,
+                secure: false, // Port 587 requires secure: false for STARTTLS
                 auth: {
                     user: process.env.SMTP_EMAIL?.trim(),
                     pass: process.env.SMTP_PASSWORD?.trim(),
