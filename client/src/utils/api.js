@@ -1,12 +1,12 @@
 import axios from 'axios';
 
-// Get API URL from env
-const API_URL = process.env.REACT_APP_API_URL;
+// Get API URL from env - Vite uses import.meta.env
+const API_URL = import.meta.env.VITE_API_URL || "";
 
 // ✅ Ensure no trailing slash
 const cleanURL = API_URL ? API_URL.replace(/\/$/, "") : "";
 
-// ✅ Final base URL
+// ✅ Final base URL for API calls
 const baseURL = cleanURL ? `${cleanURL}/api` : "/api";
 
 console.log("Final Base URL:", baseURL);
@@ -14,6 +14,18 @@ console.log("Final Base URL:", baseURL);
 const api = axios.create({
     baseURL,
 });
+
+// Helper to get full URL for uploaded files
+export const getFileUrl = (path) => {
+    if (!path) return "";
+    if (path.startsWith('http') || path.startsWith('data:')) return path;
+    
+    // Ensure path starts with / if it doesn't already
+    const normalizedPath = path.startsWith('/') ? path : `/${path}`;
+    
+    // Combine with cleanURL
+    return `${cleanURL}${normalizedPath}`;
+};
 
 // 🔐 Add token interceptor
 api.interceptors.request.use(

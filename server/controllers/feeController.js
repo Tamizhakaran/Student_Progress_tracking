@@ -51,7 +51,7 @@ exports.getStudentFees = asyncHandler(async (req, res) => {
 // @route   POST /api/fees
 // @access  Private/Admin
 exports.createFee = asyncHandler(async (req, res) => {
-    const { studentEmail, totalAmount, dueDate, category, academicYear, notes } = req.body;
+    const { studentEmail, totalAmount, paidAmount, dueDate, category, academicYear, notes } = req.body;
 
     const student = await User.findOne({ email: studentEmail, adminId: req.user._id });
     if (!student) {
@@ -92,7 +92,7 @@ exports.createFee = asyncHandler(async (req, res) => {
 // @route   PUT /api/fees/:id
 // @access  Private/Admin
 exports.updateFee = asyncHandler(async (req, res) => {
-    const fee = await Fee.findById(req.params.id).populate('student');
+    let fee = await Fee.findById(req.params.id).populate('student');
 
     if (!fee) {
         res.status(404);

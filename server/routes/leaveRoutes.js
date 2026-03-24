@@ -4,7 +4,8 @@ const {
     applyLeave,
     getMyLeaves,
     getAllLeaves,
-    updateLeaveStatus
+    updateLeaveStatus,
+    deleteLeave
 } = require('../controllers/leaveController');
 const { protect, authorize } = require('../middleware/authMiddleware');
 
@@ -15,5 +16,6 @@ router.get('/my', authorize('Student'), getMyLeaves);
 
 router.get('/admin/all', authorize('Admin'), getAllLeaves);
 router.put('/:id/status', authorize('Admin'), updateLeaveStatus);
+router.delete('/:id', authorize('Admin'), deleteLeave);
 
 module.exports = router;

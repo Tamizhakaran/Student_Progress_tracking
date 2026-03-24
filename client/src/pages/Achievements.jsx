@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiAward, FiPlus, FiX, FiCheckCircle, FiClock, FiCalendar, FiFileText, FiAlertCircle } from 'react-icons/fi';
-import api from '../utils/api';
+import api, { getFileUrl } from '../utils/api';
 import { toast } from 'react-toastify';
 
 const Achievements = () => {
@@ -135,7 +135,7 @@ const Achievements = () => {
                                         )}
                                         {achievement.certificate && (
                                             <a
-                                                href={`${import.meta.env.VITE_API_URL || ''}${achievement.certificate}`}
+                                                href={getFileUrl(achievement.certificate)}
                                                 target="_blank"
                                                 rel="noopener noreferrer"
                                                 className="flex items-center gap-2 text-[10px] font-black text-indigo-600 uppercase tracking-widest hover:text-indigo-700 transition-colors"

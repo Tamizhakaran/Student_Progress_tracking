@@ -5,7 +5,8 @@ const {
     getMyAchievements,
     getAllAchievements,
     verifyAchievement,
-    getAchievementStats
+    getAchievementStats,
+    deleteAchievement
 } = require('../controllers/achievementController');
 const { protect, authorize } = require('../middleware/authMiddleware');
 const upload = require('../middleware/uploadMiddleware');
@@ -18,5 +19,6 @@ router.get('/stats', getAchievementStats);
 
 router.get('/admin/all', authorize('Admin'), getAllAchievements);
 router.put('/:id/verify', authorize('Admin'), verifyAchievement);
+router.delete('/:id', authorize('Admin'), deleteAchievement);
 
 module.exports = router;

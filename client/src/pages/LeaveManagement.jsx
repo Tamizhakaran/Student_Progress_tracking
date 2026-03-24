@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
     FiSearch, FiFilter, FiCheckCircle, FiXCircle,
-    FiCalendar, FiClock, FiMessageSquare, FiUser
+    FiCalendar, FiClock, FiMessageSquare, FiUser, FiTrash2
 } from 'react-icons/fi';
 import api from '../utils/api';
 import { toast } from 'react-toastify';
@@ -44,6 +44,17 @@ const LeaveManagement = () => {
             fetchLeaves();
         } catch (error) {
             toast.error('Operation failed');
+        }
+    };
+
+    const handleDelete = async (id) => {
+        if (!window.confirm('Are you sure you want to delete this leave request?')) return;
+        try {
+            await api.delete(`/leaves/${id}`);
+            toast.success('Leave request deleted successfully');
+            fetchLeaves();
+        } catch (error) {
+            toast.error('Delete failed');
         }
     };
 
@@ -185,6 +196,15 @@ const LeaveManagement = () => {
                                                     Processed
                                                 </div>
                                             )}
+                                            <motion.button
+                                                whileHover={{ scale: 1.1 }}
+                                                whileTap={{ scale: 0.9 }}
+                                                onClick={() => handleDelete(l._id)}
+                                                className="p-3 bg-rose-50 text-rose-600 rounded-xl hover:bg-rose-600 hover:text-white transition-all shadow-sm border border-rose-100"
+                                                title="Delete"
+                                            >
+                                                <FiTrash2 size={18} />
+                                            </motion.button>
                                         </div>
                                     </td>
                                 </motion.tr>

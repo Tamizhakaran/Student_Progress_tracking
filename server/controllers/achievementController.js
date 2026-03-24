@@ -165,3 +165,38 @@ exports.getAchievementStats = async (req, res) => {
         });
     }
 };
+
+// @desc    Delete an achievement record
+// @route   DELETE /api/achievements/:id
+// @access  Private (Admin)
+exports.deleteAchievement = async (req, res) => {
+    try {
+        const achievement = await Achievement.findById(req.params.id).populate('student');
+        if (!achievement) {
+            return res.status(404).json({
+                success: false,
+                message: 'Achievement not found'
+            });
+        }
+
+        // Check if student belongs to this admin
+        if (achievement.student.adminId.toString() !== req.user._id.toString()) {
+            return res.status(403).json({
+                success: false,
+                message: 'Not authorized to delete this achievement'
+            });
+        }
+
+        await Achievement.findByIdAndDelete(req.params.id);
+
+        res.status(200).json({
+            success: true,
+            data: {}
+        });
+    } catch (error) {
+        res.status(400).json({
+            success: false,
+            message: error.message
+        });
+    }
+};

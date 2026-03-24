@@ -2,11 +2,11 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 
-// Set subdirectories
+// Set subdirectories - Use absolute paths to avoid issues with different CWDs
 const directories = {
-    certificates: 'uploads/certificates',
-    students: 'uploads/students',
-    profiles: 'uploads/profiles'
+    certificates: path.join(__dirname, '..', 'uploads', 'certificates'),
+    students: path.join(__dirname, '..', 'uploads', 'students'),
+    profiles: path.join(__dirname, '..', 'uploads', 'profiles')
 };
 
 // Ensure directories exist

@@ -87,10 +87,18 @@ const sendEmail = async (options) => {
         }
     }
 
-    // Final Fallback: Missing configuration
-    const configError = 'No email configuration found. Please set SMTP_EMAIL/PASS or RESEND_API_KEY.';
-    console.warn(`⚠️ Warning: ${configError}`);
-    throw new Error(configError);
+    // Final Fallback: Log to console so the user can see the reset link in Render logs
+    console.error('--- ALL EMAIL DISPATCH METHODS FAILED ---');
+    console.log(`RECIPIENT: ${options.email}`);
+    console.log(`SUBJECT: ${options.subject}`);
+    console.log('--- MESSAGE CONTENT START ---');
+    console.log(options.message);
+    console.log('--- MESSAGE CONTENT END ---');
+    console.log('IMPORTANT: Please verify your SMTP credentials or Resend domain to resolve this.');
+    
+    // We still throw so the frontend knows it didn't actually "send" an email,
+    // but the link is now available in the server logs.
+    throw new Error('Email delivery failed. The reset link has been logged to the server console for debugging.');
 };
 
 module.exports = sendEmail;

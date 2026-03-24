@@ -14,7 +14,7 @@ const FeeManagement = () => {
     const [editForm, setEditForm] = useState({});
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
     const [createForm, setCreateForm] = useState({
-        studentEmail: '', totalAmount: '', dueDate: '', category: 'Tuition', academicYear: '2025-2026', notes: ''
+        studentEmail: '', totalAmount: '', paidAmount: '0', dueDate: '', category: 'Tuition', academicYear: '2025-2026', notes: ''
     });
     const [isBulkEditing, setIsBulkEditing] = useState(false);
     const [bulkEditData, setBulkEditData] = useState({});
@@ -76,7 +76,7 @@ const FeeManagement = () => {
             toast.success('Fee record created');
             setIsCreateModalOpen(false);
             setCreateForm({
-                studentEmail: '', totalAmount: '', dueDate: '', category: 'Tuition', academicYear: '2025-2026', notes: ''
+                studentEmail: '', totalAmount: '', paidAmount: '0', dueDate: '', category: 'Tuition', academicYear: '2025-2026', notes: ''
             });
             fetchFees();
         } catch (error) {
@@ -516,15 +516,26 @@ const FeeManagement = () => {
                                     />
                                 </div>
                                 <div className="space-y-1">
-                                    <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-2">Due Date</label>
+                                    <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-2">Paid Amount (₹)</label>
                                     <input
                                         required
-                                        type="date"
+                                        type="number"
                                         className="w-full px-5 py-3 rounded-2xl bg-slate-50 border border-slate-100 font-bold text-sm outline-none focus:border-indigo-200 transition-all"
-                                        value={createForm.dueDate}
-                                        onChange={(e) => setCreateForm({ ...createForm, dueDate: e.target.value })}
+                                        placeholder="0"
+                                        value={createForm.paidAmount}
+                                        onChange={(e) => setCreateForm({ ...createForm, paidAmount: e.target.value })}
                                     />
                                 </div>
+                            </div>
+                            <div className="space-y-1">
+                                <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-2">Due Date</label>
+                                <input
+                                    required
+                                    type="date"
+                                    className="w-full px-5 py-3 rounded-2xl bg-slate-50 border border-slate-100 font-bold text-sm outline-none focus:border-indigo-200 transition-all"
+                                    value={createForm.dueDate}
+                                    onChange={(e) => setCreateForm({ ...createForm, dueDate: e.target.value })}
+                                />
                             </div>
 
                             <div className="grid grid-cols-2 gap-4">

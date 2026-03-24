@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FiAward, FiCheckCircle, FiXCircle, FiInfo, FiSearch, FiFilter, FiUser, FiCalendar, FiX, FiFileText } from 'react-icons/fi';
-import api from '../utils/api';
+import { FiAward, FiCheckCircle, FiXCircle, FiInfo, FiSearch, FiFilter, FiUser, FiCalendar, FiX, FiFileText, FiTrash2 } from 'react-icons/fi';
+import api, { getFileUrl } from '../utils/api';
 import { toast } from 'react-toastify';
 
 const AchievementManagement = () => {
@@ -41,6 +41,17 @@ const AchievementManagement = () => {
             fetchAchievements();
         } catch (error) {
             toast.error('Operation failed');
+        }
+    };
+
+    const handleDelete = async (id) => {
+        if (!window.confirm('Are you sure you want to delete this achievement record?')) return;
+        try {
+            await api.delete(`/achievements/${id}`);
+            toast.success('Achievement deleted successfully');
+            fetchAchievements();
+        } catch (error) {
+            toast.error('Delete failed');
         }
     };
 
@@ -128,7 +139,7 @@ const AchievementManagement = () => {
                                             <p className="text-[10px] font-extrabold text-indigo-600 uppercase tracking-widest mt-1 mb-2">{a.eventName}</p>
                                             {a.certificate && (
                                                 <a
-                                                    href={`${import.meta.env.VITE_API_URL || ''}${a.certificate}`}
+                                                    href={getFileUrl(a.certificate)}
                                                     target="_blank"
                                                     rel="noopener noreferrer"
                                                     className="inline-flex items-center gap-2 text-[10px] font-bold text-slate-500 hover:text-indigo-600 transition-colors uppercase tracking-widest"
@@ -177,6 +188,15 @@ const AchievementManagement = () => {
                                                         </motion.button>
                                                     </>
                                                 )}
+                                                <motion.button
+                                                    whileHover={{ scale: 1.1 }}
+                                                    whileTap={{ scale: 0.9 }}
+                                                    onClick={() => handleDelete(a._id)}
+                                                    className="p-3 bg-rose-50 text-rose-600 rounded-xl hover:bg-rose-600 hover:text-white transition-all shadow-sm border border-rose-100"
+                                                    title="Delete"
+                                                >
+                                                    <FiTrash2 size={18} />
+                                                </motion.button>
                                                 <motion.button
                                                     whileHover={{ scale: 1.1 }}
                                                     whileTap={{ scale: 0.9 }}

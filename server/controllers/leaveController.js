@@ -89,9 +89,34 @@ const updateLeaveStatus = asyncHandler(async (req, res) => {
     });
 });
 
+// @desc    Delete leave request
+// @route   DELETE /api/leaves/:id
+// @access  Private (Admin)
+const deleteLeave = asyncHandler(async (req, res) => {
+    const leave = await Leave.findById(req.params.id).populate('student');
+    if (!leave) {
+        res.status(404);
+        throw new Error('Leave request not found');
+    }
+
+    // Check if student belongs to this admin
+    if (leave.student.adminId.toString() !== req.user._id.toString()) {
+        res.status(403);
+        throw new Error('Not authorized to delete this leave request');
+    }
+
+    await Leave.findByIdAndDelete(req.params.id);
+
+    res.status(200).json({
+        success: true,
+        data: {}
+    });
+});
+
 module.exports = {
     applyLeave,
     getMyLeaves,
     getAllLeaves,
-    updateLeaveStatus
+    updateLeaveStatus,
+    deleteLeave
 };

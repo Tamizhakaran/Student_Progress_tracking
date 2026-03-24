@@ -4,11 +4,11 @@ export const getMediaURL = (path) => {
     if (path.startsWith('data:')) return path;
 
     // Check both standard prefixes for Vite and Create React App
-    const baseUrl = process.env.REACT_APP_API_URL || 
-                    import.meta.env?.VITE_API_URL || 
-                    "https://student-progress-tracking.onrender.com";
+    const baseUrl = import.meta.env?.VITE_API_URL || 
+                    process.env.REACT_APP_API_URL || 
+                    "";
     
-    const API_URL = baseUrl.replace(/\/$/, "");
+    const API_URL = baseUrl ? baseUrl.replace(/\/$/, "") : "";
 
     // If it's an absolute URL
     if (path.startsWith('http')) {
