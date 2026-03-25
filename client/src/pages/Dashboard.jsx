@@ -212,7 +212,7 @@ const Dashboard = () => {
             // Only show placement offers updated within the last 24 hours for students
             if (!isAdmin) {
                 const now = new Date();
-                placementsData = placementsData.filter(p => {
+                placementsData = (placementsData || []).filter(p => {
                     if (p.type !== 'Offer') return true; // Keep upcoming companies
                     const updatedTime = new Date(p.updatedAt || p.createdAt || p.date);
                     const hoursDiff = (now - updatedTime) / (1000 * 60 * 60);
@@ -404,8 +404,8 @@ const Dashboard = () => {
                             </div>
                         </div>
                         <div className="space-y-4 flex-1 overflow-y-auto max-h-[400px] pr-2 custom-scrollbar">
-                            {placements.filter(p => p.type === 'Upcoming').length > 0 ? (
-                                placements.filter(p => p.type === 'Upcoming').map(p => (
+                            {(placements || []).filter(p => p.type === 'Upcoming').length > 0 ? (
+                                (placements || []).filter(p => p.type === 'Upcoming').map(p => (
                                     <div key={p._id} className="p-6 rounded-[2rem] bg-white/60 border border-slate-100 shadow-sm hover:shadow-md transition-all">
                                         <div className="flex justify-between items-start mb-4">
                                             <div>
@@ -441,8 +441,8 @@ const Dashboard = () => {
                             </div>
                         </div>
                         <div className="space-y-4 flex-1 overflow-y-auto max-h-[400px] pr-2 custom-scrollbar">
-                            {placements.filter(p => p.type === 'Offer').length > 0 ? (
-                                placements.filter(p => p.type === 'Offer').map(p => (
+                            {(placements || []).filter(p => p.type === 'Offer').length > 0 ? (
+                                (placements || []).filter(p => p.type === 'Offer').map(p => (
                                     <div key={p._id} className="p-6 rounded-[2rem] bg-white/60 border border-slate-100 shadow-sm hover:shadow-md transition-all">
                                         <div className="flex items-center gap-4">
                                             <div className="w-12 h-12 rounded-xl overflow-hidden shadow-sm border border-slate-100 shrink-0">

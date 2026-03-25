@@ -65,7 +65,7 @@ const StudyMaterials = () => {
         }
     };
 
-    const filteredMaterials = materials.filter(m => {
+    const filteredMaterials = (materials || []).filter(m => {
         const matchesSearch = m.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
             m.subject.toLowerCase().includes(searchTerm.toLowerCase());
         const matchesCategory = filterCategory === 'All' || m.category === filterCategory;

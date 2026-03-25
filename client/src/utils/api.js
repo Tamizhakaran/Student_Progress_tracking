@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // Get API URL from env - Vite uses import.meta.env
-const API_URL = import.meta.env.VITE_API_URL || "";
+const API_URL = import.meta.env.VITE_API_URL || "https://student-progress-tracking.onrender.com";
 
 // ✅ Ensure no trailing slash
 const cleanURL = API_URL ? API_URL.replace(/\/$/, "") : "";
