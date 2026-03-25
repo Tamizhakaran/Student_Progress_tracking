@@ -13,11 +13,11 @@ const sendEmail = async (options) => {
         try {
             console.log('--- SEND_EMAIL_DIAGNOSTIC: Attempting SMTP (Nodemailer) ---');
             
-            // Try Port 465 (SSL) first as it's often more reliable on cloud providers
+            // Try Port 587 (TLS) first to bypass Render's common 465 timeout issues
             const smtpConfig = {
                 host: 'smtp.gmail.com',
-                port: 465,
-                secure: true, // SSL
+                port: 587,
+                secure: false, // TLS
                 auth: {
                     user: process.env.SMTP_EMAIL.trim(),
                     pass: process.env.SMTP_PASSWORD.trim(),
