@@ -1,5 +1,6 @@
 const Achievement = require('../models/Achievement');
 const User = require('../models/User');
+const fs = require('fs');
 
 // @desc    Submit a new achievement
 // @route   POST /api/achievements
@@ -21,7 +22,19 @@ exports.submitAchievement = async (req, res) => {
         }
 
         let certificatePath = `/uploads/certificates/${req.file.filename}`;
-        console.log('Certificate Path:', certificatePath);
+        
+        try {
+            // Convert to Base64 to prevent data loss on ephemeral file systems (like Render)
+            const fileData = fs.readFileSync(req.file.path);
+            certificatePath = `data:${req.file.mimetype};base64,${fileData.toString('base64')}`;
+
+            // Delete the temporary file
+            fs.unlinkSync(req.file.path);
+        } catch (fileErr) {
+            console.error("Error converting certificate to Base64:", fileErr);
+        }
+
+        console.log('Certificate Path Length:', certificatePath.length > 200 ? 'Base64 String' : certificatePath);
 
         const achievement = await Achievement.create({
             student: req.user._id,

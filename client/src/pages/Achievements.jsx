@@ -75,6 +75,30 @@ const Achievements = () => {
         }
     };
 
+    const handleViewCertificate = (e, url) => {
+        if (url && url.startsWith('data:application/pdf')) {
+            e.preventDefault();
+            try {
+                const arr = url.split(',');
+                const bstr = atob(arr[1]);
+                let n = bstr.length;
+                const u8arr = new Uint8Array(n);
+                while (n--) {
+                    u8arr[n] = bstr.charCodeAt(n);
+                }
+                const blob = new Blob([u8arr], { type: 'application/pdf' });
+                const blobUrl = URL.createObjectURL(blob);
+                window.open(blobUrl, '_blank');
+                
+                // Optional cleanup
+                setTimeout(() => URL.revokeObjectURL(blobUrl), 10000);
+            } catch (err) {
+                console.error("Error opening PDF: ", err);
+                window.open(url, '_blank'); 
+            }
+        }
+    };
+
     return (
         <div className="space-y-12 pb-20">
             {/* Header section */}
@@ -138,6 +162,7 @@ const Achievements = () => {
                                                 href={getFileUrl(achievement.certificate)}
                                                 target="_blank"
                                                 rel="noopener noreferrer"
+                                                onClick={(e) => handleViewCertificate(e, getFileUrl(achievement.certificate))}
                                                 className="flex items-center gap-2 text-[10px] font-black text-indigo-600 uppercase tracking-widest hover:text-indigo-700 transition-colors"
                                             >
                                                 <FiFileText /> View Certificate
