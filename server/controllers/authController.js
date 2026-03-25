@@ -192,14 +192,31 @@ const forgotPassword = asyncHandler(async (req, res) => {
     // Create reset url
     const resetUrl = `${process.env.FRONTEND_URL}/reset-password/${resetToken}`;
 
-    const message = `You are receiving this email because you (or someone else) has requested the reset of a password. Please make a PUT request to:\n\n ${resetUrl}`;
+    const plainText = `You requested a password reset for your StudentIQ account.\n\nClick the link below to reset your password (valid for 10 minutes):\n\n${resetUrl}\n\nIf you did not request this, please ignore this email.`;
+
+    const htmlContent = `
+    <div style="font-family: Arial, sans-serif; max-width: 560px; margin: 0 auto; background: #f8fafc; padding: 32px; border-radius: 16px;">
+      <div style="text-align: center; margin-bottom: 24px;">
+        <h2 style="color: #1e293b; font-size: 22px; margin: 0;">🔐 Password Reset</h2>
+        <p style="color: #64748b; font-size: 14px; margin-top: 8px;">StudentIQ – Student Progress Monitor</p>
+      </div>
+      <p style="color: #334155; font-size: 15px; line-height: 1.6;">Hi ${user.name},</p>
+      <p style="color: #334155; font-size: 15px; line-height: 1.6;">We received a request to reset the password for your account. Click the button below to reset it. This link is valid for <strong>10 minutes</strong>.</p>
+      <div style="text-align: center; margin: 32px 0;">
+        <a href="${resetUrl}" style="background: #1e293b; color: #ffffff; text-decoration: none; padding: 14px 32px; border-radius: 10px; font-size: 15px; font-weight: bold; display: inline-block;">Reset My Password</a>
+      </div>
+      <p style="color: #94a3b8; font-size: 13px; line-height: 1.6;">If the button doesn't work, copy and paste this URL into your browser:<br/><a href="${resetUrl}" style="color: #6366f1; word-break: break-all;">${resetUrl}</a></p>
+      <hr style="border: none; border-top: 1px solid #e2e8f0; margin: 24px 0;" />
+      <p style="color: #94a3b8; font-size: 12px; text-align: center;">If you did not request a password reset, you can safely ignore this email. Your password will not change.</p>
+    </div>`;
 
     try {
         const sendEmail = require('../utils/sendEmail');
         await sendEmail({
             email: user.email,
-            subject: 'Password reset token',
-            message,
+            subject: 'Reset Your StudentIQ Password',
+            message: plainText,
+            html: htmlContent,
         });
 
         res.status(200).json({ success: true, data: 'Email sent' });

@@ -8,21 +8,24 @@ const sendEmail = async (options) => {
     const fromName = process.env.FROM_NAME || 'EduTrack X';
     const fromEmail = process.env.SMTP_EMAIL || 'onboarding@resend.dev';
 
-    // Mode 1: SMTP (Nodemailer) - Highly recommended for custom domains/testing
+    // Mode 1: SMTP (Nodemailer) - Port 465 SSL (verified working on Render)
     if (process.env.SMTP_EMAIL && process.env.SMTP_PASSWORD) {
         try {
-            console.log('--- SEND_EMAIL_DIAGNOSTIC: Attempting SMTP (Nodemailer) ---');
+            console.log('--- SEND_EMAIL_DIAGNOSTIC: Attempting SMTP (Nodemailer) Port 465 SSL ---');
             
-            // Try Port 587 (TLS) first to bypass Render's common 465 timeout issues
+            // Use Port 465 (SSL) - confirmed working via verify_smtp.js
+            // Port 587 (STARTTLS) is often blocked by Render's network
             const smtpConfig = {
                 host: 'smtp.gmail.com',
-                port: 587,
-                secure: false, // TLS
+                port: 465,
+                secure: true, // SSL
                 auth: {
                     user: process.env.SMTP_EMAIL.trim(),
                     pass: process.env.SMTP_PASSWORD.trim(),
                 },
-                connectionTimeout: 10000,
+                connectionTimeout: 15000,
+                greetingTimeout: 15000,
+                socketTimeout: 20000,
             };
 
             console.log(`Diagnostic: Attempting SMTP via ${smtpConfig.host}:${smtpConfig.port} (SSL: ${smtpConfig.secure})`);
@@ -33,6 +36,7 @@ const sendEmail = async (options) => {
                 to: options.email,
                 subject: options.subject,
                 text: options.message,
+                html: options.html || undefined,
             };
 
             const info = await transporter.sendMail(mailOptions);
