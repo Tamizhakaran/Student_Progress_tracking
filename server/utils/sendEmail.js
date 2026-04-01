@@ -91,18 +91,20 @@ const sendEmail = async (options) => {
         }
     }
 
-    // Final Fallback: Log to console so the user can see the reset link in Render logs
+    // Final Fallback: Log to console so the reset link is visible in Render logs
     console.error('--- ALL EMAIL DISPATCH METHODS FAILED ---');
     console.log(`RECIPIENT: ${options.email}`);
     console.log(`SUBJECT: ${options.subject}`);
+    if (options.resetUrl) {
+        console.log(`RESET URL (USE THIS LINK): ${options.resetUrl}`);
+    }
     console.log('--- MESSAGE CONTENT START ---');
     console.log(options.message);
     console.log('--- MESSAGE CONTENT END ---');
     console.log('IMPORTANT: Please verify your SMTP credentials or Resend domain to resolve this.');
     
-    // We still throw so the frontend knows it didn't actually "send" an email,
-    // but the link is now available in the server logs.
-    throw new Error('Email delivery failed. The reset link has been logged to the server console for debugging.');
+    // Throw so the controller knows email failed
+    throw new Error('Email delivery failed. No SMTP or Resend credentials configured.');
 };
 
 module.exports = sendEmail;
