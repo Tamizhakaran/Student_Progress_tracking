@@ -114,7 +114,7 @@ const PerformanceManagement = () => {
     );
 
     const addMarkField = () => {
-        setMarks([...marks, { id: Date.now() + Math.random(), subject: '', score: '', semester: semester, isCustom: false }]);
+        setMarks(prev => [...prev, { id: Date.now() + Math.random(), subject: '', score: '', semester: semester, isCustom: false }]);
     };
 
     const removeMarkField = async (id) => {
@@ -128,11 +128,11 @@ const PerformanceManagement = () => {
                 return;
             }
         }
-        setMarks(marks.filter(m => m.id !== id));
+        setMarks(prev => prev.filter(m => m.id !== id));
     };
 
     const updateMark = (id, field, value) => {
-        setMarks(marks.map(m => m.id === id ? { ...m, [field]: value } : m));
+        setMarks(prev => prev.map(m => m.id === id ? { ...m, [field]: value } : m));
     };
 
     const handleSave = async () => {
