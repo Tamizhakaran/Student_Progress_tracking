@@ -100,6 +100,14 @@ const getAllSchedules = asyncHandler(async (req, res) => {
 // @access  Private/Admin
 const deleteSchedule = asyncHandler(async (req, res) => {
     console.log('Backend: Deleting schedule ID:', req.params.id);
+
+    const schedule = await Schedule.findById(req.params.id);
+
+    if (!schedule) {
+        res.status(404);
+        throw new Error('Schedule not found');
+    }
+
     // Admin isolation - Only the owner can delete
     if (schedule.adminId.toString() !== req.user._id.toString()) {
         res.status(403);
