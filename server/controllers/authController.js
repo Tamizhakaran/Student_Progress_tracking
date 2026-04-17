@@ -190,9 +190,17 @@ const forgotPassword = asyncHandler(async (req, res) => {
     await user.save({ validateBeforeSave: false });
 
     // Ensure the frontend URL doesn't accidentally point to the backend API server
-    const frontendUrl = process.env.FRONTEND_URL && !process.env.FRONTEND_URL.includes('onrender.com') 
+    let frontendUrl = process.env.FRONTEND_URL && !process.env.FRONTEND_URL.includes('onrender.com') 
         ? process.env.FRONTEND_URL 
         : "https://student-progress-tracking-nine.vercel.app";
+        
+    // Guarantee that frontendUrl has an http/https prefix so email clients don't treat it as a relative link
+    if (!frontendUrl.startsWith('http://') && !frontendUrl.startsWith('https://')) {
+        frontendUrl = `https://${frontendUrl}`;
+    }
+    
+    // Remove any trailing slash to prevent double slashes
+    frontendUrl = frontendUrl.replace(/\/$/, '');
         
     // Create reset url
     const resetUrl = `${frontendUrl}/reset-password/${resetToken}`;

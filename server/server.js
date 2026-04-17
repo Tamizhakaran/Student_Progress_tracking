@@ -76,9 +76,11 @@ app.get('/', (req, res) => {
 // Fallback for frontend routes that mistakenly hit the backend directly
 // (e.g. if an email link incorrectly points to the backend URL)
 app.get(['/reset-password/:token', '/forgot-password', '/login'], (req, res) => {
-    const frontendUrl = process.env.FRONTEND_URL && !process.env.FRONTEND_URL.includes('onrender.com') 
+    let frontendUrl = process.env.FRONTEND_URL && !process.env.FRONTEND_URL.includes('onrender.com') 
         ? process.env.FRONTEND_URL 
         : "https://student-progress-tracking-nine.vercel.app";
+        
+    frontendUrl = frontendUrl.replace(/\/$/, '');
         
     res.redirect(`${frontendUrl}${req.path}`);
 });
