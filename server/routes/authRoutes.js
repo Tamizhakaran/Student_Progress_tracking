@@ -17,14 +17,20 @@ router.get('/me', protect, getMe);
 // @route   GET /api/forgotpassword
 // @desc    Redirect to frontend forgot password page
 router.get('/forgotpassword', (req, res) => {
-    res.redirect(`${process.env.FRONTEND_URL}/forgot-password`);
+    const frontendUrl = process.env.FRONTEND_URL && !process.env.FRONTEND_URL.includes('onrender.com') 
+        ? process.env.FRONTEND_URL 
+        : "https://student-progress-tracking-nine.vercel.app";
+    res.redirect(`${frontendUrl}/forgot-password`);
 });
 router.post('/forgotpassword', forgotPassword);
 
 // @route   GET /api/resetpassword/:resettoken
 // @desc    Redirect to frontend reset password page
 router.get('/resetpassword/:resettoken', (req, res) => {
-    res.redirect(`${process.env.FRONTEND_URL}/reset-password/${req.params.resettoken}`);
+    const frontendUrl = process.env.FRONTEND_URL && !process.env.FRONTEND_URL.includes('onrender.com') 
+        ? process.env.FRONTEND_URL 
+        : "https://student-progress-tracking-nine.vercel.app";
+    res.redirect(`${frontendUrl}/reset-password/${req.params.resettoken}`);
 });
 router.put('/resetpassword/:resettoken', resetPassword);
 

@@ -73,6 +73,16 @@ app.get('/', (req, res) => {
     res.send('API is running...');
 });
 
+// Fallback for frontend routes that mistakenly hit the backend directly
+// (e.g. if an email link incorrectly points to the backend URL)
+app.get(['/reset-password/:token', '/forgot-password', '/login'], (req, res) => {
+    const frontendUrl = process.env.FRONTEND_URL && !process.env.FRONTEND_URL.includes('onrender.com') 
+        ? process.env.FRONTEND_URL 
+        : "https://student-progress-tracking-nine.vercel.app";
+        
+    res.redirect(`${frontendUrl}${req.path}`);
+});
+
 // Error Handler
 app.use(errorHandler);
 

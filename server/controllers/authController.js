@@ -189,8 +189,13 @@ const forgotPassword = asyncHandler(async (req, res) => {
 
     await user.save({ validateBeforeSave: false });
 
+    // Ensure the frontend URL doesn't accidentally point to the backend API server
+    const frontendUrl = process.env.FRONTEND_URL && !process.env.FRONTEND_URL.includes('onrender.com') 
+        ? process.env.FRONTEND_URL 
+        : "https://student-progress-tracking-nine.vercel.app";
+        
     // Create reset url
-    const resetUrl = `${process.env.FRONTEND_URL}/reset-password/${resetToken}`;
+    const resetUrl = `${frontendUrl}/reset-password/${resetToken}`;
 
     const plainText = `You requested a password reset for your StudentIQ account.\n\nClick the link below to reset your password (valid for 10 minutes):\n\n${resetUrl}\n\nIf you did not request this, please ignore this email.`;
 
